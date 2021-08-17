@@ -1,0 +1,9 @@
+@font-face
+{
+    font-family: 'Karenina Handwriting';
+  src: url('Karenina Handwriting.eot');
+  src: url('Karenina Handwriting.eot?#') format('embedded-opentype'),
+      url('Karenina Handwriting.woff') format('woff'),
+      url('Karenina Handwriting.ttf') format('truetype');
+}
+ 
