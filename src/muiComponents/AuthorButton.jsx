@@ -7,6 +7,7 @@ export const AuthorButton = withStyles(() => ({
     padding: "6px 20px",
     background: "rgba(255, 0, 0, 0.11)",
     borderRadius: "26px",
+    textTransform: 'capitalize',
     "&:hover": {
       backgroundColor: "rgba(255, 0, 0, 0.31)",
     },

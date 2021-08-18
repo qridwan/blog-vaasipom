@@ -9,6 +9,7 @@ export const SignInButton = withStyles((theme) => ({
     background: `linear-gradient(270deg, #000000 -2.29%, #323232 100%)`,
     boxShadow: `0px 14px 27px rgba(0, 0, 0, 0.3)`,
     borderRadius: "51px",
+    textTransform: 'capitalize',
     "&:hover": {
       backgroundColor: grey[900],
     },

@@ -10,48 +10,11 @@ import {
 import { AuthorButton } from "../../muiComponents/AuthorButton";
 import { Box } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
+import { feedCardStyles } from "../../muiStyles/muiStyles";
 
-const feedCardStyles = makeStyles({
-  root: {
-    margin: "10px 0",
-    boxShadow: "none",
-    textAlign: "start",
-    paddingBottom: "50px",
-  },
-  media: {
-    width: "100%",
-    height: "220px",
-    borderRadius: "20px",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: "30px",
-    lineHeight: "150%",
-    paddingBottom: "15px",
-    color: "#121212",
-    "@media (max-width:800px)": {
-      fontSize: "20px",
-      lineHeight: "110%",
-    },
-  },
-  desc: {
-    fontSize: "16px",
-    lineHeight: "150%",
-    paddingBottom: "15px",
-    color: "#454545",
-    "@media (max-width:800px)": {
-      fontSize: "12px",
-      lineHeight: "110%",
-    },
-  },
-  topbar: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-});
+
 
 const FeedCard = ({ feed }) => {
   const classes = feedCardStyles();

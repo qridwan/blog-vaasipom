@@ -2,25 +2,15 @@ import React from "react";
 import Feed from "../../Components/LandingPage/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
 import Suggestions from "../../Components/LandingPage/Suggestions.jsx";
-import { Grid, makeStyles, Paper } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
+import { landingPageStyles } from "../../muiStyles/muiStyles.js";
 
-const landingPageStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    boxShadow: 'none'
-  },
-}));
 const LandingPage = () => {
   const classes = landingPageStyles();
   return (
     <div className={classes.root}>
       <Header />
-      <div >
+      <div>
         <Grid
           container
           spacing={3}
