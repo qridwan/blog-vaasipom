@@ -1,9 +1,9 @@
 import React from "react";
 import Feed from "../../Components/LandingPage/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
-import Suggestions from "../../Components/LandingPage/Suggestions.jsx";
+import Suggestions from "../../Components/Shared/Suggestions.jsx";
 import { Grid, Paper } from "@material-ui/core";
-import { landingPageStyles } from "../../muiStyles/muiStyles.js";
+import { landingPageStyles } from "../../Styles/muiStyles.js";
 
 const LandingPage = () => {
   const classes = landingPageStyles();

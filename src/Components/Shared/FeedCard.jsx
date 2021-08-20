@@ -12,11 +12,10 @@ import { Box } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import { feedCardStyles } from "../../muiStyles/muiStyles";
+import { feedCardStyles } from "../../Styles/muiStyles";
+import QueueMusicIcon from "@material-ui/icons/QueueMusic";
 
-
-
-const FeedCard = ({ feed }) => {
+const FeedCard = ({ feed, podcast }) => {
   const classes = feedCardStyles();
   const { author, title, desc, img, likes, views, date, readTime, topic } =
     feed;
@@ -25,9 +24,16 @@ const FeedCard = ({ feed }) => {
       {/* topbar */}
       <CardActions className={classes.topbar}>
         <AuthorButton>{author}</AuthorButton>
-        <IconButton>
-          <BookmarkIcon />
-        </IconButton>
+        <div>
+          {podcast && (
+            <IconButton>
+              <QueueMusicIcon />
+            </IconButton>
+          )}
+          <IconButton>
+            <BookmarkIcon />
+          </IconButton>
+        </div>
       </CardActions>
       <CardActionArea>
         {/* title */}
@@ -46,15 +52,18 @@ const FeedCard = ({ feed }) => {
       </CardActionArea>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box display="flex" alignItems="center">
-          <VisibilityOutlinedIcon />
-          <Typography style={{ marginLeft: "10px" }}>{views}</Typography>
+          <Box display="flex" alignItems="center">
+            <VisibilityOutlinedIcon />
+            <Typography style={{ marginLeft: "10px" }}>{views}</Typography>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <IconButton>
+              <FavoriteBorderOutlinedIcon />
+            </IconButton>
+            <Typography>{likes}</Typography>
+          </Box>
         </Box>
-        <Box display="flex" alignItems="center">
-          <IconButton>
-            <FavoriteBorderOutlinedIcon />
-          </IconButton>
-          <Typography>{likes}</Typography>
-        </Box>
+
         <div>
           <Typography>{`${date}  |  ${readTime}  |  ${topic}`}</Typography>
         </div>

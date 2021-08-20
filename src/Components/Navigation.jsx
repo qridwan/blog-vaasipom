@@ -1,7 +1,7 @@
 import React from "react";
 import VasipomLogo from "../Assets/logos/VasipomLogo2.png";
 import { AppBar, Box, Toolbar } from "@material-ui/core";
-import { NavigationStyles } from "../muiStyles/muiStyles";
+import { NavigationStyles } from "../Styles/muiStyles";
 import { Container } from "@material-ui/core";
 import { Avatar } from "@material-ui/core";
 import User from "../Assets/img/user.png";

@@ -1,13 +1,14 @@
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
-import FeedImg from "../../Assets/img/feedImg.png";
 import FeedCard from "../Shared/FeedCard";
-const feeds = [
+import PodcastSlider from "./PodcastSlider";
+const podcastFeeds = [
   {
     id: 1,
     author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
+    img: "",
     likes: 529,
     views: 768,
     date: "10th August",
@@ -31,7 +32,7 @@ const feeds = [
     author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
+    img: "",
     likes: 529,
     views: 768,
     date: "10th August",
@@ -39,14 +40,41 @@ const feeds = [
     topic: "Science",
   },
 ];
-const Feed = () => {
+
+const podcastFeedStyles = makeStyles(() => {
+    return {
+      root: {
+        boxShadow: "none",
+        margin: "40px 0",
+      },
+      title: {
+        fontWeight: "bold",
+        fontSize: "25px",
+        lineHeight: "31px",
+        color: "#000000",
+      }}
+    })
+
+const PodcastFeed = () => {
+    const classes = podcastFeedStyles()
   return (
-    <div>
-      {feeds.map((feed) => (
-        <FeedCard key={feed.id} feed={feed} />
-      ))}
+    <div y className={classes.root}>
+        <Typography className={classes.title}>Popular Trending</Typography>
+      <PodcastSlider />
+      <Box my={10}>
+        {podcastFeeds.map((feed) => (
+          <FeedCard key={feed.id} feed={feed} podcast={true} />
+        ))}
+      </Box>
+      <Typography className={classes.title}>Spiritual & Religious</Typography>
+      <PodcastSlider />
+      <Box my={10}>
+        {podcastFeeds.map((feed) => (
+          <FeedCard key={feed.id} feed={feed} podcast={true} />
+        ))}
+      </Box>
     </div>
   );
 };
 
-export default Feed;
+export default PodcastFeed;
