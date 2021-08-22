@@ -8,8 +8,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import AvatarImg from "../../Assets/img/avatar.png";
-import { OutlineButton } from "../../muiComponents/OutlineButton";
+import { DarkButton, OutlineButton } from "../../muiComponents/OutlineButton";
 
 const suggestionStyles = makeStyles((theme) => ({
   box: {
@@ -79,15 +80,20 @@ const suggestionStyles = makeStyles((theme) => ({
 }));
 
 const Suggestions = () => {
+  const location = useLocation();
+  const { pathname } = location;
+  const splitLocation = pathname.split("/")[1];
+
   const [follow, setFollow] = useState(false);
-  const [authors, setAuthors] = useState([1,2,3,4,5]);
+  const [authors, setAuthors] = useState([1, 2, 3, 4, 5]);
+
   const classes = suggestionStyles();
   const [lookingFor, setLookingFor] = useState([
     { key: 0, label: "Podcast" },
     { key: 1, label: "Short Stories" },
     { key: 2, label: "Articles" },
     { key: 3, label: "Poetries" },
-    { key: 4, label: "Videocasts" },
+    { key: 4, label: "Videocast" },
     { key: 5, label: "Reviews" },
     { key: 6, label: "All" },
   ]);
@@ -109,7 +115,10 @@ const Suggestions = () => {
   const handleFollow = () => {
     setFollow(!follow);
   };
-
+  console.log(
+    "🚀 ~ file: Suggestions.jsx ~ line 86 ~ Suggestions ~ splitLocation",
+    splitLocation
+  );
   return (
     <div>
       <Box className={classes.box}>
@@ -119,11 +128,21 @@ const Suggestions = () => {
         </Typography>
         <Paper component="ul" className={classes.root}>
           {lookingFor.map((data) => {
+            let page = data.label.toLowerCase();
+            if (page === "all") {
+              page = "";
+            }
             return (
               <li key={data.key} className={classes.buttons}>
-                <OutlineButton onClick={handleClick}>
-                  {data.label}
-                </OutlineButton>
+                <NavLink to={`/${page}`}>
+                  {splitLocation === page ? (
+                    <DarkButton onClick={handleClick}>{data.label}</DarkButton>
+                  ) : (
+                    <OutlineButton onClick={handleClick}>
+                      {data.label}
+                    </OutlineButton>
+                  )}
+                </NavLink>
               </li>
             );
           })}
@@ -157,37 +176,39 @@ const Suggestions = () => {
       {/*Authors to follow */}
       <Box className={classes.box}>
         <Typography className={classes.text}>Authors To Follow </Typography>
-       {authors.map(author => <Card
-       key={author}
-       className={classes.card}>
-          <CardHeader
-            avatar={
-              <Avatar
-                aria-label="recipe"
-                className={classes.avatar}
-                src={AvatarImg}
-                alt="Author Name"
-              />
-            }
-            action={
-              <>
-                <OutlineButton
-                  className={follow ? classes.follow : classes.unFollow}
-                  onClick={handleFollow}
-                >
-                  {follow ? "Unfollow" : "Follow"}
-                </OutlineButton>
-              </>
-            }
-            title={<Typography className={classes.title}>Jhon Doe</Typography>}
-            subheader={
-              <Typography className={classes.subheader}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                id magna massa. Ut vitae risus vehicula,
-              </Typography>
-            }
-          />
-        </Card> ) }
+        {authors.map((author) => (
+          <Card key={author} className={classes.card}>
+            <CardHeader
+              avatar={
+                <Avatar
+                  aria-label="recipe"
+                  className={classes.avatar}
+                  src={AvatarImg}
+                  alt="Author Name"
+                />
+              }
+              action={
+                <>
+                  <OutlineButton
+                    className={follow ? classes.follow : classes.unFollow}
+                    onClick={handleFollow}
+                  >
+                    {follow ? "Unfollow" : "Follow"}
+                  </OutlineButton>
+                </>
+              }
+              title={
+                <Typography className={classes.title}>Jhon Doe</Typography>
+              }
+              subheader={
+                <Typography className={classes.subheader}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                  id magna massa. Ut vitae risus vehicula,
+                </Typography>
+              }
+            />
+          </Card>
+        ))}
       </Box>
     </div>
   );

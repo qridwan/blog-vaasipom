@@ -1,7 +1,8 @@
 import { Container, createTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import Navigation from "./Components/Navigation";
+import ScrollToTop from "./Components/Scroll/ScrollToTop";
+import Navigation from "./Pages/Common/Navigation";
 import { Routes } from "./routes";
 
 const fontTheme = createTheme({
@@ -13,6 +14,7 @@ const fontTheme = createTheme({
 function RouteWithSubRoutes(route) {
   return (
     <Route
+      exact={route.exact}
       path={route.path}
       render={(props) => (
         // pass the sub-routes down to keep nesting
@@ -25,6 +27,7 @@ function RouteWithSubRoutes(route) {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <ThemeProvider theme={fontTheme}>
         <Container fixed>
           <Navigation />

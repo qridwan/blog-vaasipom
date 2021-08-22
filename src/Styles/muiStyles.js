@@ -38,7 +38,7 @@ export const feedCardStyles = makeStyles({
   },
   media: {
     width: "100%",
-    height: "220px",
+    height: "260px",
     borderRadius: "20px",
   },
   title: {

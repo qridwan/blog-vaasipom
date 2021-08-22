@@ -42,35 +42,41 @@ const podcastFeeds = [
 ];
 
 const podcastFeedStyles = makeStyles(() => {
-    return {
-      root: {
-        boxShadow: "none",
-        margin: "40px 0",
-      },
-      title: {
-        fontWeight: "bold",
-        fontSize: "25px",
-        lineHeight: "31px",
-        color: "#000000",
-      }}
-    })
+  return {
+    root: {
+      boxShadow: "none",
+      margin: "40px 0",
+    },
+    title: {
+      fontWeight: "bold",
+      fontSize: "25px",
+      lineHeight: "31px",
+      color: "#000000",
+    },
+  };
+});
 
-const PodcastFeed = () => {
-    const classes = podcastFeedStyles()
+const PodcastFeed = ({ setIsAudioPlay }) => {
+  const classes = podcastFeedStyles();
   return (
     <div y className={classes.root}>
-        <Typography className={classes.title}>Popular Trending</Typography>
-      <PodcastSlider />
+      <Typography className={classes.title}>Popular Trending</Typography>
+      <PodcastSlider setIsAudioPlay={setIsAudioPlay} />
       <Box my={10}>
         {podcastFeeds.map((feed) => (
           <FeedCard key={feed.id} feed={feed} podcast={true} />
         ))}
       </Box>
-      <Typography className={classes.title}>Spiritual & Religious</Typography>
-      <PodcastSlider />
+      <Typography
+        onClick={() => setIsAudioPlay(true)}
+        className={classes.title}
+      >
+        Spiritual & Religious
+      </Typography>
+      <PodcastSlider setIsAudioPlay={setIsAudioPlay} />
       <Box my={10}>
         {podcastFeeds.map((feed) => (
-          <FeedCard key={feed.id} feed={feed} podcast={true} />
+          <FeedCard key={feed.id} feed={feed} type={"podcast"} />
         ))}
       </Box>
     </div>

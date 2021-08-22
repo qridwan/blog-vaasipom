@@ -10,10 +10,10 @@ import {
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination } from "swiper/core";
-import Img from '../../Assets/img/sliderTrend.png';
+import Img from "../../Assets/img/sliderTrend.png";
 import "swiper/swiper.min.css";
 import "swiper/components/pagination/pagination.min.css";
-import BookmarkIcon from '@material-ui/icons/Bookmark';
+import BookmarkIcon from "@material-ui/icons/Bookmark";
 const sliderStyles = makeStyles(() => {
   return {
     root: {
@@ -32,11 +32,11 @@ const sliderStyles = makeStyles(() => {
       padding: "0px",
       cursor: "pointer",
       "&:hover": {
-          backgroundColor: "transparent"
+        backgroundColor: "transparent",
       },
       "&:focus": {
-          backgroundColor: "transparent"
-      }
+        backgroundColor: "transparent",
+      },
     },
     media: {
       height: 200,
@@ -70,9 +70,14 @@ const sliderStyles = makeStyles(() => {
 
 // install Swiper modules
 SwiperCore.use([Pagination]);
-const PodcastSlider = () => {
+const PodcastSlider = ({ setIsAudioPlay }) => {
   const classes = sliderStyles();
   const [slider, setSlider] = useState([1, 2, 3, 4, 5]);
+
+  const playPodcast = () => {
+    setIsAudioPlay(true);
+  };
+  
   return (
     <div className={classes.root}>
       <Box className={classes.sliderBox}>
@@ -84,22 +89,22 @@ const PodcastSlider = () => {
         >
           {slider.map((numb) => (
             <SwiperSlide key={numb}>
-              <Card className={classes.card}>
-                
-                  <CardMedia
-                    className={classes.media}
-                    image={Img}
-                    title="Contemplative Reptile"
-                  />
-                  <BookmarkIcon className={classes.icon}/>
-                  <CardContent style={{ padding: "0" }}>
-                    <Typography gutterBottom className={classes.cardTitle}>
-                      TED Talks Daily
-                    </Typography>
-                    <Typography className={classes.cardAuthor}>
-                      Krishnamurthy
-                    </Typography>
-                  </CardContent>
+              <Card onClick={playPodcast} className={classes.card}>
+                <CardMedia
+                 onClick={playPodcast}
+                  className={classes.media}
+                  image={Img}
+                  title="Contemplative Reptile"
+                />
+                <BookmarkIcon className={classes.icon} />
+                <CardContent style={{ padding: "0" }}>
+                  <Typography gutterBottom className={classes.cardTitle}>
+                    TED Talks Daily
+                  </Typography>
+                  <Typography className={classes.cardAuthor}>
+                    Krishnamurthy
+                  </Typography>
+                </CardContent>
               </Card>
             </SwiperSlide>
           ))}

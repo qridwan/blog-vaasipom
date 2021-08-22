@@ -45,7 +45,7 @@
   content: "";
   height: 5px;
   width: var(--seek-before-width);
-  background-color: black;
+  background-color: var(--seek-before-color) !important;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   position: absolute;

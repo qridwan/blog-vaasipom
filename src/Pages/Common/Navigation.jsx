@@ -1,13 +1,14 @@
 import React from "react";
-import VasipomLogo from "../Assets/logos/VasipomLogo2.png";
+import VasipomLogo from "../../Assets/logos/VasipomLogo2.png";
 import { AppBar, Box, Toolbar } from "@material-ui/core";
-import { NavigationStyles } from "../Styles/muiStyles";
+import { NavigationStyles } from "../../Styles/muiStyles";
 import { Container } from "@material-ui/core";
 import { Avatar } from "@material-ui/core";
-import User from "../Assets/img/user.png";
-import NotifyIcon from "../Assets/icons/notification.png";
-import WriteIcon from "../Assets/icons/writing.png";
+import User from "../../Assets/img/user.png";
+import NotifyIcon from "../../Assets/icons/notification.png";
+import WriteIcon from "../../Assets/icons/writing.png";
 import { IconButton } from "@material-ui/core";
+import { NavLink } from "react-router-dom";
 const Navigation = () => {
   const classes = NavigationStyles();
   console.log(
@@ -20,13 +21,16 @@ const Navigation = () => {
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
             <Box className={classes.menuBrand}>
-              <img
-                src={VasipomLogo}
-                alt="brandLogo"
-                className=""
-                height="70px"
-                width="200px"
-              />
+             <NavLink to={`/`}>
+               <img
+               src={VasipomLogo}
+               alt="brandLogo"
+               className=""
+               height="70px"
+               width="200px"
+             />
+             </NavLink>
+            
             </Box>
 
             {/* After Login  */}

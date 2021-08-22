@@ -84,16 +84,17 @@ const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-
   // references
-  const audioPlayer = useRef(); // reference our audio component
-  const progressBar = useRef(); // reference our progress bar
-  const animationRef = useRef(); // reference the animation
+  const audioPlayer = useRef(); // ref audio component
+  const progressBar = useRef(); // ref progress bar
+  const animationRef = useRef(); // ref animation
+  const playPauseBtnRef = useRef(); // ref Play/Pause button
 
   useEffect(() => {
     const seconds = Math.floor(audioPlayer.current.duration);
     setDuration(seconds);
     progressBar.current.max = seconds;
+    !isPlaying && playPauseBtnRef.current.click();
   }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
 
   const togglePlayPause = () => {
@@ -109,9 +110,11 @@ const AudioPlayer = () => {
   };
 
   const whilePlaying = () => {
-    progressBar.current.value = audioPlayer.current.currentTime;
-    changePlayerCurrentTime();
-    animationRef.current = requestAnimationFrame(whilePlaying);
+    if (progressBar.current) {
+      progressBar.current.value = audioPlayer?.current?.currentTime;
+      changePlayerCurrentTime();
+      animationRef.current = requestAnimationFrame(whilePlaying);
+    }
   };
 
   const changeRange = () => {
@@ -178,6 +181,7 @@ const AudioPlayer = () => {
               <img src={PrevIco} alt="" />
             </IconButton>
             <Fab
+              ref={playPauseBtnRef}
               onClick={togglePlayPause}
               className={classes.fab}
               aria-label="add"

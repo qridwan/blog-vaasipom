@@ -14,18 +14,19 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import { feedCardStyles } from "../../Styles/muiStyles";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
+import { NavLink, useRouteMatch } from "react-router-dom";
 
-const FeedCard = ({ feed, podcast }) => {
+const FeedCard = ({ feed, type }) => {
   const classes = feedCardStyles();
   const { author, title, desc, img, likes, views, date, readTime, topic } =
     feed;
+    let { url } = useRouteMatch();
   return (
     <Card className={classes.root}>
-      {/* topbar */}
       <CardActions className={classes.topbar}>
         <AuthorButton>{author}</AuthorButton>
         <div>
-          {podcast && (
+          {type === "podcast" && (
             <IconButton>
               <QueueMusicIcon />
             </IconButton>
@@ -35,21 +36,23 @@ const FeedCard = ({ feed, podcast }) => {
           </IconButton>
         </div>
       </CardActions>
-      <CardActionArea>
-        {/* title */}
-        <Typography className={classes.title}>{title}</Typography>
-        {/* description */}
-        <Typography className={classes.desc}>{desc}</Typography>
-        {/* image */}
-        {img && (
-          <CardMedia
-            className={classes.media}
-            image={img}
-            title="Feed Cover Photo"
-          />
-        )}
-        {/* footer */}
-      </CardActionArea>
+      <NavLink to={`${url}/${title}`}>
+        <CardActionArea>
+          {/* title */}
+          <Typography className={classes.title}>{title}</Typography>
+          {/* description */}
+          <Typography className={classes.desc}>{desc}</Typography>
+          {/* image */}
+          {img && (
+            <CardMedia
+              className={classes.media}
+              image={img}
+              title="Feed Cover Photo"
+            />
+          )}
+          {/* footer */}
+        </CardActionArea>
+      </NavLink>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box display="flex" alignItems="center">
           <Box display="flex" alignItems="center">
