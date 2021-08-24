@@ -1,3 +1,4 @@
+import { Container } from "@material-ui/core";
 import {
   Avatar,
   Box,
@@ -11,18 +12,21 @@ import React, { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AvatarImg from "../../Assets/img/avatar.png";
 import { DarkButton, OutlineButton } from "../../muiComponents/OutlineButton";
+import AuthorsToFollow from "./AuthorsToFollow";
 
 const suggestionStyles = makeStyles((theme) => ({
+  container: {
+    padding: 0,
+  },
   box: {
-    margin: "20px 0",
-    padding: "40px",
+    margin: "30px 0",
   },
   root: {
     display: "flex",
     justifyContent: "start",
     flexWrap: "wrap",
     listStyle: "none",
-    padding: "20px 0",
+    padding: "5px 0",
     margin: theme.spacing(1),
     boxShadow: "none",
   },
@@ -75,19 +79,17 @@ const suggestionStyles = makeStyles((theme) => ({
     color: "#797979",
   },
   buttons: {
-    margin: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }));
 
 const Suggestions = () => {
   const location = useLocation();
+  const classes = suggestionStyles();
   const { pathname } = location;
   const splitLocation = pathname.split("/")[1];
 
-  const [follow, setFollow] = useState(false);
-  const [authors, setAuthors] = useState([1, 2, 3, 4, 5]);
-
-  const classes = suggestionStyles();
   const [lookingFor, setLookingFor] = useState([
     { key: 0, label: "Podcast" },
     { key: 1, label: "Short Stories" },
@@ -106,23 +108,12 @@ const Suggestions = () => {
     { key: 5, label: "Entertainment" },
   ]);
 
-  const handleDelete = (chipToDelete) => () => {
-    // setChipData((chips) =>
-    //   chips.filter((chip) => chip.key !== chipToDelete.key)
-    // );
-  };
   const handleClick = () => {};
-  const handleFollow = () => {
-    setFollow(!follow);
-  };
-  console.log(
-    "🚀 ~ file: Suggestions.jsx ~ line 86 ~ Suggestions ~ splitLocation",
-    splitLocation
-  );
+
   return (
-    <div>
-      <Box className={classes.box}>
-        {/*What Looking for */}
+    <Container className={classes.container}>
+      {/*What Looking for */}
+      {/* <Box className={classes.box}>
         <Typography className={classes.text}>
           What You’re Looking For
         </Typography>
@@ -147,7 +138,7 @@ const Suggestions = () => {
             );
           })}
         </Paper>
-      </Box>
+      </Box> */}
 
       {/*Topic to follow */}
       <Box className={classes.box}>
@@ -176,41 +167,9 @@ const Suggestions = () => {
       {/*Authors to follow */}
       <Box className={classes.box}>
         <Typography className={classes.text}>Authors To Follow </Typography>
-        {authors.map((author) => (
-          <Card key={author} className={classes.card}>
-            <CardHeader
-              avatar={
-                <Avatar
-                  aria-label="recipe"
-                  className={classes.avatar}
-                  src={AvatarImg}
-                  alt="Author Name"
-                />
-              }
-              action={
-                <>
-                  <OutlineButton
-                    className={follow ? classes.follow : classes.unFollow}
-                    onClick={handleFollow}
-                  >
-                    {follow ? "Unfollow" : "Follow"}
-                  </OutlineButton>
-                </>
-              }
-              title={
-                <Typography className={classes.title}>Jhon Doe</Typography>
-              }
-              subheader={
-                <Typography className={classes.subheader}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                  id magna massa. Ut vitae risus vehicula,
-                </Typography>
-              }
-            />
-          </Card>
-        ))}
+        <AuthorsToFollow />
       </Box>
-    </div>
+    </Container>
   );
 };
 

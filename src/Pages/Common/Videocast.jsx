@@ -5,6 +5,8 @@ import Suggestions from "../../Components/Shared/Suggestions";
 import FeedImg from "../../Assets/img/feedImg.png";
 import martinVid from "../../Assets/img/martinVideo.png";
 import PinkFem from "../../Assets/img/canva-pink-feminine-social-media-marketing.png";
+import Header from "../../Components/LandingPage/Header";
+import SubNavigation from "../../Components/LandingPage/SubNavigation";
 
 
 const data = [
@@ -48,16 +50,18 @@ const data = [
 const Videocast = () => {
   return (
     <Container>
+      <Header />
+      <SubNavigation />
       <Grid
         container
         spacing={3}
         justifyContent="flex-start"
         alignItems="flex-start"
       >
-        <Grid item sm={12} md={6}>
+        <Grid item sm={12} md={8}>
           <Feed data={data} type="videocast"/>
         </Grid>
-        <Grid item sm={12} md={6}>
+        <Grid item sm={12} md={4}>
           <Suggestions />
         </Grid>
       </Grid>

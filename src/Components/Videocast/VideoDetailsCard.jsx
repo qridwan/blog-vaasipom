@@ -18,7 +18,6 @@ import playIco from "../../Assets/icons/play.png";
 import VideoComments from "./VideoComments";
 import CommentatorImg from "../../Assets/img/commentor.png";
 
-
 const videoCardStyle = makeStyles({
   root: {
     margin: "10px 0",
@@ -30,7 +29,6 @@ const videoCardStyle = makeStyles({
   },
   media: {
     width: "100%",
-    height: "260px",
     borderRadius: "20px",
   },
   title: {

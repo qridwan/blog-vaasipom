@@ -1,6 +1,7 @@
 import React from "react";
 import Feed from "../../Components/Shared/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
+import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
 import Suggestions from "../../Components/Shared/Suggestions.jsx";
 import { Grid, Paper } from "@material-ui/core";
 import { landingPageStyles } from "../../Styles/muiStyles.js";
@@ -49,6 +50,7 @@ const LandingPage = () => {
   return (
     <div className={classes.root}>
       <Header />
+      <SubNavigation />
       <div>
         <Grid
           container
@@ -56,12 +58,12 @@ const LandingPage = () => {
           justifyContent="flex-start"
           alignItems="flex-start"
         >
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}>
             <Paper className={classes.paper}>
               <Feed data={data} type="allFeed"/>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <Paper className={classes.paper}>
               <Suggestions />
             </Paper>

@@ -44,8 +44,10 @@ const podcastFeeds = [
 const podcastFeedStyles = makeStyles(() => {
   return {
     root: {
-      boxShadow: "none",
-      margin: "40px 0",
+      padding: "0 40px",
+      marginTop: "30px",
+      overflowY: "scroll",
+      maxHeight: "100vh",
     },
     title: {
       fontWeight: "bold",
@@ -59,7 +61,7 @@ const podcastFeedStyles = makeStyles(() => {
 const PodcastFeed = ({ setIsAudioPlay }) => {
   const classes = podcastFeedStyles();
   return (
-    <div y className={classes.root}>
+    <div className={classes.root}>
       <Typography className={classes.title}>Popular Trending</Typography>
       <PodcastSlider setIsAudioPlay={setIsAudioPlay} />
       <Box my={10}>

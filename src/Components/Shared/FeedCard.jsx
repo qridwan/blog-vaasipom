@@ -20,7 +20,11 @@ const FeedCard = ({ feed, type }) => {
   const classes = feedCardStyles();
   const { author, title, desc, img, likes, views, date, readTime, topic } =
     feed;
-    let { url } = useRouteMatch();
+  let { url } = useRouteMatch();
+  if (url === "/") {
+    url = "/feed";
+  }
+
   return (
     <Card className={classes.root}>
       <CardActions className={classes.topbar}>
