@@ -2,8 +2,6 @@ import { Container } from "@material-ui/core";
 import {
   Avatar,
   Box,
-  Card,
-  CardHeader,
   makeStyles,
   Paper,
   Typography,
@@ -17,6 +15,9 @@ import AuthorsToFollow from "./AuthorsToFollow";
 const suggestionStyles = makeStyles((theme) => ({
   container: {
     padding: 0,
+    boxSizing: "border-box",
+    position: "sticky",
+    top: "0",
   },
   box: {
     margin: "30px 0",
@@ -113,7 +114,7 @@ const Suggestions = () => {
   return (
     <Container className={classes.container}>
       {/*What Looking for */}
-      {/* <Box className={classes.box}>
+      <Box className={classes.box}>
         <Typography className={classes.text}>
           What You’re Looking For
         </Typography>
@@ -138,7 +139,7 @@ const Suggestions = () => {
             );
           })}
         </Paper>
-      </Box> */}
+      </Box>
 
       {/*Topic to follow */}
       <Box className={classes.box}>

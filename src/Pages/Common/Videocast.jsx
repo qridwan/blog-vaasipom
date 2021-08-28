@@ -1,4 +1,4 @@
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
 import Feed from "../../Components/Shared/Feed";
 import Suggestions from "../../Components/Shared/Suggestions";
@@ -7,7 +7,7 @@ import martinVid from "../../Assets/img/martinVideo.png";
 import PinkFem from "../../Assets/img/canva-pink-feminine-social-media-marketing.png";
 import Header from "../../Components/LandingPage/Header";
 import SubNavigation from "../../Components/LandingPage/SubNavigation";
-
+import Navigation from "./Navigation";
 
 const data = [
   {
@@ -47,9 +47,19 @@ const data = [
     topic: "Science",
   },
 ];
+
+const videocastStyles = makeStyles({
+  right: {
+    boxSizing: "border-box",
+    position: "sticky",
+    top: "0",
+  },
+});
 const Videocast = () => {
+  const classes = videocastStyles();
   return (
     <Container>
+      <Navigation />
       <Header />
       <SubNavigation />
       <Grid
@@ -59,9 +69,9 @@ const Videocast = () => {
         alignItems="flex-start"
       >
         <Grid item sm={12} md={8}>
-          <Feed data={data} type="videocast"/>
+          <Feed data={data} type="videocast" />
         </Grid>
-        <Grid item sm={12} md={4}>
+        <Grid item sm={12} md={4} className={classes.right}>
           <Suggestions />
         </Grid>
       </Grid>

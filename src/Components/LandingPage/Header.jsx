@@ -7,6 +7,8 @@ import { SignInButton } from "../../muiComponents/SignInButton";
 const headerStyles = makeStyles((theme) => ({
   head: {
     marginTop: "20px",
+    position: 'relative',
+    zIndex: theme.zIndex.drawer + 1,
   },
   root: {
     flexGrow: 1,

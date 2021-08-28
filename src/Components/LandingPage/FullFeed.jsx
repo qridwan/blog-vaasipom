@@ -17,6 +17,7 @@ import ShareIcon from "@material-ui/icons/Share";
 import FeedImg from "../../Assets/img/feedImg.png";
 import AuthorsToFollow from "../Shared/AuthorsToFollow";
 import SubNavigation from "./SubNavigation";
+import Navigation from "../../Pages/Common/Navigation";
 
 const fullFeedStyles = makeStyles({
   root: {
@@ -104,6 +105,7 @@ const FullFeed = () => {
     feedData;
   return (
     <Container maxWidth="md">
+      <Navigation />
       <SubNavigation />
       <Card className={classes.root}>
         <Box className={classes.topbar}>

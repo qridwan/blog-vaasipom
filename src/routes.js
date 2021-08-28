@@ -4,6 +4,7 @@ import VideoDetails from "./Components/Videocast/VideoDetails";
 import LandingPage from "./Pages/Common/LandingPage";
 import NotFound from "./Pages/Common/NotFound";
 import FullFeed from "./Components/LandingPage/FullFeed";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 
 export const Routes = [
   { path: "/podcast", component: Podcast, exact: "exact" },
@@ -12,6 +13,7 @@ export const Routes = [
  
   { path: "/videocast/:title", component: VideoDetails },
   { path: "/videocast", component: Videocast },
+  { path: "/dashboard", component: Dashboard },
   { path: "/", component: LandingPage, exact: "exact" },
   { component: NotFound },
 ];

@@ -9,35 +9,34 @@ import NotifyIcon from "../../Assets/icons/notification.png";
 import WriteIcon from "../../Assets/icons/writing.png";
 import { IconButton } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-const Navigation = () => {
+
+const Navigation = ({ type }) => {
   const classes = NavigationStyles();
-  console.log(
-    "🚀 ~ file: Navigation.jsx ~ line 9 ~ Navigation ~ classes",
-    classes
-  );
   return (
     <Container>
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
             <Box className={classes.menuBrand}>
-             <NavLink to={`/`}>
-               <img
-               src={VasipomLogo}
-               alt="brandLogo"
-               className=""
-               height="70px"
-               width="200px"
-             />
-             </NavLink>
-            
+              <NavLink to={`/`}>
+                <img
+                  src={VasipomLogo}
+                  alt="brandLogo"
+                  className=""
+                  height="70px"
+                  width="200px"
+                />
+              </NavLink>
             </Box>
 
             {/* After Login  */}
-            <Box >
-              <IconButton className={classes.navIcon}>
-                <img src={WriteIcon} alt="" />
-              </IconButton>
+            <Box>
+              <NavLink to="/dashboard">
+                <IconButton className={classes.navIcon}>
+                  <img src={WriteIcon} alt="" />
+                </IconButton>
+              </NavLink>
+
               <IconButton className={classes.navIcon}>
                 <img src={NotifyIcon} alt="" />
               </IconButton>

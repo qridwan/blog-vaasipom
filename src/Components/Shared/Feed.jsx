@@ -7,8 +7,6 @@ const feedStyles = makeStyles({
   root: {
     padding: "0 40px",
     marginTop: "30px",
-    overflowY: "scroll",
-    maxHeight: "100vh",
   },
 });
 const Feed = ({ data, type }) => {

@@ -78,4 +78,11 @@ export const landingPageStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     boxShadow: "none",
   },
+  left: {},
+  content: {},
+  right: {
+    boxSizing: "border-box",
+    position: "sticky",
+    top: "0",
+  },
 }));
