@@ -2,7 +2,7 @@ import { Grid, makeStyles, Paper, Typography } from "@material-ui/core";
 import { deepOrange } from "@material-ui/core/colors";
 import React from "react";
 import headerImg from "../../Assets/img/HeaderImg.png";
-import { SignInButton } from "../../muiComponents/SignInButton";
+import { BlackButton } from "../../muiComponents/BlackButton";
 
 const headerStyles = makeStyles((theme) => ({
   head: {
@@ -83,7 +83,7 @@ const Header = () => {
                 id magna massa. Ut vitae risus vehicula, faucibus odio id,
                 dictum neque. Curabitur rhoncus quis ipsum quis varius.
               </Typography>
-              <SignInButton className={classes.btn}>Sign Up</SignInButton>
+              <BlackButton className={classes.btn}>Sign Up</BlackButton>
              </div>
             </Paper>
           </Grid>

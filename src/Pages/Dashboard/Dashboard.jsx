@@ -23,7 +23,7 @@ import writingIcon from "../../Assets/icons/writingIcon.svg";
 import { NavLink } from "react-router-dom";
 import { grey, red } from "@material-ui/core/colors";
 import DashboardTable from "../../Components/Dashboard/Table";
-import { SignInButton } from "../../muiComponents/SignInButton";
+import { BlackButton } from "../../muiComponents/BlackButton";
 import MenuModal from "../../Components/Dashboard/MenuModal";
 import { blue } from "@material-ui/core/colors";
 import Article from "../../Components/Dashboard/Writing/Article";
@@ -261,7 +261,7 @@ const Dashboard = (props) => {
                 <Typography className={classes.title}>
                   Your Publishes
                 </Typography>
-                <SignInButton onClick={handleOpen}>Publish</SignInButton>
+                <BlackButton onClick={handleOpen}>Publish</BlackButton>
               </>
             ) : (
               <>

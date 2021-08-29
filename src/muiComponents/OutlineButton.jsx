@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/styles";
 export const OutlineButton = withStyles(() => ({
   root: {
     color: grey[800],
-    padding: "5px 15px",
+    padding: "10px 35px",
     background: `transparent`,
     boxShadow: `none`,
     fontSize: "16px",
