@@ -38,13 +38,14 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "Title",
+   width: 220
   },
   { id: "category", numeric: false, disablePadding: false, label: "Category" },
   { id: "status", numeric: false, disablePadding: false, label: "Status" },
   { id: "date", numeric: false, disablePadding: false, label: "Date" },
   { id: "likes", numeric: true, disablePadding: false, label: "Likes" },
   { id: "views", numeric: true, disablePadding: false, label: "Views" },
-  { id: "comment", numeric: true, disablePadding: false, label: "Comment" },
+  { id: "comment", numeric: true, disablePadding: false, label: "Comment" ,  size: "small"},
   {
     id: "performance",
     numeric: true,
@@ -63,7 +64,9 @@ const DashTableHead = (props) => {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
+            style={{ width: headCell.width }}
             className={classes.headCell}
+            // style={{width: headCell.width}}
             align={headCell.numeric ? "center" : "start"}
             // padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}

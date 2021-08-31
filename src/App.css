@@ -11,10 +11,10 @@ a {
   background-color: #ffffff;
 }
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #f5f1f1;
+  background-color: #868686;
   border: none;
   width: 5px;
 }

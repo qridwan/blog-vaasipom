@@ -38,8 +38,10 @@ export const InputArea = withStyles((theme) => ({
 
 export const CustomLabel = withStyles((theme) => ({
   root: {
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     width: "100%",
-    fontSize: "16px !important"
+    fontSize: "16px !important",
+    color: grey[800]
   },
 }))(InputLabel);

@@ -14,19 +14,20 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
-import { Avatar, Box, Button, IconButton } from "@material-ui/core";
+import { Avatar, Box, IconButton } from "@material-ui/core";
 import SearchField from "../../Components/Shared/SearchField";
 import VasipomLogo from "../../Assets/logos/whiteBrandLogo.png";
 import settingIcon from "../../Assets/icons/settings.svg";
 import readingIcon from "../../Assets/icons/readingIcon.svg";
 import writingIcon from "../../Assets/icons/writingIcon.svg";
 import { NavLink } from "react-router-dom";
-import { grey, red } from "@material-ui/core/colors";
+import { grey } from "@material-ui/core/colors";
 import DashboardTable from "../../Components/Dashboard/Table";
 import { BlackButton } from "../../muiComponents/BlackButton";
 import MenuModal from "../../Components/Dashboard/MenuModal";
-import { blue } from "@material-ui/core/colors";
 import Article from "../../Components/Dashboard/Writing/Article";
+import Novel from "../../Components/Dashboard/Writing/Novel";
+import MediaCast from "../../Components/Dashboard/Writing/MediaCast";
 
 const drawerWidth = 250;
 
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
-      width: drawerWidth / 6,
+      width: drawerWidth / 3,
       flexShrink: 0,
     },
   },
@@ -176,6 +177,7 @@ const Dashboard = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   console.log({ page, write });
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -266,7 +268,7 @@ const Dashboard = (props) => {
             ) : (
               <>
                 <Typography className={classes.title}>
-                  Write Your {write}
+                  Write Your {write === "Poetry" ? "Novel" : write}
                 </Typography>
               </>
             )}
@@ -285,11 +287,23 @@ const Dashboard = (props) => {
         )}
 
         {/* Article Writing */}
-        {page === "Writing" && write === "Article" && (
-          <section>
-            <Article />
-          </section>
+        {((page === "Writing" && write === "Article") ||
+          (page === "Writing" && write === "Short Story") ||
+          (page === "Writing" && write === "Reviews")) && (
+          <Article type={write} />
         )}
+
+        {/* Novel Writing */}
+        {page === "Writing" && write === "Poetry" && <Novel />}
+
+        {/* Podcast || Videocast Writing */}
+        {((page === "Writing" && write === "Podcast") ||
+          (page === "Writing" && write === "Videocast")) && (
+          <MediaCast type={write} />
+        )}
+
+        {/* Novel Writing */}
+        {/* {page === "Writing" && write === "VideoCast" && <MediaCast type={write}/>} */}
       </main>
     </div>
   );

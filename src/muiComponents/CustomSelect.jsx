@@ -1,5 +1,5 @@
 import { MenuItem, Select, useTheme } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { InputArea } from "./InputArea";
 
 function getStyles(name, tagName, theme) {
@@ -20,23 +20,32 @@ const MenuProps = {
     },
   },
 };
-const MultiSelect = ({ data, selectItems, setSelectItems }) => {
+const CustomSelect = ({ data, selectItems, setSelectItems, type }) => {
   const theme = useTheme();
+  const [isMultiple, setIsMultiple] = useState(true);
   const handleSelect = (event) => {
     setSelectItems(event.target.value);
+    if (type === "single") {
+      setIsMultiple(false);
+    }
   };
+
   return (
     <Select
-      multiple
+      multiple={isMultiple}
       displayEmpty
       value={selectItems}
       onChange={handleSelect}
       input={<InputArea />}
       renderValue={(selected) => {
-        if (selected.length === 0) {
-          return <em></em>;
+        if (selected && isMultiple) {
+          if (selected.length === 0) {
+            return <em></em>;
+          }
+          return selected.join(", ");
+        } else if (selected && !isMultiple) {
+          return selected;
         }
-        return selected.join(", ");
       }}
       MenuProps={MenuProps}
       inputProps={{ "aria-label": "Without label" }}
@@ -55,4 +64,4 @@ const MultiSelect = ({ data, selectItems, setSelectItems }) => {
   );
 };
 
-export default MultiSelect;
+export default CustomSelect;

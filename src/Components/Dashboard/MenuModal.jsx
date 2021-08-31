@@ -20,8 +20,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    maxWidth: "550px",
+    maxWidth: "750px",
     margin: "0 auto",
+    padding: "20px"
   },
   paper: {
     border: `1px solid rgba(196, 196, 196, 0.5)`,
@@ -106,9 +107,9 @@ const MenuModal = ({ open, handleClose, setWrite }) => {
             <h1 id="transition-modal-title">
               Any one can write. Show your creativity
             </h1>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
               {menuList.map((obj) => (
-                <Grid key={obj.id} item xs={6}>
+                <Grid key={obj.id} item xs={4}>
                   <Paper
                     onClick={() => handleRender(obj.title)}
                     className={classes.paper}
