@@ -7,6 +7,7 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { grey } from "@material-ui/core/colors";
 import { NavLink, useRouteMatch } from "react-router-dom";
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   titleSpan: {
     color: "#aba7a7",
     fontSize: "14px",
-    marginLeft: "5px"
+    marginLeft: "5px",
   },
   search: {
     position: "relative",
@@ -103,49 +104,51 @@ const SubNavigation = () => {
     path
   );
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.appBar} color="white" position="static">
-        <Toolbar>
-          <div className={classes.leftItems}>
-            {lookingFor.map((data) => {
-              let page = "/" + data.label.toLowerCase();
-              if (page === "/all") {
-                page = "/";
-              }
-              return (
-                <NavLink to={page}>
-                  <Typography
-                    className={
-                      path === page ? classes.darkTitle : classes.title
-                    }
-                    noWrap
-                  >
-                    {data.label}
-                    {data.count && (
-                      <span className={classes.titleSpan}>{data.count}</span>
-                    )}
-                  </Typography>
-                </NavLink>
-              );
-            })}
-          </div>
-
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+    <Container maxWidth="xl">
+      <div className={classes.root}>
+        <AppBar className={classes.appBar} color="white" position="static">
+          <Toolbar>
+            <div className={classes.leftItems}>
+              {lookingFor.map((data) => {
+                let page = "/" + data.label.toLowerCase();
+                if (page === "/all") {
+                  page = "/";
+                }
+                return (
+                  <NavLink to={page}>
+                    <Typography
+                      className={
+                        path === page ? classes.darkTitle : classes.title
+                      }
+                      noWrap
+                    >
+                      {data.label}
+                      {data.count && (
+                        <span className={classes.titleSpan}>{data.count}</span>
+                      )}
+                    </Typography>
+                  </NavLink>
+                );
+              })}
             </div>
-            <InputBase
-              placeholder="Search something here…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
+
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search something here…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+    </Container>
   );
 };
 

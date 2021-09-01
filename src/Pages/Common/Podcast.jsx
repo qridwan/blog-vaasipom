@@ -21,7 +21,7 @@ const Podcast = () => {
   const [isAudioPlay, setIsAudioPlay] = useState(false);
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Navigation />
       <Header />
       <SubNavigation />

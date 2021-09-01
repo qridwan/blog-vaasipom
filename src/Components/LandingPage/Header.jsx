@@ -6,7 +6,7 @@ import { BlackButton } from "../../muiComponents/BlackButton";
 
 const headerStyles = makeStyles((theme) => ({
   head: {
-    marginTop: "20px",
+    marginTop: "10px",
     position: 'relative',
     zIndex: theme.zIndex.drawer + 1,
   },
@@ -14,7 +14,7 @@ const headerStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   left: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(7),
     textAlign: "start",
     color: theme.palette.text.primary,
     display: "flex",
@@ -22,7 +22,7 @@ const headerStyles = makeStyles((theme) => ({
     boxShadow: "none",
   },
   right: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(5),
     textAlign: "start",
     color: theme.palette.text.primary,
     boxShadow: "none",

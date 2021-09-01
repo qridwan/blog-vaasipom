@@ -5,6 +5,7 @@ export const NavigationStyles = makeStyles((theme) => {
   return {
     root: {
       flexGrow: 1,
+      paddingTop: 12
     },
     appBar: {
       backgroundColor: "#ffffff",
@@ -21,7 +22,8 @@ export const NavigationStyles = makeStyles((theme) => {
     },
     offset: theme.mixins.toolbar,
     navIcon: {
-      marginRight: "20px",
+      marginRight: "25px",
+
     },
   };
 });
@@ -70,7 +72,7 @@ export const feedCardStyles = makeStyles({
 
 export const landingPageStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   paper: {
     padding: theme.spacing(2),

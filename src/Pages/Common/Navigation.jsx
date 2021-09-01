@@ -13,7 +13,7 @@ import { NavLink } from "react-router-dom";
 const Navigation = ({ type }) => {
   const classes = NavigationStyles();
   return (
-    <Container>
+    <Container maxWidth="xl">
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>

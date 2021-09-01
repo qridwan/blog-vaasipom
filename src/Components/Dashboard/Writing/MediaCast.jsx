@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, Container, Grid } from "@material-ui/core";
 import React, { createRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BlackButton } from "../../../muiComponents/BlackButton";
@@ -35,7 +35,7 @@ const MediaCast = ({ type }) => {
   };
 
   return (
-    <Box mb={10}>
+    <Container maxWidth="md">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
@@ -95,7 +95,7 @@ const MediaCast = ({ type }) => {
           </Grid>
         </Grid>
       </form>
-    </Box>
+    </Container>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Container, createTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import ScrollToTop from "./Components/Scroll/ScrollToTop";
@@ -32,13 +32,13 @@ function App() {
     <Router>
       <ScrollToTop />
       <ThemeProvider theme={fontTheme}>
-        <Container fixed>
+        <>
           <Switch>
             {Routes.map((route, i) => (
               <RouteWithSubRoutes key={i} {...route} />
             ))}
           </Switch>
-        </Container>
+        </>
       </ThemeProvider>
     </Router>
   );

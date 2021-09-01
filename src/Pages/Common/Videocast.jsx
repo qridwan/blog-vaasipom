@@ -58,7 +58,7 @@ const videocastStyles = makeStyles({
 const Videocast = () => {
   const classes = videocastStyles();
   return (
-    <Container>
+    <Container maxWidth="xl"> 
       <Navigation />
       <Header />
       <SubNavigation />

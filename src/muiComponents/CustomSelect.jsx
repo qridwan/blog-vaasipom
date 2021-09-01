@@ -2,10 +2,10 @@ import { MenuItem, Select, useTheme } from "@material-ui/core";
 import React, { useState } from "react";
 import { InputArea } from "./InputArea";
 
-function getStyles(name, tagName, theme) {
+function getStyles(item, chosenItems, theme) {
   return {
     fontWeight:
-      tagName.indexOf(name) === -1
+      chosenItems.indexOf(item) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -20,7 +20,13 @@ const MenuProps = {
     },
   },
 };
-const CustomSelect = ({ data, selectItems, setSelectItems, type }) => {
+const CustomSelect = ({
+  data,
+  selectItems,
+  setSelectItems,
+  type,
+  placeholder,
+}) => {
   const theme = useTheme();
   const [isMultiple, setIsMultiple] = useState(true);
   const handleSelect = (event) => {
@@ -40,7 +46,7 @@ const CustomSelect = ({ data, selectItems, setSelectItems, type }) => {
       renderValue={(selected) => {
         if (selected && isMultiple) {
           if (selected.length === 0) {
-            return <em></em>;
+            return <span>{placeholder && "Filter By Category"}</span>;
           }
           return selected.join(", ");
         } else if (selected && !isMultiple) {

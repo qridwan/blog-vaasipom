@@ -14,7 +14,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
-import { Avatar, Box, IconButton } from "@material-ui/core";
+import { Avatar, Box, Container, IconButton } from "@material-ui/core";
 import SearchField from "../../Components/Shared/SearchField";
 import VasipomLogo from "../../Assets/logos/whiteBrandLogo.png";
 import settingIcon from "../../Assets/icons/settings.svg";
@@ -28,6 +28,8 @@ import MenuModal from "../../Components/Dashboard/MenuModal";
 import Article from "../../Components/Dashboard/Writing/Article";
 import Novel from "../../Components/Dashboard/Writing/Novel";
 import MediaCast from "../../Components/Dashboard/Writing/MediaCast";
+import EditProfile from "../../Components/Dashboard/ProfileSettings/EditProfile";
+import Reading from "../../Components/Dashboard/Reading/Reading";
 
 const drawerWidth = 250;
 
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
-      width: drawerWidth / 3,
+      width: drawerWidth / 2,
       flexShrink: 0,
     },
   },
@@ -85,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   // necessary for content to be below app bar
   toolbar: {
-    minHeight: "70px",
+    minHeight: "100px",
   },
   drawerPaper: {
     width: drawerWidth,
@@ -94,9 +96,10 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: "0px",
+    padding: "30px 0 40px 0",
     marginLeft: "150px",
     backgroundColor: "#ffffff",
+    overflowX: "auto",
   },
   navIcon: {
     marginLeft: "15px",
@@ -107,13 +110,50 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "150%",
     color: "#121212",
   },
+  readingNav: {
+    flexGrow: 1,
+  },
+  navTitle: {
+    display: "none",
+    color: "#767676",
+    fontSize: "16px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    marginRight: theme.spacing(3),
+    [theme.breakpoints.up("sm")]: {
+      display: "inline-block",
+    },
+  },
+  darkNavTitle: {
+    display: "none",
+    color: "#000000",
+    fontSize: "16px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.31)",
+    marginRight: theme.spacing(4),
+    [theme.breakpoints.up("sm")]: {
+      display: "inline-block",
+    },
+  },
+  navTitleSpan: {
+    color: "#aba7a7",
+    fontSize: "14px",
+    marginLeft: "5px",
+  },
 }));
 
 const Dashboard = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const [lookingFor, setLookingFor] = useState([
+    { key: 1, label: "All", count: 553 },
+    { key: 2, label: "Bookmarked", count: 323 },
+    { key: 3, label: "Liked", count: 53 },
+  ]);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [reading, setReading] = useState("All");
   const [page, setPage] = useState("Writing");
   const [write, setWrite] = useState(null);
   const [open, setOpen] = useState(false);
@@ -173,13 +213,16 @@ const Dashboard = (props) => {
       </List>
     </div>
   );
-
+  const handleReadingNav = (page, event) => {
+    console.log(page, event);
+    setReading(page);
+  };
   const container =
     window !== undefined ? () => window().document.body : undefined;
   console.log({ page, write });
 
   return (
-    <div className={classes.root}>
+    <Container maxWidth="xl" className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar} color="white">
         <IconButton
@@ -192,6 +235,30 @@ const Dashboard = (props) => {
           <MenuIcon />
         </IconButton>
         <Toolbar>
+          {page === "Reading" && (
+            <div className={classes.readingNav}>
+              {lookingFor.map((data) => {
+                let page = data.label;
+                // if (page === "/all") {
+                //   page = "/";
+                // }
+                return (
+                  <Typography
+                    onClick={(e) => handleReadingNav(data.label, e)}
+                    className={
+                      reading === page ? classes.darkNavTitle : classes.navTitle
+                    }
+                    noWrap
+                  >
+                    {data.label}
+                    {data.count && (
+                      <span className={classes.navTitleSpan}>{data.count}</span>
+                    )}
+                  </Typography>
+                );
+              })}
+            </div>
+          )}
           <Box display="flex" alignItems="center" flexGrow="1"></Box>
 
           <div className={classes.searchField}>
@@ -251,26 +318,39 @@ const Dashboard = (props) => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {/* Top Title */}
-        {page === "Writing" && (
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            my={4}
-          >
+        {(page === "Writing" || page === "Settings") && (
+          <Box display="flex" justifyContent="space-between" alignItems="start">
             {page === "Writing" && write === null ? (
               <>
-                <Typography className={classes.title}>
+                <Typography
+                  className={classes.title}
+                  style={{ paddingBottom: "40px" }}
+                >
                   Your Publishes
                 </Typography>
-                <BlackButton onClick={handleOpen}>Publish</BlackButton>
+                <BlackButton
+                  style={{ marginRight: "35px" }}
+                  onClick={handleOpen}
+                >
+                  Publish
+                </BlackButton>
               </>
             ) : (
-              <>
+              page === "Writing" && (
+                <Container maxWidth="md">
+                  <Typography className={classes.title}>
+                    Write Your {write === "Short Story" ? "Novel" : write}
+                  </Typography>
+                </Container>
+              )
+            )}
+            {page === "Settings" && (
+              <Container maxWidth="xl">
                 <Typography className={classes.title}>
-                  Write Your {write === "Poetry" ? "Novel" : write}
+                  Edit Your Profile
                 </Typography>
-              </>
+                <EditProfile />
+              </Container>
             )}
           </Box>
         )}
@@ -288,24 +368,23 @@ const Dashboard = (props) => {
 
         {/* Article Writing */}
         {((page === "Writing" && write === "Article") ||
-          (page === "Writing" && write === "Short Story") ||
+          (page === "Writing" && write === "Poetry") ||
           (page === "Writing" && write === "Reviews")) && (
           <Article type={write} />
         )}
 
         {/* Novel Writing */}
-        {page === "Writing" && write === "Poetry" && <Novel />}
+        {page === "Writing" && write === "Short Story" && <Novel />}
 
         {/* Podcast || Videocast Writing */}
         {((page === "Writing" && write === "Podcast") ||
           (page === "Writing" && write === "Videocast")) && (
           <MediaCast type={write} />
         )}
-
-        {/* Novel Writing */}
-        {/* {page === "Writing" && write === "VideoCast" && <MediaCast type={write}/>} */}
+        {/* Reading Section */}
+        {page === "Reading" && <Reading />}
       </main>
-    </div>
+    </Container>
   );
 };
 

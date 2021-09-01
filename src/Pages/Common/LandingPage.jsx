@@ -3,7 +3,7 @@ import Feed from "../../Components/Shared/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
 import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
 import Suggestions from "../../Components/Shared/Suggestions.jsx";
-import { Grid, Paper } from "@material-ui/core";
+import { Container, Grid, Paper } from "@material-ui/core";
 import { landingPageStyles } from "../../Styles/muiStyles.js";
 import FeedImg from "../../Assets/img/feedImg.png";
 import Navigation from "./Navigation.jsx";
@@ -85,7 +85,7 @@ const data = [
 const LandingPage = () => {
   const classes = landingPageStyles();
   return (
-    <div className={classes.root}>
+    <Container maxWidth="xl" >
       <Navigation />
       <Header />
       <SubNavigation />
@@ -109,7 +109,7 @@ const LandingPage = () => {
           </Grid>
         </Grid>
       </div>
-    </div>
+    </Container>
   );
 };
 

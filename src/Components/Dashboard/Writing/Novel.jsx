@@ -1,6 +1,6 @@
-import { Box, Grid } from "@material-ui/core";
-import React, { createRef, useEffect, useState } from "react";
+import { Box, Container, Grid } from "@material-ui/core";
 import { useForm } from "react-hook-form";
+import React, { useEffect, useRef, useState } from "react";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import CustomSelect from "../../../muiComponents/CustomSelect";
@@ -16,7 +16,7 @@ const Novel = () => {
   const [selectedInterest, setSelectedInterest] = useState([]);
   const [novelType, setNovelType] = useState([]);
   const [tagName, setTagName] = useState([]);
-  const novelRef = createRef();
+  const novelRef = useRef(null);
   useEffect(() => {
     document.title = "Blog | Writing | Novel";
   }, []);
@@ -35,9 +35,9 @@ const Novel = () => {
       console.log(novelRef.current.getContent());
     }
   };
-  console.log({ novelType });
+
   return (
-    <Box>
+    <Container maxWidth="md">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={3}>
@@ -84,6 +84,7 @@ const Novel = () => {
               <Grid item xs={12} sm={12}>
                 <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
                 <CustomSelect
+
                   data={interests}
                   selectItems={selectedInterest}
                   setSelectItems={setSelectedInterest}
@@ -115,7 +116,7 @@ const Novel = () => {
           )}
           <Grid item xs={12} sm={4}>
             <CustomLabel>Add Image</CustomLabel>
-            <ImageInput registry={"novelImage"} />
+            <ImageInput register={register} fileName={"novelImage"} />
           </Grid>
         </Grid>
         {novelType !== "New" && (
@@ -133,7 +134,7 @@ const Novel = () => {
           </Box>
         )}
       </form>
-    </Box>
+    </Container>
   );
 };
 

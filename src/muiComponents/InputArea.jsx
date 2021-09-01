@@ -4,12 +4,10 @@ import { withStyles } from "@material-ui/styles";
 
 export const InputArea = withStyles((theme) => ({
   root: {
-   
-      width: "100%",
-  
+    width: "100%",
   },
   input: {
-    borderRadius: 4,
+    borderRadius: (props) => (props.border === "curve" ? 25 : 4),
     position: "relative",
     backgroundColor: theme.palette.common.white,
     border: "1px solid #ced4da",
@@ -42,6 +40,6 @@ export const CustomLabel = withStyles((theme) => ({
     marginBottom: theme.spacing(1),
     width: "100%",
     fontSize: "16px !important",
-    color: grey[800]
+    color: grey[800],
   },
 }))(InputLabel);
