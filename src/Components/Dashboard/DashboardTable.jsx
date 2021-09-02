@@ -5,16 +5,43 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import DashTableHead, { getComparator, stableSort } from "./TableHead";
+import CustomTableHead, { getComparator, stableSort } from "./TableHead";
 import { grey } from "@material-ui/core/colors";
 import { Box, IconButton, Typography } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Popover from "@material-ui/core/Popover";
 import { Button } from "@material-ui/core";
+import { tableStyles } from "../../Styles/muiStyles";
 
+const headTableData = [
+  {
+    id: "title",
+    numeric: false,
+    disablePadding: false,
+    label: "Title",
+    width: 220,
+  },
+  { id: "category", numeric: false, disablePadding: false, label: "Category" },
+  { id: "status", numeric: false, disablePadding: false, label: "Status" },
+  { id: "date", numeric: false, disablePadding: false, label: "Date" },
+  { id: "likes", numeric: true, disablePadding: false, label: "Likes" },
+  { id: "views", numeric: true, disablePadding: false, label: "Views" },
+  {
+    id: "comment",
+    numeric: true,
+    disablePadding: false,
+    label: "Comment",
+    size: "small",
+  },
+  {
+    id: "performance",
+    numeric: true,
+    disablePadding: false,
+    label: "Performance",
+  },
+];
 function createData(
   title,
   category,
@@ -141,38 +168,8 @@ const rows = [
   ),
 ];
 
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-    boxShadow: "none",
-  },
-  container: {
-    maxHeight: 540,
-  },
-  headCell: {
-    background: "#F8F8F8",
-    fontWeight: "600",
-    fontSize: "15px",
-    lineHeight: "22px",
-    color: "#00000",
-  },
-  tableCell: {
-    fontWeight: "600",
-    fontSize: "14px",
-    lineHeight: "22px",
-    color: "#00000",
-    border: "none",
-  },
-  button: {
-    display: "block",
-    padding: "15px 25px",  
-    width: "100%",
-    textTransform: "capitalize",
-  },
-});
-
 const DashboardTable = () => {
-  const classes = useStyles();
+  const classes = tableStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
@@ -208,12 +205,13 @@ const DashboardTable = () => {
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
-          <DashTableHead
+          <CustomTableHead
             classes={classes}
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
+            data={headTableData}
           />
           <TableBody>
             {stableSort(rows, getComparator(order, orderBy))
@@ -292,13 +290,13 @@ const DashboardTable = () => {
                         elevation={1}
                       >
                         <Box mx={2} align="center">
-                        <Button className={classes.button}>Edit</Button>
-                        <Button
-                          style={{ color: "#FF0000" }}
-                          className={classes.button}
-                        >
-                          Delete
-                        </Button>
+                          <Button className={classes.button}>Edit</Button>
+                          <Button
+                            style={{ color: "#FF0000" }}
+                            className={classes.button}
+                          >
+                            Delete
+                          </Button>
                         </Box>
                       </Popover>
                     </TableCell>

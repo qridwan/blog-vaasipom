@@ -18,8 +18,8 @@ const data = [
     likes: 529,
     views: 768,
     date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
+    readTime: "4 Min",
+    topic: "Article",
   },
   {
     id: 2,
@@ -30,8 +30,8 @@ const data = [
     likes: 529,
     views: 768,
     date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
+    readTime: "4 Min",
+    topic: "Novel",
   },
   {
     id: 3,
@@ -42,19 +42,19 @@ const data = [
     likes: 529,
     views: 768,
     date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
+    readTime: "4 Min",
+    topic: "Podcast",
   },
   {
     id: 4,
-    author: "Aadavan",
+    author: "Novel",
     title: "The art of writing Create a blog post subtitle",
     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
     img: FeedImg,
     likes: 529,
     views: 768,
     date: "10th August",
-    readTime: "4Min",
+    readTime: "4 Min",
     topic: "Science",
   },
   {
@@ -66,8 +66,8 @@ const data = [
     likes: 529,
     views: 768,
     date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
+    readTime: "3 Min",
+    topic: "Article",
   },
   {
     id: 6,
@@ -78,14 +78,14 @@ const data = [
     likes: 529,
     views: 768,
     date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
+    readTime: "6 Min",
+    topic: "Videocast",
   },
 ];
 const LandingPage = () => {
   const classes = landingPageStyles();
   return (
-    <Container maxWidth="xl" >
+    <Container maxWidth="xl">
       <Navigation />
       <Header />
       <SubNavigation />

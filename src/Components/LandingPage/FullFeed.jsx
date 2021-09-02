@@ -7,27 +7,38 @@ import {
   IconButton,
   Typography,
   Grid,
-  Paper,
+  InputAdornment,
+  TextField,
+  Input,
 } from "@material-ui/core";
 import React from "react";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import { AuthorButton } from "../../muiComponents/AuthorButton";
 import ShareIcon from "@material-ui/icons/Share";
 import FeedImg from "../../Assets/img/feedImg.png";
 import AuthorsToFollow from "../Shared/AuthorsToFollow";
 import SubNavigation from "./SubNavigation";
 import Navigation from "../../Pages/Common/Navigation";
+import AuthorButton from "../../muiComponents/AuthorButton";
+import authorImg from "../../Assets/img/authorbtnImg.png";
+import shareIcon from "../../Assets/icons/shareIcon.svg";
+import PostCountInfo from "../Shared/PostCountInfo";
+import PostFooterInfo from "../Shared/PostFooterInfo";
+import { grey, red } from "@material-ui/core/colors";
+import { InputArea } from "../../muiComponents/InputArea";
+import { DarkButton } from "../../muiComponents/OutlineButton";
+import { BlackButton } from "../../muiComponents/BlackButton";
+import CommentTemp from "../Shared/CommentTemp";
 
 const fullFeedStyles = makeStyles({
   root: {
-    margin: "40px 0 0 0",
+    margin: "20px 0 0 0",
     boxShadow: "none",
     paddingBottom: "50px",
   },
   media: {
     width: "100%",
-    height: "400px",
+    height: "450px",
     borderRadius: "20px",
   },
   title: {
@@ -48,6 +59,7 @@ const fullFeedStyles = makeStyles({
     padding: "15px 0",
     color: "#454545",
     whiteSpace: "pre-line",
+    textAlign: "justify",
     "@media (max-width:800px)": {
       fontSize: "13px",
       lineHeight: "110%",
@@ -58,8 +70,12 @@ const fullFeedStyles = makeStyles({
     justifyContent: "space-between",
   },
   likeBtn: {
-    padding: "15px 10px",
+    padding: "15px",
     marginBottom: "20px",
+    backgroundColor: red[50],
+    "&:hover": {
+      backgroundColor: red[50],
+    },
   },
   likeDesc: {
     fontWeight: "600",
@@ -74,6 +90,20 @@ const fullFeedStyles = makeStyles({
     lineHeight: "30px",
     color: "#000000",
     marginBottom: "20px",
+  },
+  commentWrapper: {
+    borderRadius: "25px",
+
+    backgroundColor: grey[200],
+    width: "40%",
+    "@media (max-width:800px)": {
+      width: "100%",
+    },
+  },
+  commentInput: {
+    padding: "5px 0 5px 8px",
+    borderRadius: "25px",
+    backgroundColor: "transparent",
   },
 });
 
@@ -98,74 +128,85 @@ const feedData = {
   readTime: "4Min",
   topic: "Science",
 };
-
+const comments = [1,2,3,4,5,6,7]
 const FullFeed = () => {
   const classes = fullFeedStyles();
   const { author, title, desc, img, likes, views, date, readTime, topic } =
     feedData;
   return (
-    <Container maxWidth="md">
+    <>
       <Navigation />
       <SubNavigation />
-      <Card className={classes.root}>
-        <Box className={classes.topbar}>
-          <AuthorButton>{author}</AuthorButton>
-          <div>
-            <IconButton>
-              <ShareIcon />
-            </IconButton>
-          </div>
-        </Box>
-        <Box>
-          {/* title */}
-          <Typography className={classes.title}>{title}</Typography>
-          {/* image */}
-          {img && (
-            <CardMedia
-              className={classes.media}
-              image={img}
-              title="Feed Cover Photo"
-            />
-          )}
-          {/* footer */}
-        </Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex" alignItems="center">
-            <Box display="flex" alignItems="center">
-              <VisibilityOutlinedIcon />
-              <Typography style={{ marginLeft: "10px" }}>{views}</Typography>
-            </Box>
-            <Box display="flex" alignItems="center">
+      <Container maxWidth="lg">
+        <Card className={classes.root}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography className={classes.title}>{title}</Typography>
+            <div>
               <IconButton>
-                <FavoriteBorderOutlinedIcon />
+                {/* <ShareIcon /> */}
+                <img src={shareIcon} alt="Share" height={30} />
               </IconButton>
-              <Typography>{likes}</Typography>
-            </Box>
+            </div>
           </Box>
+          <Box>
+            {/* image */}
+            {img && (
+              <CardMedia
+                className={classes.media}
+                image={img}
+                title="Feed Cover Photo"
+              />
+            )}
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mt={3}
+          >
+            <PostCountInfo views={views} likes={likes} />
 
-          <div>
-            <Typography>{`${date}  |  ${readTime}  |  ${topic}`}</Typography>
-          </div>
-        </Box>
-        {/* description */}
-        <Typography className={classes.desc}>{desc}</Typography>
+            <PostFooterInfo date={date} readTime={readTime} topic={topic} />
+          </Box>
+          {/* description */}
+          <Typography className={classes.desc}>{desc}</Typography>
 
-        <Box display="flex" justifyContent="center" my={5}>
-          <span style={{ textAlign: "center" }}>
-            <AuthorButton className={classes.likeBtn}>
-              <FavoriteBorderOutlinedIcon />
-            </AuthorButton>
-            <Typography className={classes.likeDesc}>
-              Please Like If you Enjoyed This Article
-            </Typography>
-          </span>
-        </Box>
-      </Card>
-      <Typography className={classes.text}>Authors To Follow </Typography>
-      <Grid container spacing={3}>
-        <AuthorsToFollow width="half" />
-      </Grid>
-    </Container>
+          <Box display="flex" justifyContent="center" my={5}>
+            <span style={{ textAlign: "center" }}>
+              <IconButton className={classes.likeBtn} color="secondary">
+                <FavoriteBorderOutlinedIcon color="secondary" />
+              </IconButton>
+              <Typography className={classes.likeDesc}>
+                Please Like If you Enjoyed This Article
+              </Typography>
+            </span>
+          </Box>
+        </Card>
+        <Typography className={classes.text}>Comments</Typography>
+        <div className={classes.commentWrapper}>
+          <InputArea
+            id="outlined-start-adornment"
+            className={classes.commentInput}
+            placeholder="Write something here"
+            type="comment"
+            endAdornment={
+              <InputAdornment position="end">
+                <BlackButton> Post </BlackButton>
+              </InputAdornment>
+            }
+            variant="outlined"
+          />
+        </div>
+        <Grid container spacing={3}>
+          {/* <AuthorsToFollow width="1/3" /> */}
+          <CommentTemp web={4} comments={comments}/>
+        </Grid>
+      </Container>
+    </>
   );
 };
 

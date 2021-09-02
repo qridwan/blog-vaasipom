@@ -3,11 +3,12 @@ import { deepOrange } from "@material-ui/core/colors";
 import React from "react";
 import headerImg from "../../Assets/img/HeaderImg.png";
 import { BlackButton } from "../../muiComponents/BlackButton";
+import Typewriter from "typewriter-effect";
 
 const headerStyles = makeStyles((theme) => ({
   head: {
     marginTop: "10px",
-    position: 'relative',
+    position: "relative",
     zIndex: theme.zIndex.drawer + 1,
   },
   root: {
@@ -48,14 +49,14 @@ const headerStyles = makeStyles((theme) => ({
     marginBottom: "20px",
     fontSize: "14px",
     textAlign: "justify",
-    color: '#6E7782',
+    color: "#6E7782",
     "@media (min-width:800px)": {
       fontSize: "18px",
     },
   },
   btn: {
     marginTop: "40px",
-  }
+  },
 }));
 
 const Header = () => {
@@ -71,20 +72,34 @@ const Header = () => {
         >
           <Grid className={classes.left} item sm={12} md={6}>
             <Paper className={classes.left}>
-             <div>
-             <Typography className={classes.title}>
-                The art of writing
-              </Typography>
-              <Typography className={classes.subtitle}>
-                Creat a blog post subtitle
-              </Typography>
-              <Typography className={classes.desc}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                id magna massa. Ut vitae risus vehicula, faucibus odio id,
-                dictum neque. Curabitur rhoncus quis ipsum quis varius.
-              </Typography>
-              <BlackButton className={classes.btn}>Sign Up</BlackButton>
-             </div>
+              <div>
+                <Typography className={classes.title}>
+                  The art of writing
+                </Typography>
+                <Typography className={classes.subtitle}>
+                  <Typewriter
+                  onInit={(typewriter) => {
+                    typewriter
+                      .typeString(`Create a blog post subtitle`)
+                      .callFunction(() => {
+                        console.log("String typed out!");
+                      })
+                      .pauseFor(3000)
+                      .deleteAll()
+                      .callFunction(() => {})
+                      .start();
+                  }}
+                  options={{ loop: true}}
+                />
+                </Typography>
+                
+                <Typography className={classes.desc}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                  id magna massa. Ut vitae risus vehicula, faucibus odio id,
+                  dictum neque. Curabitur rhoncus quis ipsum quis varius.
+                </Typography>
+                <BlackButton className={classes.btn}>Sign Up</BlackButton>
+              </div>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6}>

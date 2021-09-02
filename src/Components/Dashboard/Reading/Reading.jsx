@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import CustomSelect from "../../../muiComponents/CustomSelect";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
-import DashboardTable from "../Table";
+import DashboardTable from "../DashboardTable";
+import ReadTable from "./ReadTable";
 const categories = [
   "All",
   "Novel",
@@ -22,7 +23,7 @@ const Reading = () => {
     <Container>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={8}>
-          <DashboardTable />
+          <ReadTable />
         </Grid>
         <Grid item xs={12} sm={4}>
           <Grid container spacing={3}>

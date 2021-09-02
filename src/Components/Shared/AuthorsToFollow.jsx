@@ -67,8 +67,8 @@ const AuthorsToFollow = ({ width }) => {
     setFollow(!follow);
   };
   let ratio = 12;
-  if (width === "half") {
-    ratio = 6;
+  if (width === "1/3") {
+    ratio = 4;
   }
   return (
     <>

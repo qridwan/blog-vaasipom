@@ -31,37 +31,15 @@ export function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
-const headCells = [
-  {
-    id: "title",
-    numeric: false,
-    disablePadding: false,
-    label: "Title",
-   width: 220
-  },
-  { id: "category", numeric: false, disablePadding: false, label: "Category" },
-  { id: "status", numeric: false, disablePadding: false, label: "Status" },
-  { id: "date", numeric: false, disablePadding: false, label: "Date" },
-  { id: "likes", numeric: true, disablePadding: false, label: "Likes" },
-  { id: "views", numeric: true, disablePadding: false, label: "Views" },
-  { id: "comment", numeric: true, disablePadding: false, label: "Comment" ,  size: "small"},
-  {
-    id: "performance",
-    numeric: true,
-    disablePadding: false,
-    label: "Performance",
-  },
-];
-const DashTableHead = (props) => {
-  const { classes, order, orderBy, rowCount, onRequestSort } = props;
+const CustomTableHead = (props) => {
+  const { classes, order, orderBy, rowCount, onRequestSort, data } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
   return (
     <TableHead>
       <TableRow className={classes.head}>
-        {headCells.map((headCell) => (
+        {data.map((headCell) => (
           <TableCell
             key={headCell.id}
             style={{ width: headCell.width }}
@@ -69,25 +47,27 @@ const DashTableHead = (props) => {
             // style={{width: headCell.width}}
             align={headCell.numeric ? "center" : "start"}
             // padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
+            sortDirection={orderBy && (orderBy === headCell.id ? order : false)}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
+            {order ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+              </TableSortLabel>
+            ) : (
+              <> {headCell.label}</>
+            )}
           </TableCell>
         ))}
-         <TableCell
-            className={classes.headCell}
-            align="center"
-          >
-          </TableCell>
+        {order && (
+          <TableCell className={classes.headCell} align="center"></TableCell>
+        )}
       </TableRow>
     </TableHead>
   );
 };
 
-export default DashTableHead;
+export default CustomTableHead;

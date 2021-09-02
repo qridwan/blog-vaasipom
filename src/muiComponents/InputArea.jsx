@@ -9,8 +9,10 @@ export const InputArea = withStyles((theme) => ({
   input: {
     borderRadius: (props) => (props.border === "curve" ? 25 : 4),
     position: "relative",
-    backgroundColor: theme.palette.common.white,
-    border: "1px solid #ced4da",
+    backgroundColor: (props) =>
+      props.type === "comment" ? "transparent" : theme.palette.common.white,
+    border: (props) =>
+      props.type === "comment" ? "none" : "1px solid #ced4da",
     fontSize: 16,
     width: "100%",
     padding: "10px 12px",

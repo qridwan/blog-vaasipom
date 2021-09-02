@@ -5,7 +5,7 @@ export const NavigationStyles = makeStyles((theme) => {
   return {
     root: {
       flexGrow: 1,
-      paddingTop: 12
+      paddingTop: 12,
     },
     appBar: {
       backgroundColor: "#ffffff",
@@ -23,20 +23,17 @@ export const NavigationStyles = makeStyles((theme) => {
     offset: theme.mixins.toolbar,
     navIcon: {
       marginRight: "25px",
-
     },
   };
 });
 
 //landing page styling
-export const feedCardStyles = makeStyles({
-  root: {
+export const feedCardStyles = makeStyles((theme) => {
+ return {root: {
     margin: "10px 0",
     boxShadow: "none",
     textAlign: "start",
     paddingBottom: "50px",
-    // borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-    // borderRight: "1px solid rgba(0, 0, 0, 0.1)",
   },
   media: {
     width: "100%",
@@ -67,8 +64,16 @@ export const feedCardStyles = makeStyles({
   topbar: {
     display: "flex",
     justifyContent: "space-between",
+    
   },
-});
+  btnAvatar: {
+  display: "none",
+   [theme.breakpoints.up("sm")]: {
+    display: "block",
+    marginRight: "20px"
+  }
+  }
+}});
 
 export const landingPageStyles = makeStyles((theme) => ({
   root: {
@@ -88,3 +93,36 @@ export const landingPageStyles = makeStyles((theme) => ({
     top: "0",
   },
 }));
+
+export const tableStyles = makeStyles({
+  root: {
+    width: "100%",
+    boxShadow: "none",
+  },
+  container: {
+    maxHeight: 540,
+  },
+  tableRow: {
+    cursor: "pointer",
+  },
+  headCell: {
+    background: "#F8F8F8",
+    fontWeight: "600",
+    fontSize: "15px",
+    lineHeight: "22px",
+    color: "#00000",
+  },
+  tableCell: {
+    fontWeight: "600",
+    fontSize: "14px",
+    lineHeight: "22px",
+    color: "#00000",
+    border: "none",
+  },
+  button: {
+    display: "block",
+    padding: "15px 25px",
+    width: "100%",
+    textTransform: "capitalize",
+  },
+});

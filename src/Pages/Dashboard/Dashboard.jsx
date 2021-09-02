@@ -22,7 +22,6 @@ import readingIcon from "../../Assets/icons/readingIcon.svg";
 import writingIcon from "../../Assets/icons/writingIcon.svg";
 import { NavLink } from "react-router-dom";
 import { grey } from "@material-ui/core/colors";
-import DashboardTable from "../../Components/Dashboard/Table";
 import { BlackButton } from "../../muiComponents/BlackButton";
 import MenuModal from "../../Components/Dashboard/MenuModal";
 import Article from "../../Components/Dashboard/Writing/Article";
@@ -30,6 +29,7 @@ import Novel from "../../Components/Dashboard/Writing/Novel";
 import MediaCast from "../../Components/Dashboard/Writing/MediaCast";
 import EditProfile from "../../Components/Dashboard/ProfileSettings/EditProfile";
 import Reading from "../../Components/Dashboard/Reading/Reading";
+import DashboardTable from "../../Components/Dashboard/DashboardTable.jsx";
 
 const drawerWidth = 250;
 
