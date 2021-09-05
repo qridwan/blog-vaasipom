@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Feed from "../../Components/Shared/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
 import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
@@ -8,7 +8,7 @@ import { landingPageStyles } from "../../Styles/muiStyles.js";
 import FeedImg from "../../Assets/img/feedImg.png";
 import Navigation from "./Navigation.jsx";
 
-const data = [
+export const allData = [
   {
     id: 1,
     author: "Aadavan",
@@ -84,6 +84,9 @@ const data = [
 ];
 const LandingPage = () => {
   const classes = landingPageStyles();
+  useEffect(() => {
+    document.title = "Blog | Home"
+  }, [])
   return (
     <Container maxWidth="xl">
       <Navigation />
@@ -99,7 +102,7 @@ const LandingPage = () => {
         >
           <Grid item xs={12} sm={8} className={classes.left}>
             <Paper className={classes.paper}>
-              <Feed data={data} type="allFeed" />
+              <Feed data={allData} type="allFeed" />
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4} className={classes.right}>

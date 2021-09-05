@@ -1,5 +1,5 @@
 import { Container, Grid, makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import Feed from "../../Components/Shared/Feed";
 import Suggestions from "../../Components/Shared/Suggestions";
 import FeedImg from "../../Assets/img/feedImg.png";
@@ -57,10 +57,14 @@ const videocastStyles = makeStyles({
 });
 const Videocast = () => {
   const classes = videocastStyles();
+
+  useEffect(() => {
+    document.title = "Blog | Videocast";
+  }, []);
   return (
-    <Container maxWidth="xl"> 
+    <Container maxWidth="xl">
       <Navigation />
-      <Header />
+      {/* <Header /> */}
       <SubNavigation />
       <Grid
         container

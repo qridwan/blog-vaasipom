@@ -1,5 +1,5 @@
 import { Container, Grid, makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Suggestions from "../../Components/Shared/Suggestions";
 import AudioPlayer from "../../Components/Podcast/AudioPlayer";
@@ -7,6 +7,7 @@ import PodcastFeed from "../../Components/Podcast/PodcastFeed";
 import SubNavigation from "../../Components/LandingPage/SubNavigation";
 import Header from "../../Components/LandingPage/Header";
 import Navigation from "./Navigation";
+import TopicSlider from "../../Components/Shared/TopicSlider";
 
 const podcastStyles = makeStyles({
   right: {
@@ -19,11 +20,14 @@ const podcastStyles = makeStyles({
 const Podcast = () => {
   const classes = podcastStyles();
   const [isAudioPlay, setIsAudioPlay] = useState(false);
-
+  useEffect(() => {
+    document.title = "Blog | Podcast"
+  }, [])
   return (
     <Container maxWidth="xl">
       <Navigation />
-      <Header />
+      {/* <Header /> */}
+      <TopicSlider />
       <SubNavigation />
       <Grid
         container

@@ -10,7 +10,7 @@ const postFooterInfoStyles = makeStyles(() => {
     },
   };
 });
-const PostFooterInfo = ({ date, readTime, topic }) => {
+const PostFooterInfo = ({ date, readTime, topic, tags }) => {
   const classes = postFooterInfoStyles();
   return (
     <Box display="flex" justifyContent="start" alignItems="center" my={2}>
@@ -18,9 +18,12 @@ const PostFooterInfo = ({ date, readTime, topic }) => {
       <span className={classes.span}> | </span>
       <Typography>{readTime}</Typography>
       <span className={classes.span}> | </span>
-      <NavLink to={`/${topic}`}>
-        <OutlineButton size="small">{topic}</OutlineButton>
-      </NavLink>
+      {topic && (
+        <NavLink to={`/${topic}`}>
+          <OutlineButton size="small">{topic}</OutlineButton>
+        </NavLink>
+      )}
+      {tags && <Typography>{tags}</Typography>}
     </Box>
   );
 };

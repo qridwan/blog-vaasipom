@@ -1,22 +1,15 @@
 import React from "react";
-import BookmarkIcon from "@material-ui/icons/Bookmark";
 import {
   Card,
-  CardActionArea,
-  CardActions,
-  CardMedia,
   Container,
-  IconButton,
   makeStyles,
 } from "@material-ui/core";
 import ReactPlayer from "react-player/lazy";
 import { Box } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
-import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
-import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import playIco from "../../Assets/icons/play.png";
-import VideoComments from "./VideoComments";
-import CommentatorImg from "../../Assets/img/commentor.png";
+import PostCountInfo from "../Shared/PostCountInfo";
+import PostFooterInfo from "../Shared/PostFooterInfo";
 
 const videoCardStyle = makeStyles({
   root: {
@@ -29,7 +22,6 @@ const videoCardStyle = makeStyles({
   },
   media: {
     width: "100%",
-    borderRadius: "20px",
   },
   title: {
     fontWeight: "bold",
@@ -58,14 +50,15 @@ const videoCardStyle = makeStyles({
   },
   playerWrapper: {
     position: "relative",
-    margin: "10% 0 0 0",
-    height: "300px",
+    margin: "2% 0 0 0",
+    height: "350px",
   },
   player: {
     position: "absolute",
     top: 0,
     left: 0,
-    borderRadius: "10px",
+    // borderRadius: "10px",
+    overflow: "hidden",
   },
 });
 
@@ -79,26 +72,7 @@ const data = {
   likes: 324,
   views: 768,
 };
-const comments = [
-  {
-    id: 1,
-    dp: CommentatorImg,
-    name: "Jhon Doe",
-    comment: "The best video I've ever seen",
-  },
-  {
-    id: 2,
-    dp: CommentatorImg,
-    name: "RD Mallan",
-    comment: "The best video I've ever seen",
-  },
-  {
-    id: 3,
-    dp: CommentatorImg,
-    name: "Samuel Ken",
-    comment: "The best video I've ever seen",
-  },
-];
+
 const playIcon = <img src={playIco} alt="play icon" height="60" width="60" />;
 
 const VideoDetailsCard = () => {
@@ -110,7 +84,7 @@ const VideoDetailsCard = () => {
         <Box display="block" className={classes.playerWrapper}>
           <ReactPlayer
             className={classes.player}
-            style={{ borderRadius: "40px" }}
+            style={{ borderRadius: "30px" }}
             controls={true}
             url={url}
             light={true}
@@ -128,34 +102,19 @@ const VideoDetailsCard = () => {
             justifyContent="space-between"
             mb={2}
           >
-            <Box>
-              <Typography>{`${author}  ◾ ${time}  ◾  ${tags}`}</Typography>
-            </Box>
+            <PostFooterInfo date={author} readTime={`17 days ago`} tags={tags} />
             <Box
               display="flex"
               justifyContent="space-between"
               alignItems="center"
             >
-              <Box display="flex" alignItems="center">
-                <Box display="flex" alignItems="center">
-                  <VisibilityOutlinedIcon />
-                  <Typography style={{ marginLeft: "10px" }}>
-                    {views}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <IconButton>
-                    <FavoriteBorderOutlinedIcon />
-                  </IconButton>
-                  <Typography>{likes}</Typography>
-                </Box>
-              </Box>
+              <PostCountInfo likes={likes} views={views} />
             </Box>
           </Box>
           <Typography className={classes.desc}>{desc}</Typography>
         </div>
       </Card>
-      <VideoComments comments={comments} />
+      
     </Container>
   );
 };

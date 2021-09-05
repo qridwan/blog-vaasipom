@@ -1,16 +1,11 @@
-import { Container } from "@material-ui/core";
-import {
-  Avatar,
-  Box,
-  makeStyles,
-  Paper,
-  Typography,
-} from "@material-ui/core";
+import { Container, Divider } from "@material-ui/core";
+import { Avatar, Box, makeStyles, Paper, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AvatarImg from "../../Assets/img/avatar.png";
 import { DarkButton, OutlineButton } from "../../muiComponents/OutlineButton";
 import AuthorsToFollow from "./AuthorsToFollow";
+import Footer from "./Footer";
 
 const suggestionStyles = makeStyles((theme) => ({
   container: {
@@ -20,7 +15,7 @@ const suggestionStyles = makeStyles((theme) => ({
     top: "0",
   },
   box: {
-    margin: "30px 0",
+    margin: "35px 0",
   },
   root: {
     display: "flex",
@@ -50,6 +45,7 @@ const suggestionStyles = makeStyles((theme) => ({
     fontSize: "24px",
     lineHeight: "30px",
     color: "#000000",
+    marginBottom : "20px"
   },
 
   follow: {
@@ -113,7 +109,7 @@ const Suggestions = () => {
 
   return (
     <Container className={classes.container}>
-      {/*What Looking for */}
+      {/* What Looking for
       <Box className={classes.box}>
         <Typography className={classes.text}>
           What You’re Looking For
@@ -139,7 +135,7 @@ const Suggestions = () => {
             );
           })}
         </Paper>
-      </Box>
+      </Box> */}
 
       {/*Topic to follow */}
       <Box className={classes.box}>
@@ -150,13 +146,15 @@ const Suggestions = () => {
             return (
               <>
                 <li key={data.key} className={classes.buttons}>
-                  <OutlineButton onClick={handleClick}>
+                  <OutlineButton  onClick={handleClick} size="small">
                     {data.label} +
                   </OutlineButton>
                 </li>
                 {data.key === lastOne && (
                   <li className={classes.buttons}>
-                    <OutlineButton onClick={handleClick}>+</OutlineButton>
+                    <OutlineButton size="small" onClick={handleClick}>
+                      +
+                    </OutlineButton>
                   </li>
                 )}
               </>
@@ -170,6 +168,8 @@ const Suggestions = () => {
         <Typography className={classes.text}>Authors To Follow </Typography>
         <AuthorsToFollow />
       </Box>
+      <Divider />
+      <Footer />
     </Container>
   );
 };

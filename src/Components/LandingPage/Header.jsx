@@ -4,6 +4,7 @@ import React from "react";
 import headerImg from "../../Assets/img/HeaderImg.png";
 import { BlackButton } from "../../muiComponents/BlackButton";
 import Typewriter from "typewriter-effect";
+import { NavLink } from "react-router-dom";
 
 const headerStyles = makeStyles((theme) => ({
   head: {
@@ -98,7 +99,9 @@ const Header = () => {
                   id magna massa. Ut vitae risus vehicula, faucibus odio id,
                   dictum neque. Curabitur rhoncus quis ipsum quis varius.
                 </Typography>
+                <NavLink to="/login">
                 <BlackButton className={classes.btn}>Sign Up</BlackButton>
+                  </NavLink>
               </div>
             </Paper>
           </Grid>

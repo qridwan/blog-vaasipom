@@ -7,28 +7,17 @@ import {
   IconButton,
   Typography,
   Grid,
-  InputAdornment,
-  TextField,
-  Input,
 } from "@material-ui/core";
 import React from "react";
-import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
-import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import ShareIcon from "@material-ui/icons/Share";
 import FeedImg from "../../Assets/img/feedImg.png";
-import AuthorsToFollow from "../Shared/AuthorsToFollow";
-import SubNavigation from "./SubNavigation";
 import Navigation from "../../Pages/Common/Navigation";
-import AuthorButton from "../../muiComponents/AuthorButton";
-import authorImg from "../../Assets/img/authorbtnImg.png";
 import shareIcon from "../../Assets/icons/shareIcon.svg";
 import PostCountInfo from "../Shared/PostCountInfo";
 import PostFooterInfo from "../Shared/PostFooterInfo";
-import { grey, red } from "@material-ui/core/colors";
-import { InputArea } from "../../muiComponents/InputArea";
-import { DarkButton } from "../../muiComponents/OutlineButton";
-import { BlackButton } from "../../muiComponents/BlackButton";
+import { red } from "@material-ui/core/colors";
+
 import CommentTemp from "../Shared/CommentTemp";
+import PostComment from "../Shared/PostComment";
 
 const fullFeedStyles = makeStyles({
   root: {
@@ -38,7 +27,9 @@ const fullFeedStyles = makeStyles({
   },
   media: {
     width: "100%",
-    height: "450px",
+    height: "400px",
+    backgroundSize: "100% 100%",
+    backgroundPosition: "cover",
     borderRadius: "20px",
   },
   title: {
@@ -84,26 +75,12 @@ const fullFeedStyles = makeStyles({
     color: "#000000",
   },
   text: {
-    textAlign: "start",
+    textAlign: "center",
     fontWeight: "600",
     fontSize: "24px",
     lineHeight: "30px",
     color: "#000000",
     marginBottom: "20px",
-  },
-  commentWrapper: {
-    borderRadius: "25px",
-
-    backgroundColor: grey[200],
-    width: "40%",
-    "@media (max-width:800px)": {
-      width: "100%",
-    },
-  },
-  commentInput: {
-    padding: "5px 0 5px 8px",
-    borderRadius: "25px",
-    backgroundColor: "transparent",
   },
 });
 
@@ -128,7 +105,8 @@ const feedData = {
   readTime: "4Min",
   topic: "Science",
 };
-const comments = [1,2,3,4,5,6,7]
+
+const comments = [1, 2, 3, 4, 5, 6, 7];
 const FullFeed = () => {
   const classes = fullFeedStyles();
   const { author, title, desc, img, likes, views, date, readTime, topic } =
@@ -136,8 +114,8 @@ const FullFeed = () => {
   return (
     <>
       <Navigation />
-      <SubNavigation />
-      <Container maxWidth="lg">
+      {/* <SubNavigation /> */}
+      <Container maxWidth="md">
         <Card className={classes.root}>
           <Box
             display="flex"
@@ -174,36 +152,14 @@ const FullFeed = () => {
           </Box>
           {/* description */}
           <Typography className={classes.desc}>{desc}</Typography>
-
-          <Box display="flex" justifyContent="center" my={5}>
-            <span style={{ textAlign: "center" }}>
-              <IconButton className={classes.likeBtn} color="secondary">
-                <FavoriteBorderOutlinedIcon color="secondary" />
-              </IconButton>
-              <Typography className={classes.likeDesc}>
-                Please Like If you Enjoyed This Article
-              </Typography>
-            </span>
-          </Box>
         </Card>
-        <Typography className={classes.text}>Comments</Typography>
-        <div className={classes.commentWrapper}>
-          <InputArea
-            id="outlined-start-adornment"
-            className={classes.commentInput}
-            placeholder="Write something here"
-            type="comment"
-            endAdornment={
-              <InputAdornment position="end">
-                <BlackButton> Post </BlackButton>
-              </InputAdornment>
-            }
-            variant="outlined"
-          />
-        </div>
-        <Grid container spacing={3}>
-          {/* <AuthorsToFollow width="1/3" /> */}
-          <CommentTemp web={4} comments={comments}/>
+
+        <Box textAlign="center">
+          <Typography className={classes.text}>Comments</Typography>
+          <PostComment width="50%" />
+        </Box>
+        <Grid container spacing={2} justifyContent="center">
+          <CommentTemp web={8} comments={comments} />
         </Grid>
       </Container>
     </>

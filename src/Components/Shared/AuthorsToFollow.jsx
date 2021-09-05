@@ -19,8 +19,9 @@ const authorsToFollow = makeStyles({
     flexWrap: "wrap",
     listStyle: "none",
     textAlign: "start",
-    margin: 0,
+    marginBottom: 20,
     boxShadow: "none",
+    padding: '10px 10px 0 10px ',
   },
   text: {
     textAlign: "start",
@@ -32,7 +33,6 @@ const authorsToFollow = makeStyles({
 
   follow: {
     margin: 0,
-    padding: "6px, 20px ",
     alignSelf: "center",
     "&:focus": {
       background: "#000000 !important",
@@ -41,19 +41,18 @@ const authorsToFollow = makeStyles({
   },
   unFollow: {
     margin: 0,
-    padding: "6px, 20px",
     "&:focus": {
       background: "#ffffff !important",
     },
   },
   title: {
     color: "#00000",
-    fontSize: "18px",
+    fontSize: "16px",
     fontWeight: "bold",
   },
   subheader: {
     fontSize: "12px",
-    width: "90%",
+    width: "100%",
     lineHeight: "150%",
     color: "#797979",
   },
@@ -73,9 +72,10 @@ const AuthorsToFollow = ({ width }) => {
   return (
     <>
       {authors.map((author) => (
-        <Grid item xs={12} sm={ratio}>
-          <Card key={author} className={classes.card}>
+        <Grid item xs={12} sm={ratio} key={author}>
+          <Card className={classes.card}>
             <CardHeader
+            style={{padding: "0"}}
               avatar={
                 <Avatar
                   aria-label="recipe"
@@ -85,22 +85,20 @@ const AuthorsToFollow = ({ width }) => {
                 />
               }
               action={
-                <>
                   <OutlineButton
+                    size="small"
                     className={follow ? classes.follow : classes.unFollow}
                     onClick={handleFollow}
                   >
                     {follow ? "Unfollow" : "Follow"}
                   </OutlineButton>
-                </>
               }
               title={
                 <Typography className={classes.title}>Jhon Doe</Typography>
               }
               subheader={
                 <Typography className={classes.subheader}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                  id magna massa. Ut vitae risus vehicula,
+                  Lorem ipsum dolor sit amet, Ut vitae risus vehicula,
                 </Typography>
               }
             />

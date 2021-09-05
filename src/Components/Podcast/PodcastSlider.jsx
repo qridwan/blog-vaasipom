@@ -9,10 +9,12 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Pagination } from "swiper/core";
+import SwiperCore, { Navigation, Pagination } from "swiper/core";
 import Img from "../../Assets/img/sliderTrend.png";
 import "swiper/swiper.min.css";
 import "swiper/components/pagination/pagination.min.css";
+import "swiper/components/navigation/navigation.min.css";
+
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 const sliderStyles = makeStyles(() => {
   return {
@@ -69,7 +71,8 @@ const sliderStyles = makeStyles(() => {
 });
 
 // install Swiper modules
-SwiperCore.use([Pagination]);
+SwiperCore.use([Navigation]);
+
 const PodcastSlider = ({ setIsAudioPlay }) => {
   const classes = sliderStyles();
   const [slider, setSlider] = useState([1, 2, 3, 4, 5]);
@@ -77,21 +80,22 @@ const PodcastSlider = ({ setIsAudioPlay }) => {
   const playPodcast = () => {
     setIsAudioPlay(true);
   };
-  
+
   return (
     <div className={classes.root}>
       <Box className={classes.sliderBox}>
         <Swiper
-          slidesPerView={2.5}
+          slidesPerView={3.3}
           spaceBetween={30}
           freeMode={true}
           className=""
+          navigation={true}
         >
           {slider.map((numb) => (
             <SwiperSlide key={numb}>
               <Card onClick={playPodcast} className={classes.card}>
                 <CardMedia
-                 onClick={playPodcast}
+                  onClick={playPodcast}
                   className={classes.media}
                   image={Img}
                   title="Contemplative Reptile"
