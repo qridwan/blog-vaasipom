@@ -4,18 +4,25 @@ import { withStyles } from "@material-ui/styles";
 
 export const OutlineButton = withStyles(() => ({
   root: {
-    color: grey[800],
-    // padding: "10px 35px",
-    padding: (props) => (props.size === "small" ? "5px 20px" : "10px 35px"),
-    background: `transparent`,
+    color: grey[700],
+    padding: (props) =>
+      props.size === "small"
+        ? "4px 15px"
+        : props.size === "xsmall"
+        ? "1px 8px"
+        : "6px 20px",
+    background: (props) =>
+      props.size === "xsmall" ? "#E8E8E8" : `transparent`,
     boxShadow: `none`,
-    fontSize: "16px",
+    fontSize: (props) => (props.size === "xsmall" ? "12px" : "16px"),
     borderRadius: "23px",
     textTransform: "capitalize",
-    border: `1px solid rgba(0, 0, 0, 0.1)`,
+    border: (props) =>
+      props.size === "xsmall" ? "none" : `1px solid rgba(0, 0, 0, 0.1)`,
     boxSizing: `border-box`,
   },
 }))(Button);
+
 export const DarkButton = withStyles(() => ({
   root: {
     color: "white",

@@ -32,41 +32,30 @@ export const NavigationStyles = makeStyles((theme) => {
       textTransform: "capitalize",
     },
     search: {
-      position: "relative",
-      borderRadius: theme.shape.borderRadius,
+      display: "flex",
       border: `1px solid ${grey[300]}`,
-      "&:hover": {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-      },
-      marginLeft: 0,
+      borderRadius: "5px",
+      marginRight: 25,
       width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
       [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(1),
         width: "auto",
       },
     },
     searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: "100%",
-      position: "absolute",
+      padding: theme.spacing(0, 1),
       pointerEvents: "none",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
     },
-    inputRoot: {
-      color: "inherit",
-    },
     inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create("width"),
-      width: "100%",
+      display: "none",
       [theme.breakpoints.up("sm")]: {
-        width: "20ch",
-        "&:focus": {
-          width: "25ch",
-        },
+        display: "block",
+        width: "300px",
+        padding: theme.spacing(1, 1, 1, 0),
       },
     },
   };
@@ -76,46 +65,48 @@ export const NavigationStyles = makeStyles((theme) => {
 export const feedCardStyles = makeStyles((theme) => {
   return {
     root: {
-      margin: "10px 0",
+      margin: "5px 0",
       boxShadow: "none",
       textAlign: "start",
-      paddingBottom: "50px",
+      paddingBottom: "20px",
     },
     media: {
-      // height: "0",
-      // paddingTop: '90.25%',
-      // borderRadius: "20px",
-      // backgroundPosition: "cover",
+      marginTop: "5%",
       width: "100%",
-      height: "80%",
+      height: "85%",
       backgroundSize: "130% 110%",
       backgroundPosition: "cover",
-      borderRadius: "20px",
+      borderRadius: "2px",
+    },
+    mainArea: {
+      paddingBottom: "4px",
     },
     title: {
       fontWeight: "bold",
-      fontSize: "30px",
-      lineHeight: "150%",
-      paddingBottom: "15px",
+      fontSize: "22px",
+      lineHeight: "140%",
+      paddingBottom: "5px",
       color: "#121212",
       "@media (max-width:800px)": {
-        fontSize: "20px",
+        fontSize: "18px",
         lineHeight: "110%",
       },
     },
     desc: {
-      fontSize: "16px",
+      fontSize: "15px",
       lineHeight: "150%",
-      paddingBottom: "15px",
-      color: "#454545",
+      paddingBottom: "8px",
+      color: "#757575",
       "@media (max-width:800px)": {
         fontSize: "12px",
         lineHeight: "110%",
       },
     },
-    topbar: {
+    authorBtn: {
       display: "flex",
       justifyContent: "space-between",
+      paddingLeft: 0,
+      paddingBottom: 2,
     },
     btnAvatar: {
       display: "none",
@@ -132,13 +123,17 @@ export const landingPageStyles = makeStyles((theme) => ({
     // flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(2),
+    paddingTop: theme.spacing(4),
     textAlign: "center",
     color: theme.palette.text.secondary,
     boxShadow: "none",
   },
-  left: {},
-  content: {},
+  left: {
+    borderRight: "2px solid #EDEDED",
+  },
+  content: {
+    marginTop: "-20px",
+  },
   right: {
     boxSizing: "border-box",
     position: "sticky",
@@ -188,17 +183,20 @@ export const loginStyles = makeStyles((theme) => {
     boxContainer: {
       background: "white",
       minHeight: "100vh",
-      borderRadius: "50px 0 0 50px",
+      // borderRadius: "50px 0 0 50px",
       margin: "0",
       display: "grid",
       placeItems: "center",
+      "@media(max-width: 1000px)": {
+        background: "transparent",
+      },
     },
     img: {
       height: "100%",
       // width: "100%",
     },
     box: {
-      width: "50%",
+      width: "60%",
       margin: "0 auto",
       // paddingTop: "100px",
     },
@@ -213,6 +211,8 @@ export const loginStyles = makeStyles((theme) => {
     btnText: {
       textTransform: "capitalize",
       marginLeft: "10px",
+      wordWrap: `break-word`,
+      whiteSpace: `nowrap`,
       // fontWeight: "bold",
     },
     or: {

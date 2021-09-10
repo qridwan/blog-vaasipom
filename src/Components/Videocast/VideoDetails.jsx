@@ -1,9 +1,6 @@
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container, Grid } from "@material-ui/core";
 import React from "react";
-import { useParams } from "react-router-dom";
 import Navigation from "../../Pages/Common/Navigation";
-import SubNavigation from "../LandingPage/SubNavigation";
-import Suggestions from "../Shared/Suggestions";
 import VideoDetailsCard from "./VideoDetailsCard";
 import CommentatorImg from "../../Assets/img/commentor.png";
 import CommentTemp from "../Shared/CommentTemp";
@@ -33,27 +30,34 @@ const VideoDetails = ({ feed }) => {
   // const { title } = useParams();
 
   return (
-    <Container>
+    <>
       <Navigation />
-      {/* <SubNavigation /> */}
-      <Grid
-        container
-        spacing={3}
-        justifyContent="flex-start"
-        alignItems="flex-start"
-      >
-        <Grid item sm={12} md={8}>
-          <VideoDetailsCard feed={feed} />
+      <Container>
+        {/* <SubNavigation /> */}
+        <Grid
+          container
+          spacing={3}
+          justifyContent="flex-start"
+          alignItems="flex-start"
+        >
+          <Grid item sm={12} md={8}>
+            <VideoDetailsCard feed={feed} />
+          </Grid>
+          <Grid item sm={12} md={4}>
+            <Box
+              fontWeight="fontWeightBold"
+              fontSize={20}
+              my={2}
+              fontFamily="manrope"
+            >
+              Comments
+            </Box>
+            <PostComment width="100%" />
+            <CommentTemp web={12} comments={comments} />
+          </Grid>
         </Grid>
-        <Grid item sm={12} md={4}>
-          <Box fontWeight="fontWeightBold" fontSize={20} mt={2}>
-            Comments
-          </Box>
-          <PostComment width="100%" />
-          <CommentTemp web={12} comments={comments} />
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 };
 

@@ -23,6 +23,7 @@ import PrevIco from "../../Assets/icons/Prev.svg";
 import ShuffleIco from "../../Assets/icons/shuffle.svg";
 import PlayListIco from "../../Assets/icons/playlist.svg";
 import PodcastCover from "../../Assets/img/sliderTrend.png";
+import StopIcon from "@material-ui/icons/Stop";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AudioPlayer = () => {
+const AudioPlayer = ({ setIsAudioPlay }) => {
   const classes = useStyles();
   // state
   const [isPlaying, setIsPlaying] = useState(false);
@@ -87,6 +88,7 @@ const AudioPlayer = () => {
   // references
   const audioPlayer = useRef(); // ref audio component
   const progressBar = useRef(); // ref progress bar
+  const stopPlayer = useRef(); // ref progress bar
   const animationRef = useRef(); // ref animation
   const playPauseBtnRef = useRef(); // ref Play/Pause button
 
@@ -200,6 +202,13 @@ const AudioPlayer = () => {
             </IconButton>
           </Box>
           <Box className={classes.leftItems}>
+            <IconButton
+              color="inherit"
+              ref={stopPlayer}
+              onClick={() => setIsAudioPlay(false)}
+            >
+              <StopIcon color="error" />
+            </IconButton>
             <IconButton color="inherit">
               <img src={volume} alt="" />
             </IconButton>

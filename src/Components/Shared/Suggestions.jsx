@@ -1,10 +1,7 @@
 import { Container, Divider } from "@material-ui/core";
-import { Avatar, Box, makeStyles, Paper, Typography } from "@material-ui/core";
+import { Box, makeStyles, Paper, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import AvatarImg from "../../Assets/img/avatar.png";
-import { DarkButton, OutlineButton } from "../../muiComponents/OutlineButton";
-import AuthorsToFollow from "./AuthorsToFollow";
+import { OutlineButton } from "../../muiComponents/OutlineButton";
 import Footer from "./Footer";
 
 const suggestionStyles = makeStyles((theme) => ({
@@ -15,7 +12,7 @@ const suggestionStyles = makeStyles((theme) => ({
     top: "0",
   },
   box: {
-    margin: "35px 0",
+    margin: "25px 0 0 30px",
   },
   root: {
     display: "flex",
@@ -42,10 +39,10 @@ const suggestionStyles = makeStyles((theme) => ({
   text: {
     textAlign: "start",
     fontWeight: "600",
-    fontSize: "24px",
-    lineHeight: "30px",
+    fontSize: "16px",
+    lineHeight: "20px",
     color: "#000000",
-    marginBottom : "20px"
+    marginBottom : "15px"
   },
 
   follow: {
@@ -82,20 +79,20 @@ const suggestionStyles = makeStyles((theme) => ({
 }));
 
 const Suggestions = () => {
-  const location = useLocation();
+  // const location = useLocation();
   const classes = suggestionStyles();
-  const { pathname } = location;
-  const splitLocation = pathname.split("/")[1];
+  // const { pathname } = location;
+  // const splitLocation = pathname.split("/")[1];
 
-  const [lookingFor, setLookingFor] = useState([
-    { key: 0, label: "Podcast" },
-    { key: 1, label: "Short Stories" },
-    { key: 2, label: "Articles" },
-    { key: 3, label: "Poetries" },
-    { key: 4, label: "Videocast" },
-    { key: 5, label: "Reviews" },
-    { key: 6, label: "All" },
-  ]);
+  // const [lookingFor, setLookingFor] = useState([
+  //   { key: 0, label: "Podcast" },
+  //   { key: 1, label: "Short Stories" },
+  //   { key: 2, label: "Articles" },
+  //   { key: 3, label: "Poetries" },
+  //   { key: 4, label: "Videocast" },
+  //   { key: 5, label: "Reviews" },
+  //   { key: 6, label: "All" },
+  // ]);
   const [topics, setTopics] = useState([
     { key: 0, label: "Software" },
     { key: 1, label: "Books" },
@@ -164,10 +161,10 @@ const Suggestions = () => {
       </Box>
 
       {/*Authors to follow */}
-      <Box className={classes.box}>
+      {/* <Box className={classes.box}>
         <Typography className={classes.text}>Authors To Follow </Typography>
         <AuthorsToFollow />
-      </Box>
+      </Box> */}
       <Divider />
       <Footer />
     </Container>

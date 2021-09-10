@@ -273,10 +273,12 @@ const Dashboard = (props) => {
               }}
               className={classes.navIcon}
             >
-              <img src={WriteIcon} alt="" />
+              <img src={WriteIcon} alt="" height="30px"
+                  width="30px"/>
             </IconButton>
             <IconButton className={classes.navIcon}>
-              <img src={NotifyIcon} alt="" />
+              <img src={NotifyIcon} alt="" height="30px"
+                  width="30px"/>
             </IconButton>
 
             <IconButton className={classes.navIcon}>

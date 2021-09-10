@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import VasipomLogo from "../../Assets/logos/VasipomLogo2.png";
-import { AppBar, Box, Button, InputBase, Popover, Toolbar } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Button,
+  InputBase,
+  Popover,
+  Toolbar,
+} from "@material-ui/core";
 import { NavigationStyles } from "../../Styles/muiStyles";
 import { Container } from "@material-ui/core";
 import { Avatar } from "@material-ui/core";
@@ -9,7 +16,7 @@ import NotifyIcon from "../../Assets/icons/notification.png";
 import WriteIcon from "../../Assets/icons/writing.png";
 import { IconButton } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from "@material-ui/icons/Search";
 
 const Navigation = ({ type }) => {
   const classes = NavigationStyles();
@@ -40,29 +47,28 @@ const Navigation = ({ type }) => {
                 />
               </NavLink>
             </Box>
-            <Box className={classes.search}>
+            <div className={classes.search}>
               <div className={classes.searchIcon}>
-                <SearchIcon style={{color: "black"}} />
+                <SearchIcon style={{ color: "black" }} />
               </div>
               <InputBase
                 placeholder="Search something here…"
                 classes={{
-                  // root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
                 inputProps={{ "aria-label": "search" }}
               />
-            </Box>
+            </div>
             {/* After Login  */}
             <Box>
               <NavLink to="/dashboard">
                 <IconButton className={classes.navIcon}>
-                  <img src={WriteIcon} alt="" />
+                  <img src={WriteIcon} alt="" height="30px" width="30px" />
                 </IconButton>
               </NavLink>
 
               <IconButton className={classes.navIcon}>
-                <img src={NotifyIcon} alt="" />
+                <img src={NotifyIcon} alt="" height="30px" width="30px" />
               </IconButton>
 
               <IconButton className={classes.navIcon} onClick={handleClick}>

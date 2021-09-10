@@ -1,8 +1,10 @@
-import { combineReducers } from 'redux';
-import { authentication } from './authentication';
+import { combineReducers } from "redux";
+import { authentication } from "./authentication";
+import { headerVisible } from "./headerReducer";
 
 const RootReducers = combineReducers({
-    authentication,
+  authentication,
+  headerVisible,
 });
 
 export default RootReducers;

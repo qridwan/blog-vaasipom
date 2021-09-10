@@ -45,9 +45,9 @@ const profileStyles = makeStyles((theme) => {
 const Profile = ({ type }) => {
   const classes = profileStyles();
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Navigation />
-      <SubNavigation />
+      {/* <SubNavigation /> */}
       <Grid container spacing={3}>
         <Grid item xs={12} sm={3}>
           <Box textAlign="center" mt={5}>

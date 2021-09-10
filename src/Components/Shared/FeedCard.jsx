@@ -29,45 +29,42 @@ const FeedCard = ({ feed, type }) => {
 
   return (
     <Card className={classes.root}>
-      <CardActions className={classes.topbar}>
-        <AuthorButton authorName={author} authorImg={authorImg} />
-      </CardActions>
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         <Grid item xs={12} sm={img ? 8 : 12}>
+          <CardActions className={classes.authorBtn}>
+            <AuthorButton authorName={author} authorImg={authorImg} />
+          </CardActions>
           <NavLink to={`${url}/${title}`}>
-            <CardActionArea>
+            <CardActionArea className={classes.mainArea}>
               {/* title */}
               <Typography className={classes.title}>{title}</Typography>
               {/* description */}
               <Typography className={classes.desc}>{desc}</Typography>
             </CardActionArea>
           </NavLink>
-          {/* <Box display="flex" justifyContent="start" alignItems="center" my={2}>
-            <Typography>{date}</Typography>
-            <span className={classes.span}> | </span>
-            <Typography>{readTime}</Typography>
-            <span className={classes.span}> | </span>
-            <NavLink to={`/${topic}`}>
-              <OutlineButton size="small">{topic}</OutlineButton>
-            </NavLink>
-          </Box> */}
           <PostFooterInfo date={date} readTime={readTime} topic={topic} />
           <Box
             display="flex"
             justifyContent="space-between"
-            alignItems="center"
+            alignItems="start"
+            my={0}
+            py={0}
           >
             <PostCountInfo likes={likes} views={views} />
-            <div>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="start"
+            >
               {type === "podcast" && (
-                <IconButton>
-                  <QueueMusicIcon />
+                <IconButton style={{ padding: "2px" }}>
+                  <QueueMusicIcon style={{ fontSize: "16px" }} />
                 </IconButton>
               )}
-              <IconButton>
-                <BookmarkIcon />
+              <IconButton style={{ padding: "2px" }}>
+                <BookmarkIcon style={{ fontSize: "16px" }} />
               </IconButton>
-            </div>
+            </Box>
           </Box>
         </Grid>
         {/* image */}

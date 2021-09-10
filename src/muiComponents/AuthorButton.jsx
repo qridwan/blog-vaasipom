@@ -1,19 +1,20 @@
 import { Avatar, Button, makeStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
+import { NavLink } from "react-router-dom";
 
 const MyButton = withStyles((theme) => ({
   root: {
     color: "#00000",
-    background: "rgba(180, 180, 180, 0.11)",
+    background: "transparent",
     borderRadius: "26px",
     textTransform: "capitalize",
     display: "flex",
-    justifyContent: "space-between",
+    fontWeight: "600",
     [theme.breakpoints.up("sm")]: {
-      padding: "5px 35px 5px 0",
+      padding: "0",
     },
     "&:hover": {
-      backgroundColor: "rgba(180, 180, 180, 0.31))",
+      backgroundColor: "transparent",
     },
   },
 }))(Button);
@@ -24,7 +25,10 @@ const authorButtonStyles = makeStyles((theme) => {
       display: "none",
       [theme.breakpoints.up("sm")]: {
         display: "block",
-        marginRight: "20px",
+        marginRight: "10px",
+        height: "20px",
+        width: "20px",
+        fontSize: "10px"
       },
     },
   };
@@ -32,10 +36,12 @@ const authorButtonStyles = makeStyles((theme) => {
 const AuthorButton = ({ authorName, authorImg }) => {
   const classes = authorButtonStyles();
   return (
-    <MyButton>
-      <Avatar alt="Author" src={authorImg} className={classes.btnAvatar} />
-      {authorName}
-    </MyButton>
+    <NavLink to="/profile">
+      <MyButton>
+        <Avatar alt="Author" src={authorImg} className={classes.btnAvatar} />
+        {authorName}
+      </MyButton>
+    </NavLink>
   );
 };
 

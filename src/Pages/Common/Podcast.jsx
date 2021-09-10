@@ -5,7 +5,6 @@ import Suggestions from "../../Components/Shared/Suggestions";
 import AudioPlayer from "../../Components/Podcast/AudioPlayer";
 import PodcastFeed from "../../Components/Podcast/PodcastFeed";
 import SubNavigation from "../../Components/LandingPage/SubNavigation";
-import Header from "../../Components/LandingPage/Header";
 import Navigation from "./Navigation";
 import TopicSlider from "../../Components/Shared/TopicSlider";
 
@@ -15,16 +14,19 @@ const podcastStyles = makeStyles({
     position: "sticky",
     top: "0",
   },
+  left: {
+    borderRight: "2px solid #EDEDED",
+  },
 });
 
 const Podcast = () => {
   const classes = podcastStyles();
   const [isAudioPlay, setIsAudioPlay] = useState(false);
   useEffect(() => {
-    document.title = "Blog | Podcast"
-  }, [])
+    document.title = "Blog | Podcast";
+  }, []);
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Navigation />
       {/* <Header /> */}
       <TopicSlider />
@@ -34,15 +36,16 @@ const Podcast = () => {
         spacing={3}
         justifyContent="flex-start"
         alignItems="flex-start"
+        style={{marginTop: "-20px"}}
       >
-        <Grid item sm={12} md={8}>
+        <Grid item sm={12} md={8} className={classes.left}>
           <PodcastFeed setIsAudioPlay={setIsAudioPlay} />
         </Grid>
         <Grid item sm={12} md={4} className={classes.right}>
           <Suggestions />
         </Grid>
       </Grid>
-      {isAudioPlay && <AudioPlayer />}
+      {isAudioPlay && <AudioPlayer setIsAudioPlay={setIsAudioPlay} />}
     </Container>
   );
 };

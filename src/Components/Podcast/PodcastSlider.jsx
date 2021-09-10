@@ -85,11 +85,23 @@ const PodcastSlider = ({ setIsAudioPlay }) => {
     <div className={classes.root}>
       <Box className={classes.sliderBox}>
         <Swiper
-          slidesPerView={3.3}
-          spaceBetween={30}
           freeMode={true}
           className=""
           navigation={true}
+          breakpoints={{
+            1300: {
+              slidesPerView: 3.3,
+              spaceBetween: 30,
+            },
+            800: {
+              slidesPerView: 3,
+              spaceBetween: 15,
+            },
+            550: {
+              slidesPerView: 2,
+              spaceBetween: 15,
+            },
+          }}
         >
           {slider.map((numb) => (
             <SwiperSlide key={numb}>

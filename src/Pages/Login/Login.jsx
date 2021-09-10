@@ -78,10 +78,10 @@ const Login = () => {
   return (
     <main className={classes.root}>
       <Grid container>
-        <Grid item xs={12} sm={5}>
+        <Grid item sm={12} md={5}>
           <img src={jumpingKid} alt="" className={classes.img} />
         </Grid>
-        <Grid className={classes.boxContainer} item xs={12} sm={7}>
+        <Grid className={classes.boxContainer} item sm={12} md={7}>
           <Box className={classes.box}>
             {!createAcc &&
               (isNewUser ? (

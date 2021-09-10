@@ -22,7 +22,7 @@ a {
 }
 
 .swiper-button-next, .swiper-button-prev {
-  top: 35%;
+  top: 50% !important;
 }
 .swiper-button-next::after , .swiper-button-prev::after{
   background:rgb(255, 255, 255);

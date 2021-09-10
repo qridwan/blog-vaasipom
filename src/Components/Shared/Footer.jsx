@@ -9,8 +9,8 @@ const Footer = () => {
       alignItems="center"
       justifyContent="space-around"
       my={3}
+      style={{ paddingLeft: "30px" }}
     >
-      <Button>Blog</Button>
       <Button>Help</Button>
       <Button>Privacy</Button>
       <Button>Terms</Button>

@@ -7,7 +7,7 @@ import {
   Grid,
   Paper,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import ArticleIcon from "../../Assets/icons/articleIcon.svg";
 import ShortStoryIcon from "../../Assets/icons/shortStoryIcon.svg";
 import PodcastIcon from "../../Assets/icons/podcastIcon.svg";

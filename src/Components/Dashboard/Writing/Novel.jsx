@@ -8,6 +8,7 @@ import { OutlineButton } from "../../../muiComponents/OutlineButton";
 import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
 import { tags } from "./Article";
+import AddTags from "../../../muiComponents/AddTags";
 
 const types = ["New", "Existing"];
 const interests = ["Mystery", "Horror", "Romantic", "Solo"];
@@ -92,11 +93,12 @@ const Novel = () => {
               </Grid>
               <Grid item xs={12} sm={12}>
                 <CustomLabel htmlFor="">Add Tags</CustomLabel>
-                <CustomSelect
+                <AddTags />
+                {/* <CustomSelect
                   data={tags}
                   selectItems={tagName}
                   setSelectItems={setTagName}
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} sm={12}>
                 <Box

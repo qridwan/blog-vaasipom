@@ -32,7 +32,7 @@ export function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 const CustomTableHead = (props) => {
-  const { classes, order, orderBy, rowCount, onRequestSort, data } = props;
+  const { classes, order, orderBy, onRequestSort, data } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };

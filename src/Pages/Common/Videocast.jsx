@@ -8,6 +8,7 @@ import PinkFem from "../../Assets/img/canva-pink-feminine-social-media-marketing
 import Header from "../../Components/LandingPage/Header";
 import SubNavigation from "../../Components/LandingPage/SubNavigation";
 import Navigation from "./Navigation";
+import TopicSlider from "../../Components/Shared/TopicSlider";
 
 const data = [
   {
@@ -54,6 +55,9 @@ const videocastStyles = makeStyles({
     position: "sticky",
     top: "0",
   },
+  left: {
+    borderRight: "2px solid #EDEDED",
+  },
 });
 const Videocast = () => {
   const classes = videocastStyles();
@@ -62,23 +66,27 @@ const Videocast = () => {
     document.title = "Blog | Videocast";
   }, []);
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Navigation />
+      <TopicSlider />
       {/* <Header /> */}
       <SubNavigation />
-      <Grid
-        container
-        spacing={3}
-        justifyContent="flex-start"
-        alignItems="flex-start"
-      >
-        <Grid item sm={12} md={8}>
-          <Feed data={data} type="videocast" />
+      <Container>
+        <Grid
+          container
+          spacing={3}
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          style={{marginTop: "-20px"}}
+        >
+          <Grid item sm={12} md={8} className={classes.left}>
+            <Feed data={data} type="videocast" />
+          </Grid>
+          <Grid item sm={12} md={4} className={classes.right}>
+            <Suggestions />
+          </Grid>
         </Grid>
-        <Grid item sm={12} md={4} className={classes.right}>
-          <Suggestions />
-        </Grid>
-      </Grid>
+      </Container>
     </Container>
   );
 };

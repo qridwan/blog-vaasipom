@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import CustomSelect from "../../../muiComponents/CustomSelect";
+import AddTags from "../../../muiComponents/AddTags";
 import { OutlineButton } from "../../../muiComponents/OutlineButton";
 import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
@@ -72,11 +73,12 @@ const Article = ({ type}) => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <CustomLabel htmlFor="">Add Tags</CustomLabel>
-              <CustomSelect
+              {/* <CustomSelect
                 data={tags}
                 selectItems={tagName}
                 setSelectItems={setTagName}
-              />
+              /> */}
+              <AddTags />
             </Grid>
             <Grid item xs={12} sm={12}>
               <Box

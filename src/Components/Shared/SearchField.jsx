@@ -112,7 +112,6 @@ const SearchField = () => {
   const classes = searchFieldStyles();
   const {
     getRootProps,
-    getInputLabelProps,
     getInputProps,
     getListboxProps,
     getOptionProps,
@@ -124,11 +123,6 @@ const SearchField = () => {
   });
   return (
     <div>
-      {/* <div className={classes.searchContainer} {...getRootProps()}>
-        <SearchIcon />
-        <input className={classes.input} {...getInputProps()} />
-      </div> */}
-
       <div className={classes.search} {...getRootProps()}>
         <div className={classes.searchIcon}>
           <SearchIcon />

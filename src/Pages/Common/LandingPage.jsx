@@ -6,27 +6,44 @@ import Suggestions from "../../Components/Shared/Suggestions.jsx";
 import { Container, Grid, Paper } from "@material-ui/core";
 import { landingPageStyles } from "../../Styles/muiStyles.js";
 import FeedImg from "../../Assets/img/feedImg.png";
+import FeedImg2 from "../../Assets/img/demo-post-1.jpg";
+import FeedImg3 from "../../Assets/img/demo-post-2.jpg";
+import FeedImg4 from "../../Assets/img/demo-post-3.jpg";
 import Navigation from "./Navigation.jsx";
+import { connect } from "react-redux";
+import { hideHeader } from "../../redux/actions/headerAction.js";
 
 export const allData = [
   {
     id: 1,
     author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
+    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet, adipiscing elit. Dolor sit amet, adipiscing",
+    img: FeedImg2,
     likes: 529,
     views: 768,
     date: "10th August",
     readTime: "4 Min",
-    topic: "Article",
+    topic: "Videocast",
   },
   {
-    id: 2,
-    author: "Krishaan",
+    id: 12,
+    author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: "",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet, adipiscing elit. Dolor sit amet, adipiscing",
+    img: FeedImg4,
+    likes: 529,
+    views: 768,
+    date: "10th August",
+    readTime: "4 Min",
+    topic: "Podcast",
+  },
+  {
+    id: 13,
+    author: "Aadavan",
+    title: "The art of writing Create a blog post subtitle",
+    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet, adipiscing elit. Dolor sit amet, adipiscing",
+    img: FeedImg3,
     likes: 529,
     views: 768,
     date: "10th August",
@@ -38,7 +55,7 @@ export const allData = [
     author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
+    img: FeedImg4,
     likes: 529,
     views: 768,
     date: "10th August",
@@ -46,23 +63,11 @@ export const allData = [
     topic: "Podcast",
   },
   {
-    id: 4,
-    author: "Novel",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4 Min",
-    topic: "Science",
-  },
-  {
     id: 5,
     author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
+    img: FeedImg2,
     likes: 529,
     views: 768,
     date: "10th August",
@@ -74,7 +79,7 @@ export const allData = [
     author: "Aadavan",
     title: "The art of writing Create a blog post subtitle",
     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
+    img: FeedImg3,
     likes: 529,
     views: 768,
     date: "10th August",
@@ -82,17 +87,19 @@ export const allData = [
     topic: "Videocast",
   },
 ];
-const LandingPage = () => {
+const LandingPage = ({ headerVisible, hideHeader }) => {
   const classes = landingPageStyles();
   useEffect(() => {
-    document.title = "Blog | Home"
-  }, [])
+    document.title = "Blog | Home";
+    return () => hideHeader();
+  }, []);
+
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Navigation />
-      <Header />
+      {headerVisible && <Header />}
       <SubNavigation />
-      <div>
+      <Container>
         <Grid
           container
           spacing={3}
@@ -111,9 +118,13 @@ const LandingPage = () => {
             </Paper>
           </Grid>
         </Grid>
-      </div>
+      </Container>
     </Container>
   );
 };
 
-export default LandingPage;
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  hideHeader: hideHeader,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

@@ -3,11 +3,11 @@ import { deepOrange } from "@material-ui/core/colors";
 import React from "react";
 import headerImg from "../../Assets/img/HeaderImg.png";
 import { BlackButton } from "../../muiComponents/BlackButton";
-import Typewriter from "typewriter-effect";
 import { NavLink } from "react-router-dom";
 
-const headerStyles = makeStyles((theme) => ({
+export const headerStyles = makeStyles((theme) => ({
   head: {
+    margin: "0 50px",
     marginTop: "10px",
     position: "relative",
     zIndex: theme.zIndex.drawer + 1,
@@ -16,7 +16,7 @@ const headerStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   left: {
-    padding: theme.spacing(7),
+    padding: theme.spacing(5),
     textAlign: "start",
     color: theme.palette.text.primary,
     display: "flex",
@@ -33,8 +33,8 @@ const headerStyles = makeStyles((theme) => ({
     marginBottom: "10px",
     fontSize: "35px",
     "@media (min-width:800px)": {
-      fontSize: "50px",
-      marginBottom: "30px",
+      fontSize: "40px",
+      marginBottom: "5px",
     },
   },
   subtitle: {
@@ -42,8 +42,8 @@ const headerStyles = makeStyles((theme) => ({
     fontSize: "25px",
     color: deepOrange[800],
     "@media (min-width:800px)": {
-      fontSize: "35px",
-      marginBottom: "30px",
+      fontSize: "30px",
+      marginBottom: "20px",
     },
   },
   desc: {
@@ -78,7 +78,7 @@ const Header = () => {
                   The art of writing
                 </Typography>
                 <Typography className={classes.subtitle}>
-                  <Typewriter
+                  {/* <Typewriter
                   onInit={(typewriter) => {
                     typewriter
                       .typeString(`Create a blog post subtitle`)
@@ -91,17 +91,18 @@ const Header = () => {
                       .start();
                   }}
                   options={{ loop: true}}
-                />
+                /> */}
+                  Create a blog post subtitle
                 </Typography>
-                
+
                 <Typography className={classes.desc}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
                   id magna massa. Ut vitae risus vehicula, faucibus odio id,
                   dictum neque. Curabitur rhoncus quis ipsum quis varius.
                 </Typography>
                 <NavLink to="/login">
-                <BlackButton className={classes.btn}>Sign Up</BlackButton>
-                  </NavLink>
+                  <BlackButton className={classes.btn}>Sign Up</BlackButton>
+                </NavLink>
               </div>
             </Paper>
           </Grid>

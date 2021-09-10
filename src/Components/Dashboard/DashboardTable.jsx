@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,8 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import CustomTableHead, { getComparator, stableSort } from "./TableHead";
-import { grey } from "@material-ui/core/colors";
-import { Box, IconButton, Typography } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Popover from "@material-ui/core/Popover";
 import { Button } from "@material-ui/core";

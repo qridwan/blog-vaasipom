@@ -1,6 +1,7 @@
 import { Box, Container, Grid } from "@material-ui/core";
 import React, { createRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import AddTags from "../../../muiComponents/AddTags";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import CustomSelect from "../../../muiComponents/CustomSelect";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
@@ -67,11 +68,12 @@ const MediaCast = ({ type }) => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <CustomLabel htmlFor="">Add Tags</CustomLabel>
-              <CustomSelect
+              <AddTags />
+              {/* <CustomSelect
                 data={tags}
                 selectItems={tagName}
                 setSelectItems={setTagName}
-              />
+              /> */}
             </Grid>
             <Grid item xs={12} sm={12}>
               <Box

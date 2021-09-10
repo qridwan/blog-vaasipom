@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
   leftItems: {
     flexGrow: 1,
+    borderBottom: "2px solid #EDEDED",
+  },
+  toolArea: {
+    height: "40px",
   },
   title: {
     display: "none",
@@ -25,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "16px",
     cursor: "pointer",
     fontWeight: "bold",
+    padding: 0,
+    margin: 0,
+    marginBottom: -2,
     marginRight: theme.spacing(3),
     [theme.breakpoints.up("sm")]: {
       display: "inline-block",
@@ -36,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "16px",
     cursor: "pointer",
     fontWeight: "bold",
-    borderBottom: "1px solid rgba(0, 0, 0, 0.31)",
+    padding: 0,
+    marginBottom: -5.5,
+    borderBottom: "3px solid #121212",
     marginRight: theme.spacing(4),
     [theme.breakpoints.up("sm")]: {
       display: "inline-block",
@@ -107,7 +116,7 @@ const SubNavigation = () => {
     <Container maxWidth="xl">
       <div className={classes.root}>
         <AppBar className={classes.appBar} color="white" position="static">
-          <Toolbar>
+          <Toolbar className={classes.toolArea}>
             <div className={classes.leftItems}>
               {lookingFor.map((data) => {
                 let page = "/" + data.label.toLowerCase();
@@ -123,16 +132,16 @@ const SubNavigation = () => {
                       noWrap
                     >
                       {data.label}
-                      {data.count && (
+                      {/* {data.count && (
                         <span className={classes.titleSpan}>{data.count}</span>
-                      )}
+                      )} */}
                     </Typography>
                   </NavLink>
                 );
               })}
             </div>
 
-            <div className={classes.search}>
+            {/* <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
@@ -144,7 +153,7 @@ const SubNavigation = () => {
                 }}
                 inputProps={{ "aria-label": "search" }}
               />
-            </div>
+            </div> */}
           </Toolbar>
         </AppBar>
       </div>
