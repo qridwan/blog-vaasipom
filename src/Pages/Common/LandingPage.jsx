@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Feed from "../../Components/Shared/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
 import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
@@ -12,6 +12,9 @@ import FeedImg4 from "../../Assets/img/demo-post-3.jpg";
 import Navigation from "./Navigation.jsx";
 import { connect } from "react-redux";
 import { hideHeader } from "../../redux/actions/headerAction.js";
+import { BaseUrl } from "../../BaseUrl.config.js";
+import axios from "axios";
+import { PaginationBlog } from "../../muiComponents/PaginationBlog.jsx";
 
 export const allData = [
   {
@@ -89,15 +92,37 @@ export const allData = [
 ];
 const LandingPage = ({ headerVisible, hideHeader }) => {
   const classes = landingPageStyles();
+  const [token, setToken] = useState(false);
+  const [page, setPage] = useState(1);
+  const [allPost, setAllPost] = useState([]);
+
+  const getAllPost = () => {
+    axios
+      .get(
+        BaseUrl +
+          `/auth/home/posts?categoryList=story,article,poetry,review,podcast,videocast&page=${page}&allPost=true`
+      )
+      .then((response) => {
+        console.log("response:", response);
+        setAllPost(response.data);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
   useEffect(() => {
     document.title = "Blog | Home";
+    localStorage.token ? setToken(true) : setToken(false);
+    getAllPost();
     return () => hideHeader();
-  }, []);
+  }, [page]);
 
+  console.log({ token }, { allPost });
   return (
     <Container maxWidth="lg">
       <Navigation />
-      {headerVisible && <Header />}
+      {( !token && headerVisible) && <Header />}
       <SubNavigation />
       <Container>
         <Grid
@@ -109,7 +134,8 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
         >
           <Grid item xs={12} sm={8} className={classes.left}>
             <Paper className={classes.paper}>
-              <Feed data={allData} type="allFeed" />
+              <Feed data={allPost} type="allFeed" />
+              <PaginationBlog page={page} setPage={setPage}/>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4} className={classes.right}>
@@ -117,8 +143,10 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
               <Suggestions />
             </Paper>
           </Grid>
+          
         </Grid>
       </Container>
+      
     </Container>
   );
 };

@@ -1,0 +1,1 @@
+export const BaseUrl = 'http://vaasippom-uat-env-1.eu-west-1.elasticbeanstalk.com/api';

@@ -6,7 +6,6 @@ import {
   IconButton,
   Input,
   InputAdornment,
-  makeStyles,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -21,12 +20,16 @@ import { useForm } from "react-hook-form";
 import Edit from "../../Assets/icons/edit.png";
 import { NavLink } from "react-router-dom";
 import { loginStyles } from "../../Styles/muiStyles";
-
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl.config.js";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const classes = loginStyles();
+  const history = useHistory();
   const [values, setValues] = useState({
     password: "",
+    otp: "",
     showPassword: false,
   });
   const [userInfo, setUserInfo] = useState({
@@ -34,39 +37,119 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [signInData, setSignInData] = useState({
+    username: "",
+    password: "",
+  });
   const [isNewUser, setIsNewUser] = useState(true);
   const [createAcc, setCreateAcc] = useState(false);
+  const [res, setRes] = useState({
+    message: "",
+    passwordConfirmation: 0,
+  });
 
   useEffect(() => {
     document.title = "Blog | Login";
+    if(localStorage.token){
+      history.push("/");
+    }
   }, []);
   const {
     register,
     handleSubmit,
     // formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
-    console.log(
-      "🚀 ~ file: Login.jsx ~ line 109 ~ onSubmit ~ data",
-      { data },
-      "pass",
-      values.password
-    );
-    setUserInfo({
-      name: data.full_name,
-      email: data.email,
-      password: values.password,
-    });
+    console.log("🚀 ~ file: Login.jsx ~ line 61 ~ onSubmit ~ data", data);
+    isNewUser
+      ? setUserInfo({
+          name: data.full_name,
+          email: data.email,
+          password: values.password,
+        })
+      : setSignInData({
+          username: data.email,
+          password: values.password,
+        });
+
+    // FOR SIGN IN
+
+    !isNewUser &&
+      axios
+        .post(BaseUrl + "/auth/signin", signInData)
+        .then((response) => {
+          console.log("response:", response);
+          localStorage.setItem("token", "Bearer " + response.data.accessToken);
+          localStorage.setItem("username", response.data.username);
+          history.push("/");
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+
+    // SEND OTP TO EMAIL
+
+    // isNewUser &&
+    //   axios
+    //     .get(BaseUrl + "/auth/email/otp?email=" + data.email)
+    //     .then((response) => {
+    //       setUserInfo({
+    //         name: data.full_name,
+    //         email: data.email,
+    //         password: values.password,
+    //         message: response.data.message,
+    //         verifyOtp: 1,
+    //       });
+    //       console.log(response.data);
+    //     })
+    //     .catch((error) => {
+    //       console.log("error", error);
+    //       // setUserInfo((data) => ({
+    //       //   ...data,
+    //       //   verifyOtp: 0,
+    //       // }));
+    //     });
+
     isNewUser && setCreateAcc(true);
   };
 
   const submitOtp = (data) => {
-    console.log("🚀 ", data);
+    console.log("🚀", data);
+    // setOtp(data.otp);
+    setUserInfo({
+      ...userInfo,
+      otp: values.otp,
+    });
+
+    //FOR SIGN UP
+    // isNewUser &&
+    //   axios
+    //     .post(BaseUrl + "/auth/user/signup", data)
+    //     .then((response) => {
+    //       console.log("response:", response);
+    //       setRes((data) => ({
+    //         ...data,
+    //         message: response.data.message,
+    //         passwordconfirmation: 0,
+    //       }));
+    //     })
+    //     .catch((error) => {
+    //       setRes((data) => ({
+    //         ...data,
+    //         message: data.message,
+    //         passwordconfirmation: 0,
+    //       }));
+    //       console.log("error", error);
+    //     });
+
     setCreateAcc(false);
+    console.log(userInfo);
   };
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
+    setUserInfo({ ...userInfo, [prop]: event.target.value });
   };
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -75,6 +158,8 @@ const Login = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  console.log({ userInfo }, { signInData });
   return (
     <main className={classes.root}>
       <Grid container>
@@ -174,14 +259,9 @@ const Login = () => {
                     />
                   </FormControl>
                   {!isNewUser && (
-                    <NavLink to="/forgotPassword" >
-                      <p
-                      className={classes.forgotPassword}
-                      
-                    >
-                      Forgot Password
-                    </p>
-                      </NavLink>
+                    <NavLink to="/forgotPassword">
+                      <p className={classes.forgotPassword}>Forgot Password</p>
+                    </NavLink>
                   )}
                   {isNewUser ? (
                     <BlackButton type="submit" className={classes.btn}>
@@ -225,7 +305,8 @@ const Login = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  {...register("otp")}
+                  // {...register("otp")}
+                  onChange={handleChange("otp")}
                 />
                 <BlackButton type="submit" className={classes.btn}>
                   Create Account

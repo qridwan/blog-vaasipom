@@ -12,8 +12,8 @@ const Feed = ({ data, type }) => {
   const classes = feedStyles();
   return (
     <div className={classes.root}>
-      {data.map((feed) => (
-        <FeedCard key={feed.id} feed={feed} type={type} />
+      {data.map((feed, index) => (
+        <FeedCard key={index} feed={feed} type={type} />
       ))}
     </div>
   );

@@ -1,12 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Paper from "@material-ui/core/Paper";
 import { InputArea } from "./InputArea";
-import { useForm } from "react-hook-form";
 import { OutlineButton } from "./OutlineButton";
 import { Box, InputAdornment } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,10 +34,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "transparent",
   },
 }));
-const AddTags = () => {
+const AddTags = ({ setTags }) => {
   const classes = useStyles();
   const [chipData, setChipData] = useState([]);
   const [newTag, setNewTag] = useState([]);
+  const [allTag, setAllTag] = useState([]);
   const refTagInput = useRef(null);
 
   const handleDelete = (chipToDelete) => () => {
@@ -53,11 +52,19 @@ const AddTags = () => {
     setNewTag(tag);
   };
 
-  const addTag = () => {
+  const addTag = async () => {
     setChipData([...chipData, { key: chipData.length, label: newTag }]);
-    console.log(chipData);
+    refTagInput.current.children[0].value = "";
   };
 
+  useEffect(() => {
+    setTags(chipData);
+  // setTags([]);
+  // (chipData.map((obj) => setTags([...tags, obj.label])))
+    // setTags(allTag); 
+  }, [chipData]);
+
+  console.log({ chipData });
   return (
     <Paper component="ul" className={classes.root}>
       {chipData.map((data) => {
@@ -79,7 +86,7 @@ const AddTags = () => {
 
       <div className={classes.commentWrapper} style={{ width: "100%" }}>
         <InputArea
-        style={{padding: "0"}}
+          style={{ padding: "0" }}
           ref={refTagInput}
           onChange={writeTag}
           id="outlined-start-adornment"

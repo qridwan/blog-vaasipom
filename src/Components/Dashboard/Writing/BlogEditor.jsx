@@ -3,13 +3,8 @@ import React, { useEffect } from "react";
 import { forwardRef } from "react";
 
 const BlogEditor = forwardRef((props, ref) => {
-  console.log("🚀 ~ file: BlogEditor.jsx ~ line 6 ~ BlogEditor ~ ref", {
-    ref,
-    props,
-  });
+
   const { value, setValue } = props;
-  // const [content, setContent] = useState(null);
-  // const [dirty, setDirty] = useState(false);
   useEffect(() => ref, [value]);
 
   return (
@@ -18,7 +13,6 @@ const BlogEditor = forwardRef((props, ref) => {
         ref.current = editor;
       }}
       initialValue={value}
-      // onDirty={() => setDirty(true)}
       apiKey="ch28zotn1q8tkyz28lqf0bnwaaex2ava1lxdleg5mgisod5j"
       init={{
         icons: "jam",

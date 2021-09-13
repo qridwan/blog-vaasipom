@@ -17,32 +17,63 @@ import authorImg from "../../Assets/img/authorbtnImg.png";
 import AuthorButton from "../../muiComponents/AuthorButton";
 import PostCountInfo from "./PostCountInfo";
 import PostFooterInfo from "./PostFooterInfo";
+import { Subtitles } from "@material-ui/icons";
+import parse from "html-react-parser";
+import dateFormat from "dateformat";
 
 const FeedCard = ({ feed, type }) => {
   const classes = feedCardStyles();
-  const { author, title, desc, img, likes, views, date, readTime, topic } =
-    feed;
+  const { article, author, category } = feed;
+  // const {
+  //   title,
+  //   likes,
+  //   reads,
+  //   date,
+  //   mainImage,
+  //   readTime,
+  //   topic,
+  //   content,
+  //   articleId,
+  //   createDate,
+  //   subTitle,
+  // } = article;
+  const { email, name, profileImage } = author;
   let { url } = useRouteMatch();
   if (url === "/") {
     url = "/feed";
   }
+  const createdDateFormate = dateFormat(article?.createDate, "dS mmmm");
 
+  console.log(article);
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={img ? 8 : 12}>
+        <Grid item xs={12} sm={article?.mainImage ? 8 : 12}>
           <CardActions className={classes.authorBtn}>
-            <AuthorButton authorName={author} authorImg={authorImg} />
+            <AuthorButton
+              authorName={author?.name}
+              authorImg={author?.profileImage}
+            />
           </CardActions>
-          <NavLink to={`${url}/${title}`}>
+          <NavLink to={`${url}/${category}/${article?.articleId}`}>
             <CardActionArea className={classes.mainArea}>
               {/* title */}
-              <Typography className={classes.title}>{title}</Typography>
+              <Typography className={classes.title}>
+                {article?.title}
+              </Typography>
               {/* description */}
-              <Typography className={classes.desc}>{desc}</Typography>
+              {article?.subTitle && (
+                <Typography className={classes.desc}>
+                  {parse(article?.subTitle)}
+                </Typography>
+              )}
             </CardActionArea>
           </NavLink>
-          <PostFooterInfo date={date} readTime={readTime} topic={topic} />
+          <PostFooterInfo
+            date={createdDateFormate}
+            readTime={article?.readTime}
+            topic={category}
+          />
           <Box
             display="flex"
             justifyContent="space-between"
@@ -50,7 +81,7 @@ const FeedCard = ({ feed, type }) => {
             my={0}
             py={0}
           >
-            <PostCountInfo likes={likes} views={views} />
+            <PostCountInfo likes={article?.likes} views={article?.reads} />
             <Box
               display="flex"
               justifyContent="space-between"
@@ -68,11 +99,11 @@ const FeedCard = ({ feed, type }) => {
           </Box>
         </Grid>
         {/* image */}
-        {img && (
+        {article?.mainImage && (
           <Grid item xs={12} sm={4}>
             <CardMedia
               className={classes.media}
-              image={img}
+              image={article?.mainImage}
               title="Feed Cover Photo"
             />
           </Grid>
