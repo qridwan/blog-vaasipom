@@ -15,6 +15,7 @@ import { hideHeader } from "../../redux/actions/headerAction.js";
 import { BaseUrl } from "../../BaseUrl.config.js";
 import axios from "axios";
 import { PaginationBlog } from "../../muiComponents/PaginationBlog.jsx";
+import { useRouteMatch } from "react-router-dom";
 
 export const allData = [
   {
@@ -95,13 +96,16 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
   const [token, setToken] = useState(false);
   const [page, setPage] = useState(1);
   const [allPost, setAllPost] = useState([]);
+  const [categoryItem, setCategoryItem] = useState(
+    "story,article,poetry,review,podcast,videocast"
+  );
+  const [subUrl, setSubUrl] = useState();
 
-  const getAllPost = () => {
+  const { path } = useRouteMatch();
+  const getPost = () => {
+    console.log(subUrl);
     axios
-      .get(
-        BaseUrl +
-          `/auth/home/posts?categoryList=story,article,poetry,review,podcast,videocast&page=${page}&allPost=true`
-      )
+      .get(BaseUrl + subUrl)
       .then((response) => {
         console.log("response:", response);
         setAllPost(response.data);
@@ -114,15 +118,23 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
   useEffect(() => {
     document.title = "Blog | Home";
     localStorage.token ? setToken(true) : setToken(false);
-    getAllPost();
+    path === "/poetries" && setCategoryItem("poetry");
+    path === "/short stories" && setCategoryItem("story");
+    path === "/articles" && setCategoryItem("article");
+    path === "/"
+      ? setSubUrl(
+          `/auth/home/posts?categoryList=story,article,poetry,review,podcast,videocast&page=${page}&allPost=true`
+        )
+      : setSubUrl(`/auth/welcome/posts/${categoryItem}`);
+    getPost();
     return () => hideHeader();
-  }, [page]);
+  }, [page, subUrl]);
 
   console.log({ token }, { allPost });
   return (
     <Container maxWidth="lg">
       <Navigation />
-      {( !token && headerVisible) && <Header />}
+      {!token && headerVisible && <Header />}
       <SubNavigation />
       <Container>
         <Grid
@@ -135,7 +147,7 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
           <Grid item xs={12} sm={8} className={classes.left}>
             <Paper className={classes.paper}>
               <Feed data={allPost} type="allFeed" />
-              <PaginationBlog page={page} setPage={setPage}/>
+              <PaginationBlog page={page} setPage={setPage} />
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4} className={classes.right}>
@@ -143,10 +155,8 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
               <Suggestions />
             </Paper>
           </Grid>
-          
         </Grid>
       </Container>
-      
     </Container>
   );
 };

@@ -20,6 +20,10 @@ export const Routes = [
   { path: "/videocast/:title", component: VideoDetails },
   { path: "/videocast", component: Videocast },
   { path: "/dashboard", component: Dashboard },
+  { path: "/articles", component: LandingPage},
+  { path: "/short stories", component: LandingPage},
+  { path: "/poetries", component: LandingPage},
+  { path: "/reviews", component: LandingPage},
   { path: "/", component: LandingPage, exact: "exact" },
   { component: NotFound },
 ];

@@ -44,7 +44,6 @@ const FeedCard = ({ feed, type }) => {
   }
   const createdDateFormate = dateFormat(article?.createDate, "dS mmmm");
 
-  console.log(article);
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
