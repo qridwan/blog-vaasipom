@@ -30,6 +30,7 @@ import MediaCast from "../../Components/Dashboard/Writing/MediaCast";
 import EditProfile from "../../Components/Dashboard/ProfileSettings/EditProfile";
 import Reading from "../../Components/Dashboard/Reading/Reading";
 import DashboardTable from "../../Components/Dashboard/DashboardTable.jsx";
+import NavLoginPreference from "../../Components/Shared/NavLoginPreference";
 
 const drawerWidth = 250;
 
@@ -157,7 +158,7 @@ const Dashboard = (props) => {
   const [page, setPage] = useState("Writing");
   const [write, setWrite] = useState(null);
   const [open, setOpen] = useState(false);
-
+  const [isLogin, setIsLogin] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -266,7 +267,13 @@ const Dashboard = (props) => {
           </div>
 
           <Box>
-            <IconButton
+            <NavLoginPreference
+              setIsLogin={setIsLogin}
+              setPage={setPage}
+              setWrite={setWrite}
+              type={"dashboard"}
+            />
+            {/* <IconButton
               onClick={() => {
                 setPage(`Writing`);
                 setWrite(null);
@@ -283,7 +290,7 @@ const Dashboard = (props) => {
 
             <IconButton className={classes.navIcon}>
               <Avatar src={User} alt="User" />
-            </IconButton>
+            </IconButton> */}
           </Box>
         </Toolbar>
       </AppBar>

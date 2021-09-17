@@ -7,6 +7,8 @@ import PodcastFeed from "../../Components/Podcast/PodcastFeed";
 import SubNavigation from "../../Components/LandingPage/SubNavigation";
 import Navigation from "./Navigation";
 import TopicSlider from "../../Components/Shared/TopicSlider";
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl.config";
 
 const podcastStyles = makeStyles({
   right: {
@@ -19,11 +21,27 @@ const podcastStyles = makeStyles({
   },
 });
 
+
+
 const Podcast = () => {
   const classes = podcastStyles();
+  const [allPost, setAllPost] = useState([]);
   const [isAudioPlay, setIsAudioPlay] = useState(false);
+  const getPost = () => {
+    axios
+      .get(BaseUrl + `/auth/home/posts?categoryList=podcast&page=1&allPost=true`)
+      .then((response) => {
+        console.log("response:", response);
+        setAllPost(response.data);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
   useEffect(() => {
     document.title = "Blog | Podcast";
+    getPost()
   }, []);
   return (
     <Container maxWidth="lg">
@@ -39,7 +57,7 @@ const Podcast = () => {
         style={{marginTop: "-20px"}}
       >
         <Grid item sm={12} md={8} className={classes.left}>
-          <PodcastFeed setIsAudioPlay={setIsAudioPlay} />
+          <PodcastFeed data={allPost} setIsAudioPlay={setIsAudioPlay} />
         </Grid>
         <Grid item sm={12} md={4} className={classes.right}>
           <Suggestions />

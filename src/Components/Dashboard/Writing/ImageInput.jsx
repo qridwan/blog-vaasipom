@@ -35,11 +35,21 @@ const ImageInput = ({ category, setData }) => {
 
   const headers = {
     Authorization: localStorage.getItem("token"),
+    "Access-Control-Allow-Origin": "*",
   };
   // Image handling
   const [ArticleImg, setArticleImg] = useState(null);
   const [file, setFile] = useState(null);
-  const fileHandler = async (event) => {
+  useEffect(() => {
+    if (file) {
+      let data = new FormData();
+      data.append("file", file, file.name);
+      UploadImg(data);
+      console.log("effect", data);
+    }
+  }, [file]);
+
+  const fileHandler = (event) => {
     setFile(event.target.files[0]);
     let reader = new FileReader();
     reader.onload = function (e) {
@@ -48,11 +58,11 @@ const ImageInput = ({ category, setData }) => {
     reader.readAsDataURL(event.target.files[0]);
   };
 
-  const UploadImg = () => {
+  const UploadImg = (data) => {
     // e.preventDefault();
-    console.log("file-53", file);
-    let data = new FormData();
-    data.append("file", file, file.name);
+    // let data =  new FormData();
+    // await data.append("file", file, file.name);
+
     axios
       .post(BaseUrl + `/${category}/image`, data, { headers })
       .then((response) => {
@@ -66,12 +76,10 @@ const ImageInput = ({ category, setData }) => {
         console.log("Data--", data);
       })
       .catch((error) => {
+        console.log("file-53", file, "Data", data);
         console.log("error", error);
       });
   };
-  useEffect(() => {
-    file && UploadImg();
-  }, [file]);
 
   return (
     <>

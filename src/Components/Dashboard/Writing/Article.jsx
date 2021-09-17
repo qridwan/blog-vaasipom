@@ -1,6 +1,5 @@
 import { Box, Container, Grid } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import CustomSelect from "../../../muiComponents/CustomSelect";
@@ -10,7 +9,7 @@ import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
-
+// import { headeeConf } from "../../../Function/Header.info";
 export const tags = [
   "Science",
   "Travel",
@@ -21,9 +20,7 @@ export const tags = [
 export const interests = ["Novel", "Poet", "Fiction", "Economy"];
 
 const Article = ({ type }) => {
-  // const [tagName, setTagName] = useState([]);
   const [tags, setTags] = useState([]);
-  const [convertedTags, setConvertedTags] = useState([]);
   const [interest, setInterest] = useState([]);
   const [value, setValue] = useState();
   const ref = useRef(null);
@@ -36,37 +33,6 @@ const Article = ({ type }) => {
     topic: "",
     content: "",
   });
-
-  useEffect(() => {
-    document.title = "Blog | Writing | Article";
-  }, []);
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   // formState: { errors },
-  // } = useForm();
-
-  const articleContent = () => {
-    console.log(ref.current?.getContent());
-    setValue(ref.current?.getContent());
-  };
-
-  const Publish = (data) => {
-    articleContent();
-    const content = ref.current.getContent();
-    let selectedTags = [];
-    tags.forEach((tag) => selectedTags.push(tag.label));
-    // console.log({ data, tags, interest, content });
-    setAllData({
-      ...allData,
-      tags: selectedTags.join(),
-      topic: interest.join(),
-      content: content,
-    });
-    CreateArticle(allData);
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAllData((data) => ({
@@ -74,19 +40,41 @@ const Article = ({ type }) => {
       [name]: value,
     }));
   };
+  useEffect(() => {
+    document.title = "Blog | Writing | Article";
+  }, []);
 
-  //API INTEGRATION
+  const articleContent = () => {
+    console.log(ref.current?.getContent());
+    setValue(ref.current?.getContent());
+  };
+
+  const HandlePost = async (param) => {
+    articleContent();
+    const content = ref.current.getContent();
+    let selectedTags = [];
+    tags.forEach((tag) => selectedTags.push(tag.label));
+    // console.log({ data, tags, interest, content });
+    const postData = {
+      ...allData,
+      tags: selectedTags.join(),
+      topic: interest.join(),
+      content: content,
+    };
+    param === "publish" && CreateArticle(postData);
+    param === "draft" && SaveAsDraft(postData);
+  };
+
   const headers = {
     Authorization: localStorage.getItem("token"),
+    "Access-Control-Allow-Origin": "*",
+    "content-type": "application/json",
   };
 
   const CreateArticle = (data) => {
-    const headers = {
-      Authorization: localStorage.getItem("token"),
-    };
     console.log("-data-", data);
     axios
-      .post(BaseUrl + "/article", data, { headers })
+      .post(BaseUrl + "/article", data, { mode: "cors", headers })
       .then((response) => {
         console.log(
           "SUCCESSFULLY ADDED & response:",
@@ -100,10 +88,10 @@ const Article = ({ type }) => {
       });
   };
 
-  const SaveAsDraft = () => {
-    console.log("-data-", allData);
+  const SaveAsDraft = (post) => {
+    console.log("-data-", post);
     axios
-      .post(BaseUrl + "/article/draft", allData, { headers })
+      .post(BaseUrl + "/article/draft", post, { headers })
       .then((response) => {
         console.log("response:", response);
       })
@@ -156,8 +144,14 @@ const Article = ({ type }) => {
               alignItems="center"
               justifyContent="start"
             >
-              <BlackButton onClick={Publish}>Publish</BlackButton>
-              <OutlineButton type="" style={{ marginLeft: "30px" }}>
+              <BlackButton onClick={() => HandlePost("publish")}>
+                Publish
+              </BlackButton>
+              <OutlineButton
+                type=""
+                style={{ marginLeft: "30px" }}
+                onClick={() => HandlePost("draft")}
+              >
                 Save as Draft
               </OutlineButton>
             </Box>

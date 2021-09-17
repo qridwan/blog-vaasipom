@@ -67,11 +67,11 @@ const AddTags = ({ setTags }) => {
   console.log({ chipData });
   return (
     <Paper component="ul" className={classes.root}>
-      {chipData.map((data) => {
+      {chipData.map((data, index ) => {
         return (
           <>
             {data && (
-              <li key={data.key}>
+              <li key={index}>
                 <Chip
                   //   icon={icon}
                   label={data.label}

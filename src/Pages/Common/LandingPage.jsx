@@ -5,7 +5,7 @@ import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
 import Suggestions from "../../Components/Shared/Suggestions.jsx";
 import { Container, Grid, Paper } from "@material-ui/core";
 import { landingPageStyles } from "../../Styles/muiStyles.js";
-import FeedImg from "../../Assets/img/feedImg.png";
+// import FeedImg from "../../Assets/img/feedImg.png";
 import FeedImg2 from "../../Assets/img/demo-post-1.jpg";
 import FeedImg3 from "../../Assets/img/demo-post-2.jpg";
 import FeedImg4 from "../../Assets/img/demo-post-3.jpg";
@@ -16,6 +16,7 @@ import { BaseUrl } from "../../BaseUrl.config.js";
 import axios from "axios";
 import { PaginationBlog } from "../../muiComponents/PaginationBlog.jsx";
 import { useRouteMatch } from "react-router-dom";
+import MuiProgress from "../../muiComponents/MuiProgress.jsx";
 
 export const allData = [
   {
@@ -96,19 +97,29 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
   const [token, setToken] = useState(false);
   const [page, setPage] = useState(1);
   const [allPost, setAllPost] = useState([]);
-  const [categoryItem, setCategoryItem] = useState(
-    "story,article,poetry,review,podcast,videocast"
-  );
+  const [categoryItem, setCategoryItem] = useState("");
   const [subUrl, setSubUrl] = useState();
+
+  // LOADER
+  const [isLoading, setIsLoading] = useState(false);
+  const handleOpen = () => {
+    setIsLoading(true);
+  };
+  const handleClose = () => {
+    setIsLoading(false);
+  };
+  // end loader func
 
   const { path } = useRouteMatch();
   const getPost = () => {
+    handleOpen();
     console.log(subUrl);
     axios
       .get(BaseUrl + subUrl)
       .then((response) => {
         console.log("response:", response);
         setAllPost(response.data);
+        handleClose();
       })
       .catch((error) => {
         console.log("error", error);
@@ -146,6 +157,9 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
         >
           <Grid item xs={12} sm={8} className={classes.left}>
             <Paper className={classes.paper}>
+              {isLoading && (
+                <MuiProgress open={handleOpen} close={handleClose} />
+              )}
               <Feed data={allPost} type="allFeed" />
               <PaginationBlog page={page} setPage={setPage} />
             </Paper>

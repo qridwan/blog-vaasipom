@@ -1,5 +1,5 @@
 import { Container, Grid, makeStyles } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Feed from "../../Components/Shared/Feed";
 import Suggestions from "../../Components/Shared/Suggestions";
 import FeedImg from "../../Assets/img/feedImg.png";
@@ -9,6 +9,8 @@ import Header from "../../Components/LandingPage/Header";
 import SubNavigation from "../../Components/LandingPage/SubNavigation";
 import Navigation from "./Navigation";
 import TopicSlider from "../../Components/Shared/TopicSlider";
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl.config";
 
 const data = [
   {
@@ -61,10 +63,26 @@ const videocastStyles = makeStyles({
 });
 const Videocast = () => {
   const classes = videocastStyles();
+  const [allPost, setAllPost] = useState([]);
+  const getPost = () => {
+    axios
+      .get(
+        BaseUrl + `/auth/home/posts?categoryList=videocast&page=1&allPost=true`
+      )
+      .then((response) => {
+        console.log("response:", response);
+        setAllPost(response.data);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
 
   useEffect(() => {
     document.title = "Blog | Videocast";
+    getPost();
   }, []);
+
   return (
     <Container maxWidth="lg">
       <Navigation />
@@ -77,10 +95,10 @@ const Videocast = () => {
           spacing={3}
           justifyContent="flex-start"
           alignItems="flex-start"
-          style={{marginTop: "-20px"}}
+          style={{ marginTop: "-20px" }}
         >
           <Grid item sm={12} md={8} className={classes.left}>
-            <Feed data={data} type="videocast" />
+            <Feed data={allPost} type="videocast" />
           </Grid>
           <Grid item sm={12} md={4} className={classes.right}>
             <Suggestions />

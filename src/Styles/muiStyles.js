@@ -1,5 +1,5 @@
 import { alpha, makeStyles } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
+import { grey, red } from "@material-ui/core/colors";
 
 // navigation AppBar styling
 export const NavigationStyles = makeStyles((theme) => {
@@ -117,6 +117,72 @@ export const feedCardStyles = makeStyles((theme) => {
     },
   };
 });
+
+export const fullFeedStyles = makeStyles({
+  root: {
+    margin: "20px 0 0 0",
+    boxShadow: "none",
+    paddingBottom: "50px",
+  },
+  media: {
+    width: "100%",
+    height: "400px",
+    backgroundSize: "100% 100%",
+    backgroundPosition: "cover",
+    borderRadius: "20px",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: "30px",
+    lineHeight: "150%",
+    padding: "25px 0",
+    color: "#121212",
+    "@media (max-width:800px)": {
+      fontSize: "20px",
+      lineHeight: "110%",
+      padding: "10px 0",
+    },
+  },
+  desc: {
+    fontSize: "18px",
+    lineHeight: "150%",
+    padding: "15px 0",
+    color: "#454545",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    "@media (max-width:800px)": {
+      fontSize: "13px",
+      lineHeight: "110%",
+    },
+  },
+  topbar: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  likeBtn: {
+    padding: "15px",
+    marginBottom: "20px",
+    backgroundColor: red[50],
+    "&:hover": {
+      backgroundColor: red[50],
+    },
+  },
+  likeDesc: {
+    fontWeight: "600",
+    fontSize: "20px",
+    lineHeight: "30px",
+    color: "#000000",
+  },
+  text: {
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: "24px",
+    lineHeight: "30px",
+    color: "#000000",
+    marginBottom: "20px",
+  },
+});
+
 
 export const landingPageStyles = makeStyles((theme) => ({
   root: {

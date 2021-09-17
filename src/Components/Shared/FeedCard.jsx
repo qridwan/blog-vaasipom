@@ -20,6 +20,8 @@ import PostFooterInfo from "./PostFooterInfo";
 import { Subtitles } from "@material-ui/icons";
 import parse from "html-react-parser";
 import dateFormat from "dateformat";
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl.config";
 
 const FeedCard = ({ feed, type }) => {
   const classes = feedCardStyles();
@@ -37,13 +39,25 @@ const FeedCard = ({ feed, type }) => {
   //   createDate,
   //   subTitle,
   // } = article;
-  const { email, name, profileImage } = author;
+  // const { email, name, profileImage } = author;
   let { url } = useRouteMatch();
   if (url === "/") {
     url = "/feed";
   }
   const createdDateFormate = dateFormat(article?.createDate, "dS mmmm");
 
+  // const handleLike = (catg, id) => {
+  //   console.log("clicked", BaseUrl + `/${category}/like?postId=${article?.articleId}`)
+
+  //   axios
+  //     .get(BaseUrl + `/${category}/like?postId=${article?.articleId}`)
+  //     .then((response) => {
+  //       console.log(response, "--liked--");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
@@ -80,7 +94,12 @@ const FeedCard = ({ feed, type }) => {
             my={0}
             py={0}
           >
-            <PostCountInfo likes={article?.likes} views={article?.reads} />
+            <PostCountInfo
+              likes={article?.likes}
+              views={article?.reads}
+              category={category}
+              id={article?.articleId}
+            />
             <Box
               display="flex"
               justifyContent="space-between"

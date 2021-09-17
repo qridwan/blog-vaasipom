@@ -56,15 +56,15 @@ const podcastFeedStyles = makeStyles(() => {
   };
 });
 
-const PodcastFeed = ({ setIsAudioPlay }) => {
+const PodcastFeed = ({ setIsAudioPlay, data }) => {
   const classes = podcastFeedStyles();
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>Popular Trending</Typography>
       <PodcastSlider setIsAudioPlay={setIsAudioPlay} />
       <Box my={10}>
-        {podcastFeeds.map((feed) => (
-          <FeedCard key={feed.id} feed={feed} podcast={true} />
+        {data.map((feed) => (
+          <FeedCard key={feed} feed={feed} podcast={true} />
         ))}
       </Box>
       <Typography

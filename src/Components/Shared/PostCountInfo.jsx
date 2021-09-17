@@ -12,6 +12,7 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import TextsmsIcon from "@material-ui/icons/Textsms";
 import Favorite from "@material-ui/icons/Favorite";
 import { grey } from "@material-ui/core/colors";
+import { handleLike } from "../../Function/Like.Api";
 
 const postCountStyles = makeStyles(() => {
   return {
@@ -35,8 +36,9 @@ const postCountStyles = makeStyles(() => {
   };
 });
 
-const PostCountInfo = ({ views, likes, comments }) => {
+const PostCountInfo = ({ views, likes, category, id }) => {
   const classes = postCountStyles();
+
   return (
     <Box
       className={classes.mainBox}
@@ -52,6 +54,7 @@ const PostCountInfo = ({ views, likes, comments }) => {
       <Box display="flex" alignItems="center" py={0} mr={1}>
         <FormControlLabel
           className={classes.root}
+          onClick={() => handleLike(category, id)}
           control={
             <Checkbox
               style={{ padding: "2px" }}

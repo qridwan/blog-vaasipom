@@ -43,10 +43,10 @@ const Login = () => {
   });
   const [isNewUser, setIsNewUser] = useState(true);
   const [createAcc, setCreateAcc] = useState(false);
-  const [res, setRes] = useState({
-    message: "",
-    passwordConfirmation: 0,
-  });
+  // const [res, setRes] = useState({
+  //   message: "",
+  //   passwordConfirmation: 0,
+  // });
 
   useEffect(() => {
     document.title = "Blog | Login";
@@ -79,7 +79,7 @@ const Login = () => {
       axios
         .post(BaseUrl + "/auth/signin", signInData)
         .then((response) => {
-          console.log("response:", response);
+          console.log("response:", response.data);
           localStorage.setItem("token", "Bearer " + response.data.accessToken);
           localStorage.setItem("username", response.data.username);
           history.push("/");
@@ -151,6 +151,8 @@ const Login = () => {
     setValues({ ...values, [prop]: event.target.value });
     setUserInfo({ ...userInfo, [prop]: event.target.value });
   };
+
+  
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
