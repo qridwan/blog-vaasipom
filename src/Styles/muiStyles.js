@@ -268,7 +268,7 @@ export const loginStyles = makeStyles((theme) => {
     },
     heading: {
       fontWeight: "bold",
-      fontSize: "24px",
+      fontSize: "20px",
       lineHeight: "35px",
       letterSpacing: "0.08em",
       color: "#000000",
@@ -279,6 +279,7 @@ export const loginStyles = makeStyles((theme) => {
       marginLeft: "10px",
       wordWrap: `break-word`,
       whiteSpace: `nowrap`,
+      fontSize: "16px",
       // fontWeight: "bold",
     },
     or: {

@@ -1,5 +1,6 @@
 import {makeStyles } from "@material-ui/core";
 import React from "react";
+import { PaginationBlog } from "../../muiComponents/PaginationBlog";
 import FeedCard from "./FeedCard";
 
 const feedStyles = makeStyles({

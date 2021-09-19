@@ -17,6 +17,7 @@ export const Routes = [
   { path: "/forgotPassword", component: ForgotPassword, exact: "exact" },
   { path: "/podcast/:title", component: FullFeed },
   { path: "/feed/:category/:postId", component: FullFeed },
+  { path: "/myprofile/:category/:postId", component: FullFeed },
 
   { path: "/videocast/:title", component: VideoDetails },
   { path: "/videocast", component: Videocast },

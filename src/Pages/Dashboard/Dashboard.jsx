@@ -377,13 +377,13 @@ const Dashboard = (props) => {
 
         {/* Article Writing */}
         {((page === "Writing" && write === "Article") ||
-          (page === "Writing" && write === "Poetry") ||
+          (page === "Writing" && write === "Short Story") ||
           (page === "Writing" && write === "Reviews")) && (
           <Article type={write} />
         )}
 
         {/* Novel Writing */}
-        {page === "Writing" && write === "Short Story" && <Novel />}
+        {page === "Writing" && write === "Poetry" && <Novel />}
 
         {/* Podcast || Videocast Writing */}
         {((page === "Writing" && write === "Podcast") ||

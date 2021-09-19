@@ -33,6 +33,8 @@ const Article = ({ type }) => {
     topic: "",
     content: "",
   });
+
+  const category = type.toLowerCase();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAllData((data) => ({
@@ -41,7 +43,7 @@ const Article = ({ type }) => {
     }));
   };
   useEffect(() => {
-    document.title = "Blog | Writing | Article";
+    document.title = `Blog | Writing | ${type}`;
   }, []);
 
   const articleContent = () => {
@@ -74,7 +76,7 @@ const Article = ({ type }) => {
   const CreateArticle = (data) => {
     console.log("-data-", data);
     axios
-      .post(BaseUrl + "/article", data, { mode: "cors", headers })
+      .post(BaseUrl + `/${category}`, data, { mode: "cors", headers })
       .then((response) => {
         console.log(
           "SUCCESSFULLY ADDED & response:",
@@ -91,7 +93,7 @@ const Article = ({ type }) => {
   const SaveAsDraft = (post) => {
     console.log("-data-", post);
     axios
-      .post(BaseUrl + "/article/draft", post, { headers })
+      .post(BaseUrl + `/${category}/draft`, post, { headers })
       .then((response) => {
         console.log("response:", response);
       })
@@ -160,7 +162,7 @@ const Article = ({ type }) => {
 
         <Grid item xs={12} sm={5}>
           <CustomLabel>Add Image</CustomLabel>
-          <ImageInput setData={setAllData} category="article" />
+          <ImageInput setData={setAllData} category={category} />
         </Grid>
       </Grid>
     </Container>

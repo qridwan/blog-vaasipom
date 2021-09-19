@@ -50,7 +50,7 @@ const Login = () => {
 
   useEffect(() => {
     document.title = "Blog | Login";
-    if(localStorage.token){
+    if (localStorage.token) {
       history.push("/");
     }
   }, []);
@@ -62,24 +62,25 @@ const Login = () => {
 
   const onSubmit = (data) => {
     console.log("🚀 ~ file: Login.jsx ~ line 61 ~ onSubmit ~ data", data);
+    let formData = {};
     isNewUser
-      ? setUserInfo({
+      ? formData = {
           name: data.full_name,
           email: data.email,
           password: values.password,
-        })
-      : setSignInData({
+        }
+      : formData = {
           username: data.email,
           password: values.password,
-        });
+        };
 
     // FOR SIGN IN
-
+    
     !isNewUser &&
       axios
-        .post(BaseUrl + "/auth/signin", signInData)
+        .post(BaseUrl + "/auth/signin", formData)
         .then((response) => {
-          console.log("response:", response.data);
+          console.log("response:", response);
           localStorage.setItem("token", "Bearer " + response.data.accessToken);
           localStorage.setItem("username", response.data.username);
           history.push("/");
@@ -152,7 +153,6 @@ const Login = () => {
     setUserInfo({ ...userInfo, [prop]: event.target.value });
   };
 
-  
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };

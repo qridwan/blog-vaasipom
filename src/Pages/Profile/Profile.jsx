@@ -12,16 +12,22 @@ import { useRouteMatch } from "react-router-dom";
 import facebook from "../../Assets/icons/facebook-social.png";
 import instagram from "../../Assets/icons/instagram.png";
 import linkedIn from "../../Assets/icons/linkedin.png";
-import profileImage from "../../Assets/img/dp.png";
+// import profileImage from "../../Assets/img/dp.png";
 import Feed from "../../Components/Shared/Feed";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
-import { allData } from "../Common/LandingPage";
+// import { allData } from "../Common/LandingPage";
 import Navigation from "../Common/Navigation";
 import { BaseUrl } from "../../BaseUrl.config.js";
 import axios from "axios";
+import { PaginationBlog } from "../../muiComponents/PaginationBlog";
 
 const profileStyles = makeStyles((theme) => {
   return {
+    profileCard: {
+      boxSizing: "border-box",
+      position: "sticky",
+      top: "0",
+    },
     profile: {
       width: "200px",
       height: "200px",
@@ -53,24 +59,22 @@ const profileStyles = makeStyles((theme) => {
   };
 });
 
-
 const Profile = ({ type }) => {
   const classes = profileStyles();
   const [userInfo, setUserInfo] = useState({});
   const [writings, setWritings] = useState([]);
   const { path } = useRouteMatch();
+  const [page, setPage] = useState(1);
   console.log("🚀 ~ Profile ~ path", path);
   const headers = {
     Authorization: localStorage.getItem("token"),
   };
 
-  const getMyWritings = () => {
+  const getMyWritings = (paginate) => {
     axios
-      .get(
-        BaseUrl +
-          `/author/writings?category=article&page=1`,
-        { headers }
-      )
+      .get(BaseUrl + `/author/writings?category=article&page=${paginate}`, {
+        headers,
+      })
       .then((response) => {
         console.log(response.data);
         setWritings(response.data);
@@ -85,16 +89,16 @@ const Profile = ({ type }) => {
           console.log(response.data);
           setUserInfo(response.data);
         })
-        .catch((err) => console.log({err}, BaseUrl + `/myprofile`));
-      getMyWritings();
+        .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
+      getMyWritings(page);
     }
-  }, []);
+  }, [page]);
   const {
-    country,
-    email,
+    // country,
+    // email,
     firstName,
     followersCount,
-    phone,
+    // phone,
     profileImgLink,
     profileTitle,
   } = userInfo;
@@ -103,36 +107,39 @@ const Profile = ({ type }) => {
       <Navigation />
       {/* <SubNavigation /> */}
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={3}>
-          <Box textAlign="center" mt={5}>
-            <img src={profileImgLink} alt="dp" className={classes.profile} />
-            <Typography className={classes.name}>
-              {firstName?.charAt(0).toUpperCase() + firstName?.slice(1)}
-            </Typography>
-            <Typography className={classes.title}>{profileTitle}</Typography>
-            <Typography>
-              <span className={classes.follower}>{followersCount} </span>{" "}
-              Followers
-            </Typography>
+        <Grid item xs={12} sm={3} >
+          {userInfo.firstName && (
+            <Box textAlign="center" mt={5} className={classes.profileCard}>
+              <img src={profileImgLink} alt="dp" className={classes.profile} />
+              <Typography className={classes.name}>
+                {firstName?.charAt(0).toUpperCase() + firstName?.slice(1)}
+              </Typography>
+              <Typography className={classes.title}>{profileTitle}</Typography>
+              <Typography>
+                <span className={classes.follower}>{followersCount} </span>{" "}
+                Followers
+              </Typography>
 
-            <OutlineButton size="small">Edit</OutlineButton>
-            <Box my={3}>
-              <IconButton>
-                <img src={linkedIn} alt="li" />
-              </IconButton>
-              <IconButton style={{ margin: "0 20px" }}>
-                <img src={instagram} alt="ins" />
-              </IconButton>
-              <IconButton>
-                <img src={facebook} alt="fb" />
-              </IconButton>
+              <OutlineButton size="small">Edit</OutlineButton>
+              <Box my={3}>
+                <IconButton>
+                  <img src={linkedIn} alt="li" />
+                </IconButton>
+                <IconButton style={{ margin: "0 20px" }}>
+                  <img src={instagram} alt="ins" />
+                </IconButton>
+                <IconButton>
+                  <img src={facebook} alt="fb" />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
+          )}
 
           <Divider />
         </Grid>
         <Grid item xs={12} sm={8}>
           <Feed data={writings} type="allFeed" />
+          <PaginationBlog page={page} setPage={setPage} />
         </Grid>
       </Grid>
     </Container>

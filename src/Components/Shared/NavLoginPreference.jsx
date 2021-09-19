@@ -38,15 +38,16 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
           console.log("error", error);
         });
   };
-
+const handleWritePen = () => {
+  setPage(`Writing`);
+  setWrite(null)
+}
   return (
     <Box>
       <NavLink to="/dashboard">
         <IconButton
           className={classes.navIcon}
-          onClick={
-            () => type === "dashboard" ? setPage(`Writing`) && setWrite(null) : null
-          }
+          onClick={type === 'dashboard' && handleWritePen}
         >
           <img src={WriteIcon} alt="" height="30px" width="30px" />
         </IconButton>

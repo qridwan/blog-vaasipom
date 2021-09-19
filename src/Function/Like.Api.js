@@ -7,7 +7,7 @@ export const handleLike = (catg, id) => {
   };
   console.log("clicked", BaseUrl + `/${catg}/like?postId=${id}`);
   axios
-    .get(BaseUrl + `/${catg}/like?postId=${id}`)
+    .get(BaseUrl + `/${catg}/like?postId=${id}`, { headers })
     .then((response) => {
       console.log(response, "--liked--");
     })
