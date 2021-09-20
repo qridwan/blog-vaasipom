@@ -9,6 +9,8 @@ import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
+import { setType } from "../../../redux/actions/dashboardAction";
+import { connect } from "react-redux";
 // import { headeeConf } from "../../../Function/Header.info";
 export const tags = [
   "Science",
@@ -19,12 +21,18 @@ export const tags = [
 ];
 export const interests = ["Novel", "Poet", "Fiction", "Economy"];
 
-const Article = ({ type }) => {
+const Article = ({ type, dashboardState }) => {
+  console.log("🚀 ~ Article ~ dashboardState", dashboardState);
   const [tags, setTags] = useState([]);
   const [interest, setInterest] = useState([]);
   const [value, setValue] = useState();
   const ref = useRef(null);
+  const [editablePost, setEditablePost] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
+
   // Create Article
+  const post_id = dashboardState.postId;
+
   const [allData, setAllData] = useState({
     title: "",
     subTitle: "First subtitle to the first article",
@@ -101,18 +109,51 @@ const Article = ({ type }) => {
         console.log("error", error);
       });
   };
-  console.log({ allData });
+  console.log({ allData, editablePost });
+
+  //View Article for EDIT mode
+  const getPost = () => {
+    console.log(
+      "--URL116--",
+      BaseUrl + `/auth/${category}?${category}Id=${post_id}`
+    );
+    axios
+      .get(BaseUrl + `/auth/${category}?${category}Id=${post_id}`)
+      .then((response) => {
+        console.log("response: post", response.data);
+        setEditablePost(response.data);
+        setIsEdit(true);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+  useEffect(() => {
+    post_id && getPost();
+  }, [post_id, isEdit]);
+  const { title } = editablePost;
+  console.log("🚀 ~ Article ~ title", title)
+  // const {title} = editablePost
   return (
     <Container maxWidth="md">
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12}>
           <CustomLabel htmlFor="">Title</CustomLabel>
-          <InputArea
-            defaultValue=""
-            type="text"
-            name="title"
-            onChange={handleChange}
-          />
+          {isEdit ? (
+            <InputArea
+              defaultvalue={title}
+              type="text"
+              name="title"
+              onChange={handleChange}
+            />
+          ) : (
+            <InputArea
+              defaultValue=""
+              type="text"
+              name="title"
+              onChange={handleChange}
+            />
+          )}
         </Grid>
 
         <Grid item xs={12} sm={12}>
@@ -169,4 +210,11 @@ const Article = ({ type }) => {
   );
 };
 
-export default Article;
+// export default Article;
+
+// using redux
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setType: setType,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Article);

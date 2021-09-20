@@ -8,8 +8,10 @@ import WriteIcon from "../../Assets/icons/writing.png";
 import { BaseUrl } from "../../BaseUrl.config";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { setPage, setWriting } from "../../redux/actions/dashboardAction";
+import { connect } from "react-redux";
 
-const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
+const NavLoginPreference = ({ setIsLogin, setPage, setWrite , type }) => {
   const classes = NavigationStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
@@ -21,33 +23,33 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
- 
+
   const handleLogout = () => {
     // localStorage.clear();
-      const headers = {
-        'Authorization': localStorage.getItem("token"),
-      };
-      axios
-        .post(BaseUrl + '/logout', {}, { headers })
-        .then((response) => {
-          console.log("response:", response);
-          localStorage.clear();
-          history.push("/login");
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+    const headers = {
+      Authorization: localStorage.getItem("token"),
+    };
+    axios
+      .post(BaseUrl + "/logout", {}, { headers })
+      .then((response) => {
+        console.log("response:", response);
+        localStorage.clear();
+        history.push("/login");
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
-const handleWritePen = () => {
-  setPage(`Writing`);
-  setWrite(null)
-}
+  const handleWritePen = () => {
+    setPage(`Writing`);
+    setWrite(null);
+  };
   return (
     <Box>
       <NavLink to="/dashboard">
         <IconButton
           className={classes.navIcon}
-          onClick={type === 'dashboard' && handleWritePen}
+          onClick={type === "dashboard" && handleWritePen}
         >
           <img src={WriteIcon} alt="" height="30px" width="30px" />
         </IconButton>
@@ -92,4 +94,9 @@ const handleWritePen = () => {
   );
 };
 
-export default NavLoginPreference;
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setPage: setPage,
+  setWrite: setWriting,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(NavLoginPreference);

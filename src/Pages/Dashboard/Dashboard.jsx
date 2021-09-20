@@ -31,6 +31,8 @@ import EditProfile from "../../Components/Dashboard/ProfileSettings/EditProfile"
 import Reading from "../../Components/Dashboard/Reading/Reading";
 import DashboardTable from "../../Components/Dashboard/DashboardTable.jsx";
 import NavLoginPreference from "../../Components/Shared/NavLoginPreference";
+import { setPage, setWriting } from "../../redux/actions/dashboardAction";
+import { connect } from "react-redux";
 
 const drawerWidth = 250;
 
@@ -146,17 +148,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = (props) => {
   const { window } = props;
+  const { dashboardState, setPage, setWrite } = props;
+  const { page, writing } = dashboardState;
   const classes = useStyles();
   const theme = useTheme();
-  const [lookingFor, setLookingFor] = useState([
+  const [lookingFor] = useState([
     { key: 1, label: "All", count: 553 },
     { key: 2, label: "Bookmarked", count: 323 },
     { key: 3, label: "Liked", count: 53 },
   ]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reading, setReading] = useState("All");
-  const [page, setPage] = useState("Writing");
-  const [write, setWrite] = useState(null);
+  // const [page, setPage] = useState("Writing");
+  // const [write, setWrite] = useState(null);
   const [open, setOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const handleOpen = () => {
@@ -220,7 +224,7 @@ const Dashboard = (props) => {
   };
   const container =
     window !== undefined ? () => window().document.body : undefined;
-  console.log({ page, write });
+  console.log({ page, writing });
 
   return (
     <Container maxWidth="xl" className={classes.root}>
@@ -269,8 +273,6 @@ const Dashboard = (props) => {
           <Box>
             <NavLoginPreference
               setIsLogin={setIsLogin}
-              setPage={setPage}
-              setWrite={setWrite}
               type={"dashboard"}
             />
             {/* <IconButton
@@ -329,7 +331,7 @@ const Dashboard = (props) => {
         {/* Top Title */}
         {(page === "Writing" || page === "Settings") && (
           <Box display="flex" justifyContent="space-between" alignItems="start">
-            {page === "Writing" && write === null ? (
+            {page === "Writing" && writing === null ? (
               <>
                 <Typography
                   className={classes.title}
@@ -348,7 +350,7 @@ const Dashboard = (props) => {
               page === "Writing" && (
                 <Container maxWidth="md">
                   <Typography className={classes.title}>
-                    Write Your {write === "Short Story" ? "Novel" : write}
+                    Write Your {writing === "Short Story" ? "Novel" : writing}
                   </Typography>
                 </Container>
               )
@@ -364,7 +366,7 @@ const Dashboard = (props) => {
           </Box>
         )}
         {/* Writing Intro */}
-        {page === "Writing" && write === null && (
+        {page === "Writing" && writing === null && (
           <section>
             <DashboardTable />
             <MenuModal
@@ -376,19 +378,19 @@ const Dashboard = (props) => {
         )}
 
         {/* Article Writing */}
-        {((page === "Writing" && write === "Article") ||
-          (page === "Writing" && write === "Short Story") ||
-          (page === "Writing" && write === "Reviews")) && (
-          <Article type={write} />
+        {((page === "Writing" && writing === "Article") ||
+          (page === "Writing" && writing === "Short Story") ||
+          (page === "Writing" && writing === "Reviews")) && (
+          <Article type={writing} />
         )}
 
         {/* Novel Writing */}
-        {page === "Writing" && write === "Poetry" && <Novel />}
+        {page === "Writing" && writing === "Poetry" && <Novel />}
 
         {/* Podcast || Videocast Writing */}
-        {((page === "Writing" && write === "Podcast") ||
-          (page === "Writing" && write === "Videocast")) && (
-          <MediaCast type={write} />
+        {((page === "Writing" && writing === "Podcast") ||
+          (page === "Writing" && writing === "Videocast")) && (
+          <MediaCast type={writing} />
         )}
         {/* Reading Section */}
         {page === "Reading" && <Reading />}
@@ -397,4 +399,9 @@ const Dashboard = (props) => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setPage: setPage,
+  setWrite: setWriting,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

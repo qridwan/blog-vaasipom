@@ -1,63 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import {
+  Button,
   Card,
   CardActionArea,
   CardActions,
   CardMedia,
   Grid,
   IconButton,
+  Popover,
 } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { feedCardStyles } from "../../Styles/muiStyles";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
 import { NavLink, useRouteMatch } from "react-router-dom";
-import authorImg from "../../Assets/img/authorbtnImg.png";
+// import authorImg from "../../Assets/img/authorbtnImg.png";
 import AuthorButton from "../../muiComponents/AuthorButton";
 import PostCountInfo from "./PostCountInfo";
 import PostFooterInfo from "./PostFooterInfo";
-import { Subtitles } from "@material-ui/icons";
 import parse from "html-react-parser";
 import dateFormat from "dateformat";
-import axios from "axios";
-import { BaseUrl } from "../../BaseUrl.config";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { connect } from "react-redux";
+import {
+  setPage,
+  setPostId,
+  setWriting,
+} from "../../redux/actions/dashboardAction";
 
-const FeedCard = ({ feed, type }) => {
+const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
   const classes = feedCardStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isUser, setIsUser] = useState(false);
+
+  const userEmail = localStorage.getItem("username");
+
+  useEffect(() => {
+    feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
+  }, [feed]);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
   const { article, author, category } = feed;
-  // const {
-  //   title,
-  //   likes,
-  //   reads,
-  //   date,
-  //   mainImage,
-  //   readTime,
-  //   topic,
-  //   content,
-  //   articleId,
-  //   createDate,
-  //   subTitle,
-  // } = article;
-  // const { email, name, profileImage } = author;
   let { url } = useRouteMatch();
   if (url === "/") {
     url = "/feed";
   }
   const createdDateFormate = dateFormat(article?.createDate, "dS mmmm");
+  const handleEdit = () => {
+    setPage(`Writing`);
+    setWrite(`Article`);
+    setPostId(article?.articleId);
+  };
 
-  // const handleLike = (catg, id) => {
-  //   console.log("clicked", BaseUrl + `/${category}/like?postId=${article?.articleId}`)
 
-  //   axios
-  //     .get(BaseUrl + `/${category}/like?postId=${article?.articleId}`)
-  //     .then((response) => {
-  //       console.log(response, "--liked--");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+ 
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
@@ -113,6 +116,43 @@ const FeedCard = ({ feed, type }) => {
               <IconButton style={{ padding: "2px" }}>
                 <BookmarkIcon style={{ fontSize: "16px" }} />
               </IconButton>
+              {isUser && (
+                <>
+                  <IconButton style={{ padding: "2px" }} onClick={handleClick}>
+                    <MoreVertIcon style={{ fontSize: "16px" }} />
+                  </IconButton>
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                    elevation={1}
+                  >
+                    <Box mx={2} align="center">
+                      <NavLink to="/dashboard">
+                        <Button className={classes.button} onClick={handleEdit}>
+                          Edit
+                        </Button>
+                      </NavLink>
+                      <Button
+                        style={{ color: "#FF0000" }}
+                        className={classes.button}
+                        // onClick={handleLogout}
+                      >
+                        Delete
+                      </Button>
+                    </Box>
+                  </Popover>
+                </>
+              )}
             </Box>
           </Box>
         </Grid>
@@ -131,4 +171,11 @@ const FeedCard = ({ feed, type }) => {
   );
 };
 
-export default FeedCard;
+// using redux
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setPage: setPage,
+  setWrite: setWriting,
+  setPostId: setPostId,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FeedCard);

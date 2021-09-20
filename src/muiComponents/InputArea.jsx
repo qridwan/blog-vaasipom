@@ -1,6 +1,7 @@
-import { alpha, InputBase, InputLabel } from "@material-ui/core";
+import { InputBase, InputLabel } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/styles";
+// import {  } from "@mui/material";
 
 export const InputArea = withStyles((theme) => ({
   root: {
@@ -30,7 +31,6 @@ export const InputArea = withStyles((theme) => ({
       '"Segoe UI Symbol"',
     ].join(","),
     "&:focus": {
-      //   boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: grey[500],
     },
   },
