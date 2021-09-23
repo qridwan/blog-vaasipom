@@ -4,7 +4,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  makeStyles,
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
@@ -20,60 +19,37 @@ import Navigation from "../Common/Navigation";
 import { BaseUrl } from "../../BaseUrl.config.js";
 import axios from "axios";
 import { PaginationBlog } from "../../muiComponents/PaginationBlog";
+import { profileStyles } from "../../Styles/muiStyles";
+import { connect } from "react-redux";
+import { setPage } from "../../redux/actions/dashboardAction";
+import { useHistory } from "react-router-dom";
 
-const profileStyles = makeStyles((theme) => {
-  return {
-    profileCard: {
-      boxSizing: "border-box",
-      position: "sticky",
-      top: "0",
-    },
-    profile: {
-      width: "200px",
-      height: "200px",
-      borderRadius: "50%",
-    },
-    name: {
-      fontWeight: "800",
-      fontSize: "35px",
-      lineHeight: "67px",
-      textAlign: "center",
-      letterSpacing: "-0.02em",
-      color: "#000000",
-    },
-    title: {
-      fontWeight: "800",
-      fontSize: "20px",
-      lineHeight: "35px",
-      textAlign: "center",
-      letterSpacing: "-0.02em",
-      color: "#000000",
-    },
-    follower: {
-      fontWeight: "500",
-      fontSize: "20px",
-      textAlign: "center",
-      letterSpacing: "-0.02em",
-      color: "#000000",
-    },
-  };
-});
-
-const Profile = ({ type }) => {
+const Profile = ({ type, setPage, dashboardState }) => {
+  console.log("🚀 ~ Profile ~ dashboardState", dashboardState);
   const classes = profileStyles();
   const [userInfo, setUserInfo] = useState({});
   const [writings, setWritings] = useState([]);
   const { path } = useRouteMatch();
-  const [page, setPage] = useState(1);
+  const [pageNo, setPageNo] = useState(1);
   console.log("🚀 ~ Profile ~ path", path);
   const headers = {
     Authorization: localStorage.getItem("token"),
   };
 
+  const getMyProfileInfo = () => {
+    axios
+      .get(BaseUrl + `/myprofile`, { headers })
+      .then((response) => {
+        console.log(response.data);
+        setUserInfo(response.data);
+      })
+      .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
+  };
+
   const getMyWritings = (paginate) => {
     axios
-      .get(BaseUrl + `/author/writings?category=article&page=${paginate}`, {
-        headers,
+      .get(BaseUrl + `/author/writings?category=story,article,poetry,review,podcast,videocast/&page=${paginate}`, {
+        headers
       })
       .then((response) => {
         console.log(response.data);
@@ -83,16 +59,10 @@ const Profile = ({ type }) => {
   };
   useEffect(() => {
     if (path === "/myprofile") {
-      axios
-        .get(BaseUrl + `/myprofile`, { headers })
-        .then((response) => {
-          console.log(response.data);
-          setUserInfo(response.data);
-        })
-        .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
-      getMyWritings(page);
+      getMyProfileInfo();
+      getMyWritings(pageNo);
     }
-  }, [page]);
+  }, [pageNo]);
   const {
     // country,
     // email,
@@ -102,12 +72,19 @@ const Profile = ({ type }) => {
     profileImgLink,
     profileTitle,
   } = userInfo;
+  const history = useHistory();
+  const handleEdit = () => {
+    setPage(`Settings`);
+    history.push("/dashboard");
+    console.log("clicked", `color: red`);
+  };
+
   return (
     <Container maxWidth="lg">
       <Navigation />
       {/* <SubNavigation /> */}
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={3} >
+        <Grid item xs={12} sm={3}>
           {userInfo.firstName && (
             <Box textAlign="center" mt={5} className={classes.profileCard}>
               <img src={profileImgLink} alt="dp" className={classes.profile} />
@@ -120,7 +97,9 @@ const Profile = ({ type }) => {
                 Followers
               </Typography>
 
-              <OutlineButton size="small">Edit</OutlineButton>
+              <OutlineButton size="small" onClick={handleEdit}>
+                Edit
+              </OutlineButton>
               <Box my={3}>
                 <IconButton>
                   <img src={linkedIn} alt="li" />
@@ -139,11 +118,15 @@ const Profile = ({ type }) => {
         </Grid>
         <Grid item xs={12} sm={8}>
           <Feed data={writings} type="allFeed" />
-          <PaginationBlog page={page} setPage={setPage} />
+          <PaginationBlog page={pageNo} setPage={setPageNo} />
         </Grid>
       </Grid>
     </Container>
   );
 };
 
-export default Profile;
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setPage: setPage,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

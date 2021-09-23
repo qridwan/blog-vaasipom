@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { grey } from "@material-ui/core/colors";
 import { BaseUrl } from "../../../BaseUrl.config";
 import axios from "axios";
+import { headers } from "../../../header.config";
 
 const inputImageStyles = makeStyles(() => ({
   imgBox: {
@@ -30,16 +31,15 @@ const inputImageStyles = makeStyles(() => ({
   },
 }));
 
-const ImageInput = ({ category, setData }) => {
+const ImageInput = ({ category, setData, image }) => {
   const classes = inputImageStyles();
 
-  const headers = {
-    Authorization: localStorage.getItem("token"),
-    "Access-Control-Allow-Origin": "*",
-  };
+ 
   // Image handling
-  const [ArticleImg, setArticleImg] = useState(null);
+  const [ArticleImg, setArticleImg] = useState(image);
+
   const [file, setFile] = useState(null);
+
   useEffect(() => {
     if (file) {
       let data = new FormData();
@@ -59,18 +59,17 @@ const ImageInput = ({ category, setData }) => {
   };
 
   const UploadImg = (data) => {
-    // e.preventDefault();
-    // let data =  new FormData();
-    // await data.append("file", file, file.name);
-
     axios
       .post(BaseUrl + `/${category}/image`, data, { headers })
       .then((response) => {
         console.log("response:", response);
-        setData((data) => ({
-          ...data,
-          mainImage: response.data.imageLink,
-        }));
+
+        category !== "profile" &&
+          setData((data) => ({
+            ...data,
+            mainImage: response.data.imageLink,
+          }));
+
         //Console
         console.log("Upload success: Link--", response.data.imageLink);
         console.log("Data--", data);
@@ -90,7 +89,6 @@ const ImageInput = ({ category, setData }) => {
         multiple
         type="file"
         onChange={fileHandler}
-        // {...register(fileName)}
       />
       <label htmlFor="contained-button-file">
         {!ArticleImg && <div className={classes.imgBox}></div>}

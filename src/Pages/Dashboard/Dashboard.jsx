@@ -150,6 +150,7 @@ const Dashboard = (props) => {
   const { window } = props;
   const { dashboardState, setPage, setWrite } = props;
   const { page, writing } = dashboardState;
+  console.log("🚀 ~ Dashboard --", { page, writing });
   const classes = useStyles();
   const theme = useTheme();
   const [lookingFor] = useState([
@@ -159,9 +160,8 @@ const Dashboard = (props) => {
   ]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reading, setReading] = useState("All");
-  // const [page, setPage] = useState("Writing");
-  // const [write, setWrite] = useState(null);
   const [open, setOpen] = useState(false);
+
   const [isLogin, setIsLogin] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -244,9 +244,6 @@ const Dashboard = (props) => {
             <div className={classes.readingNav}>
               {lookingFor.map((data) => {
                 let page = data.label;
-                // if (page === "/all") {
-                //   page = "/";
-                // }
                 return (
                   <Typography
                     onClick={(e) => handleReadingNav(data.label, e)}
@@ -271,28 +268,7 @@ const Dashboard = (props) => {
           </div>
 
           <Box>
-            <NavLoginPreference
-              setIsLogin={setIsLogin}
-              type={"dashboard"}
-            />
-            {/* <IconButton
-              onClick={() => {
-                setPage(`Writing`);
-                setWrite(null);
-              }}
-              className={classes.navIcon}
-            >
-              <img src={WriteIcon} alt="" height="30px"
-                  width="30px"/>
-            </IconButton>
-            <IconButton className={classes.navIcon}>
-              <img src={NotifyIcon} alt="" height="30px"
-                  width="30px"/>
-            </IconButton>
-
-            <IconButton className={classes.navIcon}>
-              <Avatar src={User} alt="User" />
-            </IconButton> */}
+            <NavLoginPreference setIsLogin={setIsLogin} type={"dashboard"} />
           </Box>
         </Toolbar>
       </AppBar>
@@ -379,13 +355,13 @@ const Dashboard = (props) => {
 
         {/* Article Writing */}
         {((page === "Writing" && writing === "Article") ||
-          (page === "Writing" && writing === "Short Story") ||
+          (page === "Writing" && writing === "Poetry") ||
           (page === "Writing" && writing === "Reviews")) && (
           <Article type={writing} />
         )}
 
         {/* Novel Writing */}
-        {page === "Writing" && writing === "Poetry" && <Novel />}
+        {page === "Writing" && writing === "Short Story" && <Novel />}
 
         {/* Podcast || Videocast Writing */}
         {((page === "Writing" && writing === "Podcast") ||

@@ -1,5 +1,5 @@
 import { MenuItem, Select, useTheme } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputArea } from "./InputArea";
 
 function getStyles(item, chosenItems, theme) {
@@ -27,15 +27,19 @@ const CustomSelect = ({
   type,
   placeholder,
 }) => {
+  console.log("🚀 ~ selectItems", selectItems);
   const theme = useTheme();
   const [isMultiple, setIsMultiple] = useState(true);
   const handleSelect = (event) => {
     setSelectItems(event.target.value);
+  };
+  useEffect(() => {
     if (type === "single") {
       setIsMultiple(false);
     }
-  };
+  }, []);
 
+  
   return (
     <Select
       multiple={isMultiple}

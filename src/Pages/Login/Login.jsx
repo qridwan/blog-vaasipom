@@ -43,10 +43,6 @@ const Login = () => {
   });
   const [isNewUser, setIsNewUser] = useState(true);
   const [createAcc, setCreateAcc] = useState(false);
-  // const [res, setRes] = useState({
-  //   message: "",
-  //   passwordConfirmation: 0,
-  // });
 
   useEffect(() => {
     document.title = "Blog | Login";
@@ -59,30 +55,35 @@ const Login = () => {
     handleSubmit,
     // formState: { errors },
   } = useForm();
-
+  const handleLocalStorage = (data) => {
+    localStorage.setItem("token", "Bearer " + data.accessToken);
+    localStorage.setItem("username", data.username);
+  };
   const onSubmit = (data) => {
     console.log("🚀 ~ file: Login.jsx ~ line 61 ~ onSubmit ~ data", data);
     let formData = {};
     isNewUser
-      ? formData = {
+      ? (formData = {
           name: data.full_name,
           email: data.email,
           password: values.password,
-        }
-      : formData = {
+        })
+      : (formData = {
           username: data.email,
           password: values.password,
-        };
+        });
 
     // FOR SIGN IN
-    
+
     !isNewUser &&
       axios
         .post(BaseUrl + "/auth/signin", formData)
         .then((response) => {
-          console.log("response:", response);
-          localStorage.setItem("token", "Bearer " + response.data.accessToken);
-          localStorage.setItem("username", response.data.username);
+          console.log("response:", response.data);
+          handleLocalStorage(response.data);
+          // localStorage.setItem("token", "Bearer " + response.data.accessToken);
+          // localStorage.setItem("username", response.data.username);
+          // localStorage.setItem("userAvatar", response.data.profileImgLink);
           history.push("/");
         })
         .catch((error) => {

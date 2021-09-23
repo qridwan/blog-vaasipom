@@ -1,20 +1,19 @@
 import { Box, Container, Grid } from "@material-ui/core";
-import React, { createRef, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useRef, useState } from "react";
+
 import AddTags from "../../../muiComponents/AddTags";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import CustomSelect from "../../../muiComponents/CustomSelect";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import { OutlineButton } from "../../../muiComponents/OutlineButton";
-import { interests, tags } from "./Article";
+import { interests } from "./Article";
 import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
 
 const MediaCast = ({ type }) => {
-  const componentFor = type.toLowerCase();
-  // const [tagName, setTagName] = useState([]);
+  const category = type.toLowerCase();
   const [interest, setInterest] = useState([]);
   const [value, setValue] = useState();
   const [tags, setTags] = useState([]);
@@ -46,7 +45,7 @@ const MediaCast = ({ type }) => {
     setValue(mediaRef.current?.getContent());
   };
 
-  const Publish = async () => {
+  const HandlePost = async (param) => {
     editorContent();
     const content = mediaRef.current.getContent();
     let selectedTags = [];
@@ -58,8 +57,9 @@ const MediaCast = ({ type }) => {
       topic: interest.join(),
       content: content,
     };
+    param === "publish" && CreatePost(postData);
+    param === "draft" && SaveAsDraft(postData);
     setAllData(postData);
-    CreateMediaPost(postData);
   };
 
   //API INTEGRATION
@@ -67,13 +67,13 @@ const MediaCast = ({ type }) => {
     Authorization: localStorage.getItem("token"),
   };
 
-  const CreateMediaPost = (data) => {
+  const CreatePost = (data) => {
     const headers = {
       Authorization: localStorage.getItem("token"),
     };
     console.log("-data-", data);
     axios
-      .post(BaseUrl + `/${componentFor}`, data, { headers })
+      .post(BaseUrl + `/${category}`, data, { headers })
       .then((response) => {
         console.log(
           "SUCCESSFULLY ADDED & response:",
@@ -81,18 +81,20 @@ const MediaCast = ({ type }) => {
           "Posted Data--",
           data
         );
+        alert(`${category} Posted`);
       })
       .catch((error) => {
         console.log("error", error);
       });
   };
 
-  const SaveAsDraft = () => {
-    console.log("-data-", allData);
+  const SaveAsDraft = (data) => {
+    console.log("-data-", data);
     axios
-      .post(BaseUrl + `/${componentFor}/draft`, allData, { headers })
+      .post(BaseUrl + `/${category}/draft`, data, { headers })
       .then((response) => {
         console.log("response:", response);
+        alert(`${category} Saved on draft box`);
       })
       .catch((error) => {
         console.log("error", error);
@@ -148,8 +150,13 @@ const MediaCast = ({ type }) => {
               alignItems="center"
               justifyContent="start"
             >
-              <BlackButton onClick={Publish}>Publish</BlackButton>
-              <OutlineButton type="submit" style={{ marginLeft: "30px" }}>
+              <BlackButton onClick={() => HandlePost("publish")}>
+                Publish
+              </BlackButton>
+              <OutlineButton
+                onClick={() => HandlePost("draft")}
+                style={{ marginLeft: "30px" }}
+              >
                 Save as Draft
               </OutlineButton>
             </Box>

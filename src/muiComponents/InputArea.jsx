@@ -1,4 +1,4 @@
-import { InputBase, InputLabel } from "@material-ui/core";
+import { Input, InputBase, InputLabel } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/styles";
 // import {  } from "@mui/material";
@@ -6,8 +6,8 @@ import { withStyles } from "@material-ui/styles";
 export const InputArea = withStyles((theme) => ({
   root: {
     width: "100%",
-  },
-  input: {
+    },
+    input: {
     borderRadius: (props) => (props.border === "curve" ? 25 : 4),
     position: "relative",
     backgroundColor: (props) =>
@@ -15,7 +15,6 @@ export const InputArea = withStyles((theme) => ({
     border: (props) =>
       props.type === "comment" ? "none" : "1px solid #ced4da",
     fontSize: 16,
-    width: "100%",
     padding: "10px 12px",
     transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
@@ -32,7 +31,20 @@ export const InputArea = withStyles((theme) => ({
     ].join(","),
     "&:focus": {
       borderColor: grey[500],
+      // borderBottom: "none",
     },
+    // "&:hover": {
+    //   // borderBottom: "none !important",
+    // },
+    // "&:after": {
+    //   display: "none",
+    // },
+    // ".MuiInput-underline::after": {
+    //   // display: "none",
+    // },
+    // ".MuiInput-underline::before": {
+    //   display: "none",
+    // },
   },
 }))(InputBase);
 

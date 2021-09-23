@@ -1,5 +1,4 @@
 import { Box, Container, Grid } from "@material-ui/core";
-// import { useForm } from "react-hook-form";
 import React, { useEffect, useRef, useState } from "react";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
@@ -7,18 +6,19 @@ import CustomSelect from "../../../muiComponents/CustomSelect";
 import { OutlineButton } from "../../../muiComponents/OutlineButton";
 import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
-// import { tags } from "./Article";
 import AddTags from "../../../muiComponents/AddTags";
+import axios from "axios";
+import { BaseUrl } from "../../../BaseUrl.config";
 
 const types = ["New", "Existing"];
 const interests = ["Mystery", "Horror", "Romantic", "Solo"];
 
 const Novel = () => {
-  const [selectedInterest, setSelectedInterest] = useState([]);
+  const [suggTags, setSuggTags] = useState([]);
   const [novelType, setNovelType] = useState([]);
-  const novelRef = useRef(null);
   const [interest, setInterest] = useState([]);
-  const [tags, setTags] = useState([]);
+  const novelRef = useRef(null);
+  // const [tags, setTags] = useState([]);
   const [allData, setAllData] = useState({
     title: "",
     subTitle: "First subtitle to the first Novel",
@@ -38,23 +38,23 @@ const Novel = () => {
       [name]: value,
     }));
   };
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   // formState: { errors },
-  // } = useForm();
-  const HandlePost = () => {
+
+  const HandlePost = (param) => {
     articleContent();
     const content = novelRef.current.getContent();
-    console.log("🚀 ~ HandlePost ~ content", content);
     let selectedTags = [];
-    tags.forEach((tag) => selectedTags.push(tag.label));
+    suggTags.forEach((tag) => selectedTags.push(tag.label));
     // console.log({ data, tags, interest, content });
     const postData = {
       ...allData,
       content: content,
-      type: novelType
+      tags: selectedTags.join(),
+      novelType: novelType,
+      topic: interest.join(),
+      // type: novelType,
     };
+    param === "publish" && CreateNovel(postData);
+    param === "draft" && SaveAsDraft(postData);
     setAllData(postData);
   };
 
@@ -65,6 +65,45 @@ const Novel = () => {
   };
 
   console.log({ allData });
+
+  const headers = {
+    Authorization: localStorage.getItem("token"),
+    "Access-Control-Allow-Origin": "*",
+    "content-type": "application/json",
+  };
+
+  const CreateNovel = (data) => {
+    console.log("-data-", data);
+    axios
+      .post(BaseUrl + `/story`, data, {
+        headers,
+      })
+      .then((response) => {
+        console.log(
+          "SUCCESSFULLY ADDED & response:",
+          response,
+          "Posted Data--",
+          data
+        );
+        alert(`---Novel posted---`);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+  const SaveAsDraft = (post) => {
+    console.log("-data-", post);
+    axios
+      .post(BaseUrl + `/story/draft`, post, { headers })
+      .then((response) => {
+        console.log("response:", response);
+        alert(`Novel saved on draft box`);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
   return (
     <Container maxWidth="md">
       <Grid container spacing={3}>
@@ -128,18 +167,13 @@ const Novel = () => {
               <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
               <CustomSelect
                 data={interests}
-                selectItems={selectedInterest}
-                setSelectItems={setSelectedInterest}
+                selectItems={interest}
+                setSelectItems={setInterest}
               />
             </Grid>
             <Grid item xs={12} sm={12}>
               <CustomLabel htmlFor="">Add Tags</CustomLabel>
-              <AddTags />
-              {/* <CustomSelect
-                  data={tags}
-                  selectItems={tagName}
-                  setSelectItems={setTagName}
-                /> */}
+              <AddTags setTags={setSuggTags} defaultTags="" />
             </Grid>
             <Grid item xs={12} sm={12}>
               <Box
@@ -149,8 +183,13 @@ const Novel = () => {
                 alignItems="center"
                 justifyContent="start"
               >
-                <BlackButton onClick={HandlePost}>Publish</BlackButton>
-                <OutlineButton type="submit" style={{ marginLeft: "30px" }}>
+                <BlackButton onClick={() => HandlePost("publish")}>
+                  Publish
+                </BlackButton>
+                <OutlineButton
+                  onClick={() => HandlePost("draft")}
+                  style={{ marginLeft: "30px" }}
+                >
                   Save as Draft
                 </OutlineButton>
               </Box>
@@ -159,7 +198,7 @@ const Novel = () => {
         )}
         <Grid item xs={12} sm={4}>
           <CustomLabel>Add Image</CustomLabel>
-          <ImageInput setData={setAllData} category={"poetry"} />
+          <ImageInput setData={setAllData} category={"story"} />
         </Grid>
       </Grid>
       {novelType !== "New" && (
@@ -170,8 +209,13 @@ const Novel = () => {
           alignItems="center"
           justifyContent="start"
         >
-          <BlackButton onClick={HandlePost}>Publish</BlackButton>
-          <OutlineButton style={{ marginLeft: "30px" }}>
+          <BlackButton onClick={() => HandlePost("publish")}>
+            Publish
+          </BlackButton>
+          <OutlineButton
+            onClick={() => HandlePost("draft")}
+            style={{ marginLeft: "30px" }}
+          >
             Save as Draft
           </OutlineButton>
         </Box>

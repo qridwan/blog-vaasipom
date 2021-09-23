@@ -1,14 +1,14 @@
 import {
   SET_PAGE,
   SET_POSTID,
-  SET_TYPE,
+  SET_TODO,
   SET_WRITING,
 } from "../actions/dashboardAction";
 
 let initialState = {
   page: "Writing",
   writing: null,
-  type: "",
+  todo: "",
   postId: "",
 };
 
@@ -24,10 +24,10 @@ export const dashboardState = (state = initialState, action) => {
         ...state,
         writing: action.writing,
       };
-    case SET_TYPE:
+    case SET_TODO:
       return {
         ...state,
-        type: action.type,
+        todo: action.todo,
       };
 
     case SET_POSTID:

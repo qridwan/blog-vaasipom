@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, IconButton, Popover } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { NavigationStyles } from "../../Styles/muiStyles";
 import User from "../../Assets/img/user.png";
@@ -10,8 +10,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { setPage, setWriting } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
+// import { headers } from "../../header.config";
 
-const NavLoginPreference = ({ setIsLogin, setPage, setWrite , type }) => {
+const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
   const classes = NavigationStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
@@ -23,6 +24,21 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite , type }) => {
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+  const [userImg, setUserImg] = useState('');
+
+  const getMyProfileInfo = () => {
+    const headers = {
+      Authorization: localStorage.getItem("token"),
+    };
+    !userImg &&
+      axios
+        .get(BaseUrl + `/myprofile`, { headers })
+        .then((response) => {
+          setUserImg(response.data.profileImgLink);
+          localStorage.setItem("useravatar", response.data.profileImgLink);
+        })
+        .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
+  };
 
   const handleLogout = () => {
     // localStorage.clear();
@@ -44,6 +60,12 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite , type }) => {
     setPage(`Writing`);
     setWrite(null);
   };
+
+  useEffect(() => {
+    getMyProfileInfo();
+  }, []);
+
+  // const { profileImgLink } = userImg;
   return (
     <Box>
       <NavLink to="/dashboard">
@@ -60,7 +82,7 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite , type }) => {
       </IconButton>
 
       <IconButton className={classes.navIcon} onClick={handleClick}>
-        <Avatar src={User} alt="User" />
+        <Avatar src={userImg} alt="User" />
       </IconButton>
       <Popover
         id={id}

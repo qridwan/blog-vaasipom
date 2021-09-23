@@ -12,44 +12,44 @@ import TopicSlider from "../../Components/Shared/TopicSlider";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl.config";
 
-const data = [
-  {
-    id: 1,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: PinkFem,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
-  },
-  {
-    id: 2,
-    author: "Krishaan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: martinVid,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
-  },
-  {
-    id: 3,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4Min",
-    topic: "Science",
-  },
-];
+// const data = [
+//   {
+//     id: 1,
+//     author: "Aadavan",
+//     title: "The art of writing Create a blog post subtitle",
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
+//     img: PinkFem,
+//     likes: 529,
+//     views: 768,
+//     date: "10th August",
+//     readTime: "4Min",
+//     topic: "Science",
+//   },
+//   {
+//     id: 2,
+//     author: "Krishaan",
+//     title: "The art of writing Create a blog post subtitle",
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
+//     img: martinVid,
+//     likes: 529,
+//     views: 768,
+//     date: "10th August",
+//     readTime: "4Min",
+//     topic: "Science",
+//   },
+//   {
+//     id: 3,
+//     author: "Aadavan",
+//     title: "The art of writing Create a blog post subtitle",
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
+//     img: FeedImg,
+//     likes: 529,
+//     views: 768,
+//     date: "10th August",
+//     readTime: "4Min",
+//     topic: "Science",
+//   },
+// ];
 
 const videocastStyles = makeStyles({
   right: {

@@ -183,6 +183,44 @@ export const fullFeedStyles = makeStyles({
   },
 });
 
+//Profile styling
+export const profileStyles = makeStyles((theme) => {
+  return {
+    profileCard: {
+      boxSizing: "border-box",
+      position: "sticky",
+      top: "0",
+    },
+    profile: {
+      width: "200px",
+      height: "200px",
+      borderRadius: "50%",
+    },
+    name: {
+      fontWeight: "800",
+      fontSize: "35px",
+      lineHeight: "67px",
+      textAlign: "center",
+      letterSpacing: "-0.02em",
+      color: "#000000",
+    },
+    title: {
+      fontWeight: "800",
+      fontSize: "20px",
+      lineHeight: "35px",
+      textAlign: "center",
+      letterSpacing: "-0.02em",
+      color: "#000000",
+    },
+    follower: {
+      fontWeight: "500",
+      fontSize: "20px",
+      textAlign: "center",
+      letterSpacing: "-0.02em",
+      color: "#000000",
+    },
+  };
+});
 
 export const landingPageStyles = makeStyles((theme) => ({
   root: {

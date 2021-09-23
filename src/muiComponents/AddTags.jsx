@@ -59,15 +59,15 @@ const AddTags = ({ setTags }) => {
 
   useEffect(() => {
     setTags(chipData);
-  // setTags([]);
-  // (chipData.map((obj) => setTags([...tags, obj.label])))
-    // setTags(allTag); 
+    // setTags([]);
+    // (chipData.map((obj) => setTags([...tags, obj.label])))
+    // setTags(allTag);
   }, [chipData]);
 
   console.log({ chipData });
   return (
     <Paper component="ul" className={classes.root}>
-      {chipData.map((data, index ) => {
+      {chipData.map((data, index) => {
         return (
           <>
             {data && (

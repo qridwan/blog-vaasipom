@@ -9,9 +9,15 @@ import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
-import { setType } from "../../../redux/actions/dashboardAction";
+import {
+  setPage,
+  setPostId,
+  setTodo,
+  setWriting,
+} from "../../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 // import { headeeConf } from "../../../Function/Header.info";
+
 export const tags = [
   "Science",
   "Travel",
@@ -19,19 +25,37 @@ export const tags = [
   "Sports",
   "International",
 ];
+
 export const interests = ["Novel", "Poet", "Fiction", "Economy"];
 
-const Article = ({ type, dashboardState }) => {
+const Article = ({
+  type,
+  dashboardState,
+  setPostId,
+  setPage,
+  setWriting,
+  setTodo,
+}) => {
   console.log("🚀 ~ Article ~ dashboardState", dashboardState);
-  const [tags, setTags] = useState([]);
+  const { todo } = dashboardState;
+  const [suggTags, setSuggTags] = useState([]);
   const [interest, setInterest] = useState([]);
-  const [value, setValue] = useState();
+  const [editorValue, setEditorValue] = useState();
   const ref = useRef(null);
-  const [editablePost, setEditablePost] = useState({});
-  const [isEdit, setIsEdit] = useState(false);
+  const [image, setImage] = useState(``);
+  const cleanReduxState = () => {
+    setTodo(null);
+    setPostId("");
+    setEditorValue("");
+    // // setPage("");
+    setWriting(null);
+  };
 
+  // let post = {};
+  // const post_id = dashboardState.postId;
+  // const { title, tags, topic, mainImage, content } =
+  //   todo?.article ;
   // Create Article
-  const post_id = dashboardState.postId;
 
   const [allData, setAllData] = useState({
     title: "",
@@ -42,7 +66,16 @@ const Article = ({ type, dashboardState }) => {
     content: "",
   });
 
+  useEffect(() => {
+    document.title = `Blog | Writing | ${type}`;
+    todo && setEditorValue(todo.article.content);
+    todo && setInterest([todo.article.topic]);
+    todo && setImage(todo.article.mainImage);
+    return () => cleanReduxState();
+  }, []);
+
   const category = type.toLowerCase();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAllData((data) => ({
@@ -50,20 +83,18 @@ const Article = ({ type, dashboardState }) => {
       [name]: value,
     }));
   };
-  useEffect(() => {
-    document.title = `Blog | Writing | ${type}`;
-  }, []);
 
   const articleContent = () => {
     console.log(ref.current?.getContent());
-    setValue(ref.current?.getContent());
+    setEditorValue(ref.current?.getContent());
   };
 
   const HandlePost = async (param) => {
     articleContent();
     const content = ref.current.getContent();
     let selectedTags = [];
-    tags.forEach((tag) => selectedTags.push(tag.label));
+
+    suggTags.forEach((tag) => selectedTags.push(tag.label));
     // console.log({ data, tags, interest, content });
     const postData = {
       ...allData,
@@ -84,7 +115,9 @@ const Article = ({ type, dashboardState }) => {
   const CreateArticle = (data) => {
     console.log("-data-", data);
     axios
-      .post(BaseUrl + `/${category}`, data, { mode: "cors", headers })
+      .post(BaseUrl + `/${category}`, data, {
+        headers,
+      })
       .then((response) => {
         console.log(
           "SUCCESSFULLY ADDED & response:",
@@ -92,6 +125,7 @@ const Article = ({ type, dashboardState }) => {
           "Posted Data--",
           data
         );
+        alert(`${category} Posted`);
       })
       .catch((error) => {
         console.log("error", error);
@@ -104,61 +138,30 @@ const Article = ({ type, dashboardState }) => {
       .post(BaseUrl + `/${category}/draft`, post, { headers })
       .then((response) => {
         console.log("response:", response);
+        alert(`${category} Saved`);
       })
       .catch((error) => {
         console.log("error", error);
       });
   };
-  console.log({ allData, editablePost });
 
-  //View Article for EDIT mode
-  const getPost = () => {
-    console.log(
-      "--URL116--",
-      BaseUrl + `/auth/${category}?${category}Id=${post_id}`
-    );
-    axios
-      .get(BaseUrl + `/auth/${category}?${category}Id=${post_id}`)
-      .then((response) => {
-        console.log("response: post", response.data);
-        setEditablePost(response.data);
-        setIsEdit(true);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
-  useEffect(() => {
-    post_id && getPost();
-  }, [post_id, isEdit]);
-  const { title } = editablePost;
-  console.log("🚀 ~ Article ~ title", title)
-  // const {title} = editablePost
   return (
     <Container maxWidth="md">
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12}>
           <CustomLabel htmlFor="">Title</CustomLabel>
-          {isEdit ? (
-            <InputArea
-              defaultvalue={title}
-              type="text"
-              name="title"
-              onChange={handleChange}
-            />
-          ) : (
-            <InputArea
-              defaultValue=""
-              type="text"
-              name="title"
-              onChange={handleChange}
-            />
-          )}
+
+          <InputArea
+            defaultValue={todo ? todo.article.title : ""}
+            type="text"
+            name="title"
+            onChange={handleChange}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12}>
           <CustomLabel htmlFor="">Write Here</CustomLabel>
-          <BlogEditor ref={ref} value={value} />
+          <BlogEditor ref={ref} value={editorValue} />
         </Grid>
 
         <Grid item xs={12} sm={7} spacing={3}>
@@ -172,12 +175,8 @@ const Article = ({ type, dashboardState }) => {
           </Grid>
           <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">Add Tags</CustomLabel>
-            {/* <CustomSelect
-                data={tags}
-                selectItems={tagName}
-                setSelectItems={setTagName}
-              /> */}
-            <AddTags setTags={setTags} />
+
+            <AddTags setTags={setSuggTags} defaultTags={tags} />
           </Grid>
           <Grid item xs={12} sm={12}>
             <Box
@@ -203,7 +202,7 @@ const Article = ({ type, dashboardState }) => {
 
         <Grid item xs={12} sm={5}>
           <CustomLabel>Add Image</CustomLabel>
-          <ImageInput setData={setAllData} category={category} />
+          <ImageInput setData={setAllData} category={category} image={image} />
         </Grid>
       </Grid>
     </Container>
@@ -215,6 +214,9 @@ const Article = ({ type, dashboardState }) => {
 // using redux
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
-  setType: setType,
+  setTodo: setTodo,
+  setPostId: setPostId,
+  setPage: setPage,
+  setWriting: setWriting,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Article);

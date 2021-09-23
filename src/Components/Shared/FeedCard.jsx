@@ -26,19 +26,15 @@ import { connect } from "react-redux";
 import {
   setPage,
   setPostId,
+  setTodo,
   setWriting,
 } from "../../redux/actions/dashboardAction";
+import { handleDelete } from "../../Function/Delete.api";
 
-const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
+const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
   const classes = feedCardStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isUser, setIsUser] = useState(false);
-
-  const userEmail = localStorage.getItem("username");
-
-  useEffect(() => {
-    feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
-  }, [feed]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,15 +48,28 @@ const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
   if (url === "/") {
     url = "/feed";
   }
-  const createdDateFormate = dateFormat(article?.createDate, "dS mmmm");
+  const userEmail = localStorage.getItem("username");
+
+  useEffect(() => {
+    feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
+  }, [feed]);
+
+  //formating date
+  const createdDate = article?.createdDate;
+  const createdDateFormate = dateFormat(createdDate, "dS mmmm");
+  //formate end
+
+  //handeling edit route
   const handleEdit = () => {
     setPage(`Writing`);
-    setWrite(`Article`);
+    setWriting(`Article`);
     setPostId(article?.articleId);
+    setTodo({
+      todo: true,
+      ...feed,
+    });
   };
 
-
- 
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
@@ -116,6 +125,8 @@ const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
               <IconButton style={{ padding: "2px" }}>
                 <BookmarkIcon style={{ fontSize: "16px" }} />
               </IconButton>
+
+              {/* edit option visible only for users post */}
               {isUser && (
                 <>
                   <IconButton style={{ padding: "2px" }} onClick={handleClick}>
@@ -145,7 +156,9 @@ const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
                       <Button
                         style={{ color: "#FF0000" }}
                         className={classes.button}
-                        // onClick={handleLogout}
+                        onClick={() =>
+                          handleDelete(category, article?.articleId)
+                        }
                       >
                         Delete
                       </Button>
@@ -156,6 +169,7 @@ const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
             </Box>
           </Box>
         </Grid>
+
         {/* image */}
         {article?.mainImage && (
           <Grid item xs={12} sm={4}>
@@ -175,7 +189,8 @@ const FeedCard = ({ feed, type, setPage, setWrite, setPostId }) => {
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   setPage: setPage,
-  setWrite: setWriting,
+  setWriting: setWriting,
   setPostId: setPostId,
+  setTodo: setTodo,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FeedCard);
