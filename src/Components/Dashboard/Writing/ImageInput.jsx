@@ -3,8 +3,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import { grey } from "@material-ui/core/colors";
 import { BaseUrl } from "../../../BaseUrl.config";
 import axios from "axios";
-import { headers } from "../../../header.config";
-
+// import { headers } from "../../../header.config";
+const headers = {
+  Authorization: localStorage.getItem("token"),
+  // "Access-Control-Allow-Origin": "*",
+  // "content-type": "application/json",
+};
 const inputImageStyles = makeStyles(() => ({
   imgBox: {
     width: "100%",

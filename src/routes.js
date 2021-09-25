@@ -10,11 +10,11 @@ import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import Profile from "./Pages/Profile/Profile";
 
 export const Routes = [
-  { path: "/podcast", component: Podcast, exact: "exact" },
-  { path: "/login", component: Login, exact: "exact" },
-  { path: "/profile", component: Profile, exact: "exact" },
-  { path: "/myprofile", component: Profile, exact: "exact" },
-  { path: "/forgotPassword", component: ForgotPassword, exact: "exact" },
+  { path: "/podcast", component: Podcast, exact: true },
+  { path: "/login", component: Login, exact: true },
+  { path: "/profile", component: Profile, exact: true },
+  { path: "/myprofile", component: Profile, exact: true },
+  { path: "/forgotPassword", component: ForgotPassword, exact: true },
   { path: "/podcast/:title", component: FullFeed },
   { path: "/feed/:category/:postId", component: FullFeed },
   { path: "/myprofile/:category/:postId", component: FullFeed },
@@ -26,6 +26,6 @@ export const Routes = [
   { path: "/short stories", component: LandingPage },
   { path: "/poetries", component: LandingPage },
   { path: "/reviews", component: LandingPage },
-  { path: "/", component: LandingPage, exact: "exact" },
+  { path: "/", component: LandingPage, exact: true },
   { component: NotFound },
 ];

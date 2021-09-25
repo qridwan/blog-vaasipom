@@ -44,6 +44,7 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
     // localStorage.clear();
     const headers = {
       Authorization: localStorage.getItem("token"),
+      // "Access-Control-Allow-Origin": "*",
     };
     axios
       .post(BaseUrl + "/logout", {}, { headers })

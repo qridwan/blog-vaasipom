@@ -5,6 +5,7 @@ export const handleLike = (catg, id) => {
   console.log("🚀 ~ handleLike ~ catg, id", catg, id);
   const headers = {
     Authorization: localStorage.getItem("token"),
+    // "Access-Control-Allow-Origin": "*",
   };
   console.log("clicked", BaseUrl + `/${catg}/like?postId=${id}`);
   axios

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
+// import InputBase from "@material-ui/core/InputBase";
 import { alpha, makeStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
+// import SearchIcon from "@material-ui/icons/Search";
 import { grey } from "@material-ui/core/colors";
 import { NavLink, useRouteMatch } from "react-router-dom";
 import { Container } from "@material-ui/core";
@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SubNavigation = () => {
   const classes = useStyles();
-  const [lookingFor, setLookingFor] = useState([
+  const [lookingFor] = useState([
     { key: 6, label: "All" },
     { key: 0, label: "Podcast", count: 323 },
     { key: 4, label: "Videocast", count: 553 },
@@ -115,7 +115,7 @@ const SubNavigation = () => {
   return (
     <Container maxWidth="xl">
       <div className={classes.root}>
-        <AppBar className={classes.appBar} color="white" position="static">
+        <AppBar className={classes.appBar} color="transparent" position="static">
           <Toolbar className={classes.toolArea}>
             <div className={classes.leftItems}>
               {lookingFor.map((data) => {
@@ -124,7 +124,7 @@ const SubNavigation = () => {
                   page = "/";
                 }
                 return (
-                  <NavLink to={page}>
+                  <NavLink to={page} key={data.label}>
                     <Typography
                       className={
                         path === page ? classes.darkTitle : classes.title

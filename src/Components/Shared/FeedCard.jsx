@@ -66,6 +66,7 @@ const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
     setPostId(article?.articleId);
     setTodo({
       todo: true,
+      edit: true,
       ...feed,
     });
   };

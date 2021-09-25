@@ -7,24 +7,28 @@ import React, { useEffect, useState } from "react";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import ImageInput from "../Writing/ImageInput";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
-import { headers } from "../../../header.config";
 // import {
 //   KeyboardDatePicker,
 //   MuiPickersUtilsProvider,
 // } from "@material-ui/pickers";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: "10px 0",
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     margin: "10px 0",
+//   },
+// }));
+const headers = {
+  Authorization: localStorage.getItem("token"),
+  // "Access-Control-Allow-Origin": "*",
+  // "content-type": "application/json",
+};
 
 const EditProfile = () => {
-  const classes = useStyles();
-  const [userInfo, setUserInfo] = useState({});
+  // const classes = useStyles();
+  // const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [allData, setAllData] = useState({
     firstName: "",
@@ -34,7 +38,6 @@ const EditProfile = () => {
     country: "",
     profileTitle: "Write, Speaker",
     profileDesc: "I will update it later",
-
     // website: "",
     // email: "",
     // twitter: "",
@@ -44,6 +47,7 @@ const EditProfile = () => {
   });
   useEffect(() => {
     document.title = "Blog | Profile | Settings";
+    console.log(`URL---`, BaseUrl + `/myprofile`, { headers })
     axios
       .get(BaseUrl + `/myprofile`, { headers })
       .then((response) => {

@@ -30,6 +30,7 @@ export const PaginationBlog = ({ page, setPage }) => {
       {/* <Pagination count={Infinity} page={page} onChange={handleChange} /> */}
       <TablePagination
         component="div"
+        rowsPerPage={0}
         count={Infinity}
         page={page}
         onPageChange={handleChange}

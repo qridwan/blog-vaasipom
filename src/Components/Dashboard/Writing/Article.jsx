@@ -36,41 +36,46 @@ const Article = ({
   setWriting,
   setTodo,
 }) => {
-  console.log("🚀 ~ Article ~ dashboardState", dashboardState);
+  // console.log("🚀 ~ Article ~ dashboardState", dashboardState);
   const { todo } = dashboardState;
   const [suggTags, setSuggTags] = useState([]);
   const [interest, setInterest] = useState([]);
   const [editorValue, setEditorValue] = useState();
+  const [loading, setLoading] = useState(false);
   const ref = useRef(null);
   const [image, setImage] = useState(``);
   const cleanReduxState = () => {
-    setTodo(null);
+    setTodo({
+      edit: false
+    });
     setPostId("");
     setEditorValue("");
-    // // setPage("");
     setWriting(null);
   };
-
-  // let post = {};
-  // const post_id = dashboardState.postId;
-  // const { title, tags, topic, mainImage, content } =
-  //   todo?.article ;
-  // Create Article
-
+  const [isEdit, setIsEdit] = useState(false);
   const [allData, setAllData] = useState({
     title: "",
-    subTitle: "First subtitle to the first article",
+    subTitle: "",
     mainImage: "",
-    tags: "",
-    topic: "",
+    // tags: "",
+    // topic: "",
     content: "",
   });
 
   useEffect(() => {
     document.title = `Blog | Writing | ${type}`;
-    todo && setEditorValue(todo.article.content);
-    todo && setInterest([todo.article.topic]);
-    todo && setImage(todo.article.mainImage);
+    setIsEdit(todo.edit);
+    todo.edit && setEditorValue(todo.article.content);
+    // todo && setInterest([todo.article.topic]);
+    todo.edit && setImage(todo.article.mainImage);
+    todo.edit &&
+      setAllData({
+        ...allData,
+        articleId: dashboardState.postId,
+        title: todo.article.title,
+        mainImage: todo.article.mainImage,
+      });
+    setLoading(true);
     return () => cleanReduxState();
   }, []);
 
@@ -85,7 +90,6 @@ const Article = ({
   };
 
   const articleContent = () => {
-    console.log(ref.current?.getContent());
     setEditorValue(ref.current?.getContent());
   };
 
@@ -102,34 +106,50 @@ const Article = ({
       topic: interest.join(),
       content: content,
     };
-    param === "publish" && CreateArticle(postData);
+    const editData = {
+      ...allData,
+      content: content,
+    };
+    param === "publish" && CreateArticle(isEdit ? editData : postData);
     param === "draft" && SaveAsDraft(postData);
   };
 
   const headers = {
     Authorization: localStorage.getItem("token"),
-    "Access-Control-Allow-Origin": "*",
-    "content-type": "application/json",
+    // "Access-Control-Allow-Origin": "*",
+    // "content-type": "application/json",
   };
 
   const CreateArticle = (data) => {
     console.log("-data-", data);
-    axios
-      .post(BaseUrl + `/${category}`, data, {
-        headers,
-      })
-      .then((response) => {
-        console.log(
-          "SUCCESSFULLY ADDED & response:",
-          response,
-          "Posted Data--",
-          data
-        );
-        alert(`${category} Posted`);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+    todo.todo
+      ? axios
+          .put(BaseUrl + `/${category}`, data, {
+            headers, //headers Authorization: localStorage.getItem("token"),
+          })
+          .then((response) => {
+            console.log("Posted Data--", response.data);
+            alert(`${category} Updated`);
+          })
+          .catch((error) => {
+            console.log("error", error);
+          })
+      : axios
+          .post(BaseUrl + `/${category}`, data, {
+            headers,
+          })
+          .then((response) => {
+            console.log(
+              "SUCCESSFULLY ADDED & response:",
+              response,
+              "Posted Data--",
+              data
+            );
+            alert(`${category} Posted`);
+          })
+          .catch((error) => {
+            console.log("error", error);
+          });
   };
 
   const SaveAsDraft = (post) => {
@@ -147,64 +167,84 @@ const Article = ({
 
   return (
     <Container maxWidth="md">
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={12}>
-          <CustomLabel htmlFor="">Title</CustomLabel>
-
-          <InputArea
-            defaultValue={todo ? todo.article.title : ""}
-            type="text"
-            name="title"
-            onChange={handleChange}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={12}>
-          <CustomLabel htmlFor="">Write Here</CustomLabel>
-          <BlogEditor ref={ref} value={editorValue} />
-        </Grid>
-
-        <Grid item xs={12} sm={7} spacing={3}>
+      {loading && (
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
-            <CustomSelect
-              data={interests}
-              selectItems={interest}
-              setSelectItems={setInterest}
+            <CustomLabel htmlFor="">Title</CustomLabel>
+            <InputArea
+              defaultValue={isEdit ? todo.article.title : ""}
+              type="text"
+              name="title"
+              onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Add Tags</CustomLabel>
-
-            <AddTags setTags={setSuggTags} defaultTags={tags} />
+            <CustomLabel htmlFor="">Sub-Title</CustomLabel>
+            <InputArea
+              defaultValue={isEdit ? todo.article.subTitle : ""}
+              type="text"
+              name="subTitle"
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <Box
-              display="flex"
-              mt={5}
-              mb={3}
-              alignItems="center"
-              justifyContent="start"
-            >
-              <BlackButton onClick={() => HandlePost("publish")}>
-                Publish
-              </BlackButton>
-              <OutlineButton
-                type=""
-                style={{ marginLeft: "30px" }}
-                onClick={() => HandlePost("draft")}
+            <CustomLabel htmlFor="">Write Here</CustomLabel>
+            <BlogEditor ref={ref} value={editorValue} />
+          </Grid>
+
+          <Grid item xs={12} sm={7} spacing={3}>
+            {!isEdit && (
+              <>
+                {" "}
+                <Grid item xs={12} sm={12}>
+                  <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
+                  <CustomSelect
+                    data={interests}
+                    selectItems={interest}
+                    setSelectItems={setInterest}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <CustomLabel htmlFor="">Add Tags</CustomLabel>
+
+                  <AddTags setTags={setSuggTags} defaultTags={tags} />
+                </Grid>
+              </>
+            )}
+            <Grid item xs={12} sm={12}>
+              <Box
+                display="flex"
+                mt={5}
+                mb={3}
+                alignItems="center"
+                justifyContent="start"
               >
-                Save as Draft
-              </OutlineButton>
-            </Box>
+                <BlackButton onClick={() => HandlePost("publish")}>
+                  {isEdit ? "Update" : "Publish"}
+                </BlackButton>
+                {!isEdit && (
+                  <OutlineButton
+                    type=""
+                    style={{ marginLeft: "30px" }}
+                    onClick={() => HandlePost("draft")}
+                  >
+                    Save as Draft
+                  </OutlineButton>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12} sm={5}>
+            <CustomLabel>Add Image</CustomLabel>
+            <ImageInput
+              setData={setAllData}
+              category={category}
+              image={image}
+            />
           </Grid>
         </Grid>
-
-        <Grid item xs={12} sm={5}>
-          <CustomLabel>Add Image</CustomLabel>
-          <ImageInput setData={setAllData} category={category} image={image} />
-        </Grid>
-      </Grid>
+      )}
     </Container>
   );
 };

@@ -32,10 +32,12 @@ const Profile = ({ type, setPage, dashboardState }) => {
   const { path } = useRouteMatch();
   const [pageNo, setPageNo] = useState(1);
   console.log("🚀 ~ Profile ~ path", path);
+  
+  
   const headers = {
     Authorization: localStorage.getItem("token"),
+    // "Access-Control-Allow-Origin": "*",
   };
-
   const getMyProfileInfo = () => {
     axios
       .get(BaseUrl + `/myprofile`, { headers })
@@ -45,10 +47,10 @@ const Profile = ({ type, setPage, dashboardState }) => {
       })
       .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
   };
-
+  // author/writings?category=article&page=1
   const getMyWritings = (paginate) => {
     axios
-      .get(BaseUrl + `/author/writings?category=story,article,poetry,review,podcast,videocast/&page=${paginate}`, {
+      .get(BaseUrl + `/author/writings?category=article&page=${paginate}`, {
         headers
       })
       .then((response) => {
@@ -65,7 +67,7 @@ const Profile = ({ type, setPage, dashboardState }) => {
   }, [pageNo]);
   const {
     // country,
-    // email,
+    email,
     firstName,
     followersCount,
     // phone,
@@ -85,13 +87,13 @@ const Profile = ({ type, setPage, dashboardState }) => {
       {/* <SubNavigation /> */}
       <Grid container spacing={3}>
         <Grid item xs={12} sm={3}>
-          {userInfo.firstName && (
+          {email && (
             <Box textAlign="center" mt={5} className={classes.profileCard}>
               <img src={profileImgLink} alt="dp" className={classes.profile} />
               <Typography className={classes.name}>
-                {firstName?.charAt(0).toUpperCase() + firstName?.slice(1)}
+                {firstName ? firstName?.charAt(0).toUpperCase() + firstName?.slice(1) : "Set Your Name"}
               </Typography>
-              <Typography className={classes.title}>{profileTitle}</Typography>
+              <Typography className={classes.title}>{profileTitle ? profileTitle : "Title"}</Typography>
               <Typography>
                 <span className={classes.follower}>{followersCount} </span>{" "}
                 Followers

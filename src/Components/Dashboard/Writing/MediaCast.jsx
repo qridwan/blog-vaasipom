@@ -1,6 +1,5 @@
 import { Box, Container, Grid } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-
 import AddTags from "../../../muiComponents/AddTags";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import CustomSelect from "../../../muiComponents/CustomSelect";
@@ -65,17 +64,17 @@ const MediaCast = ({ type }) => {
   //API INTEGRATION
   const headers = {
     Authorization: localStorage.getItem("token"),
+    // "Access-Control-Allow-Origin": "*",
   };
-
   const CreatePost = (data) => {
-    const headers = {
-      Authorization: localStorage.getItem("token"),
-    };
+    
     console.log("-data-", data);
     axios
       .post(BaseUrl + `/${category}`, data, { headers })
       .then((response) => {
         console.log(
+          "URL :",
+          BaseUrl + `/${category}`,
           "SUCCESSFULLY ADDED & response:",
           response,
           "Posted Data--",
@@ -93,7 +92,12 @@ const MediaCast = ({ type }) => {
     axios
       .post(BaseUrl + `/${category}/draft`, data, { headers })
       .then((response) => {
-        console.log("response:", response);
+        console.log(
+          "URL :",
+          BaseUrl + `/${category}/draft`,
+          "response:",
+          response.data
+        );
         alert(`${category} Saved on draft box`);
       })
       .catch((error) => {
@@ -165,7 +169,7 @@ const MediaCast = ({ type }) => {
 
         <Grid item xs={12} sm={5}>
           <CustomLabel>Add Image</CustomLabel>
-          <ImageInput setData={setAllData} category="article" />
+          <ImageInput setData={setAllData} category={category} />
         </Grid>
       </Grid>
     </Container>

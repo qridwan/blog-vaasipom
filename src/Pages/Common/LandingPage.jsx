@@ -92,9 +92,11 @@ export const allData = [
     topic: "Videocast",
   },
 ];
+
 const LandingPage = ({ headerVisible, hideHeader }) => {
+console.log("🚀 ~ LandingPage ~ headerVisible", headerVisible)
   const classes = landingPageStyles();
-  const [token, setToken] = useState(false);
+  // const [token, setToken] = useState(false);
   const [page, setPage] = useState(1);
   const [allPost, setAllPost] = useState([]);
   const [categoryItem, setCategoryItem] = useState("");
@@ -113,7 +115,7 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
   const { path } = useRouteMatch();
   const getPost = () => {
     handleOpen();
-    console.log(subUrl);
+    // console.log(subUrl);
     axios
       .get(BaseUrl + subUrl)
       .then((response) => {
@@ -123,12 +125,13 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
       })
       .catch((error) => {
         console.log("error", error);
+        handleClose();
       });
   };
 
   useEffect(() => {
     document.title = "Blog | Home";
-    localStorage.token ? setToken(true) : setToken(false);
+    // localStorage.token ? setToken(true) : setToken(false);
     path === "/poetries" && setCategoryItem("poetry");
     path === "/short stories" && setCategoryItem("story");
     path === "/articles" && setCategoryItem("article");
@@ -141,11 +144,11 @@ const LandingPage = ({ headerVisible, hideHeader }) => {
     return () => hideHeader();
   }, [page, subUrl]);
 
-  console.log({ token }, { allPost });
+  console.log( { allPost });
   return (
     <Container maxWidth="lg">
       <Navigation />
-      {!token && headerVisible && <Header />}
+      {(!localStorage.token && headerVisible) && <Header />}
       <SubNavigation />
       <Container>
         <Grid

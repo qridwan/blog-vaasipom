@@ -6,35 +6,92 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import jumpingKid from "../../Assets/img/jumpingKid.svg";
+import { BaseUrl } from "../../BaseUrl.config";
 import { BlackButton } from "../../muiComponents/BlackButton";
 import { loginStyles } from "../../Styles/muiStyles";
 
 const ForgotPassword = () => {
   const classes = loginStyles();
+  const history = useHistory();
   const [isResetPass, setIsResetPass] = useState(false);
-  const [values, setValues] = useState({
-    password: "",
+  // const [values, setValues] = useState({
+  //   password: "",
+  //   confirmPassword: "",
+  //   showPassword: false,
+  // });
+  const [formdata, setFormdata] = useState({
+    email: "",
+    otp: "",
+    newPassword: "",
     confirmPassword: "",
-    showPassword: false,
   });
 
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm();
+  const headers = {
+    Authorization: localStorage.getItem("token"),
+  };
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   // formState: { errors },
+  // } = useForm();
   useEffect(() => {
     document.title = "!Forgot Password";
   }, []);
 
-  const submitEmail = ({ email }) => {
-    console.log("🚀 ~submitEmail ~ email", email);
-    setIsResetPass(true);
-  };
+  const submitEmail = () => {
+    console.log(
+      "🚀 ~ sent otp url`",
+      BaseUrl + `/auth/email/reset/otp?email=${formdata.email}`
+    );
+    // setFormdata({
+    //   ...email,
+    //   email: email,
+    // });
+    axios
+      .get(BaseUrl + `/auth/email/reset/otp?email=${formdata.email}`, {
+        headers,
+      })
 
+      .then((response) => {
+        alert(`OTP sent to on ${formdata.email}`);
+        setIsResetPass(true);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    // name !== "confirmPassword" &&
+    setFormdata((data) => ({
+      ...data,
+      [name]: value,
+    }));
+  };
+  const handleResetPassword = (e) => {
+    console.log(formdata);
+    const data = {
+      email: formdata.email,
+      otp: formdata.otp,
+      newPassword: formdata.newPassword,
+    };
+    if (formdata.newPassword !== formdata.confirmPassword) {
+      alert(`Password not matched ${formdata}`);
+    } else {
+      axios.post(BaseUrl + `/auth/resetpassword`, data, { headers })
+      .then(response => {
+        alert(`Password changed successfully ${formdata}`);
+        history.push(`/login`)
+      })
+      .catch(error => {console.log(error)});
+    }
+  };
   return (
     <main className={classes.root}>
       <Grid container>
@@ -52,46 +109,59 @@ const ForgotPassword = () => {
                 Reset Password
               </Typography>
             )}
-
+            {!isResetPass && (
+              <TextField
+                style={{ marginTop: 15 }}
+                placeholder="Enter Your Email"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="email"
+                onChange={handleChange}
+              />
+            )}
             {/* Login Form */}
-            <form onSubmit={handleSubmit(submitEmail)}>
-              {!isResetPass ? (
-                <TextField
-                  style={{ marginTop: 15 }}
-                  placeholder="Enter Your Email"
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  {...register("email")}
-                />
-              ) : (
-                <>
-                  <FormControl fullWidth>
-                    <Input
-                      style={{ margin: "15px 0" }}
-                      type="password"
-                      value={values.password}
-                      {...register("password")}
-                      placeholder="Password"
-                    />
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <Input
-                      style={{ margin: "15px 0" }}
-                      type="password"
-                      value={values.password}
-                      {...register("confirm_password")}
-                      placeholder="Confirm Password"
-                    />
-                  </FormControl>
-                </>
-              )}
-              <BlackButton type="submit" className={classes.btn}>
-                {!isResetPass ? "Forgot Password" : " Reset Password"}
-              </BlackButton>
-            </form>
+            {isResetPass && (
+              <>
+                <FormControl fullWidth>
+                  <Input
+                    style={{ margin: "15px 0" }}
+                    type=""
+                    name="otp"
+                    onChange={handleChange}
+                    placeholder="OTP"
+                  />
+                </FormControl>
+                <FormControl fullWidth>
+                  <Input
+                    style={{ margin: "15px 0" }}
+                    type="password"
+                    // value={values.password}
+                    name="newPassword"
+                    onChange={handleChange}
+                    placeholder="Password"
+                  />
+                </FormControl>
+                <FormControl fullWidth>
+                  <Input
+                    style={{ margin: "15px 0" }}
+                    type="password"
+                    // value={values.confirmPassword}
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    placeholder="Confirm Password"
+                  />
+                </FormControl>
+              </>
+            )}
+            <BlackButton
+              onClick={!isResetPass ? submitEmail : handleResetPassword}
+              className={classes.btn}
+            >
+              {!isResetPass ? "Forgot Password" : " Reset Password"}
+            </BlackButton>
           </Box>
         </Grid>
       </Grid>

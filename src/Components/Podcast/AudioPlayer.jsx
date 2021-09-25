@@ -150,7 +150,7 @@ const AudioPlayer = ({ setIsAudioPlay }) => {
       ></audio>
       <AppBar
         position="fixed"
-        color="white"
+        color="transparent"
         alignItems="center"
         className={classes.appBar}
       >

@@ -64,7 +64,7 @@ const Login = () => {
     let formData = {};
     isNewUser
       ? (formData = {
-          name: data.full_name,
+          fullName: data.full_name,
           email: data.email,
           password: values.password,
         })
@@ -73,17 +73,15 @@ const Login = () => {
           password: values.password,
         });
 
+    console.log("🚀 ~ onSubmit ~ formData", formData);
+    setUserInfo(formData);
     // FOR SIGN IN
-
     !isNewUser &&
       axios
         .post(BaseUrl + "/auth/signin", formData)
         .then((response) => {
           console.log("response:", response.data);
           handleLocalStorage(response.data);
-          // localStorage.setItem("token", "Bearer " + response.data.accessToken);
-          // localStorage.setItem("username", response.data.username);
-          // localStorage.setItem("userAvatar", response.data.profileImgLink);
           history.push("/");
         })
         .catch((error) => {
@@ -92,26 +90,27 @@ const Login = () => {
 
     // SEND OTP TO EMAIL
 
-    // isNewUser &&
-    //   axios
-    //     .get(BaseUrl + "/auth/email/otp?email=" + data.email)
-    //     .then((response) => {
-    //       setUserInfo({
-    //         name: data.full_name,
-    //         email: data.email,
-    //         password: values.password,
-    //         message: response.data.message,
-    //         verifyOtp: 1,
-    //       });
-    //       console.log(response.data);
-    //     })
-    //     .catch((error) => {
-    //       console.log("error", error);
-    //       // setUserInfo((data) => ({
-    //       //   ...data,
-    //       //   verifyOtp: 0,
-    //       // }));
-    //     });
+    isNewUser &&
+      axios
+        .get(BaseUrl + "/auth/email/otp?email=" + data.email)
+        .then((response) => {
+          // setUserInfo({
+          //   name: data.full_name,
+          //   email: data.email,
+          //   password: values.password,
+          //   message: response.data.message,
+          //   verifyOtp: 1,
+          // });
+          console.log(response.data);
+          alert(`You OTP Sent on ${data.email}`);
+        })
+        .catch((error) => {
+          console.log("error", error);
+          // setUserInfo((data) => ({
+          //   ...data,
+          //   verifyOtp: 0,
+          // }));
+        });
 
     isNewUser && setCreateAcc(true);
   };
@@ -119,34 +118,41 @@ const Login = () => {
   const submitOtp = (data) => {
     console.log("🚀", data);
     // setOtp(data.otp);
-    setUserInfo({
+    // setUserInfo({
+    //   ...userInfo,
+    //   otp: values.otp,
+    // });
+    const signUpForm = {
       ...userInfo,
       otp: values.otp,
-    });
+    };
+
+    console.log("🚀 ~ submitOtp ~ signUpForm", signUpForm);
 
     //FOR SIGN UP
-    // isNewUser &&
-    //   axios
-    //     .post(BaseUrl + "/auth/user/signup", data)
-    //     .then((response) => {
-    //       console.log("response:", response);
-    //       setRes((data) => ({
-    //         ...data,
-    //         message: response.data.message,
-    //         passwordconfirmation: 0,
-    //       }));
-    //     })
-    //     .catch((error) => {
-    //       setRes((data) => ({
-    //         ...data,
-    //         message: data.message,
-    //         passwordconfirmation: 0,
-    //       }));
-    //       console.log("error", error);
-    //     });
+    isNewUser &&
+      axios
+        .post(BaseUrl + "/auth/user/signup", signUpForm)
+        .then((response) => {
+          console.log("response:", response);
+          alert(`Sign Up Confirmed`);
+          setCreateAcc(false);
+          // setRes((data) => ({
+          //   ...data,
+          //   message: response.data.message,
+          //   passwordconfirmation: 0,
+          // }));
+        })
+        .catch((error) => {
+          // setRes((data) => ({
+          //   ...data,
+          //   message: data.message,
+          //   passwordconfirmation: 0,
+          // }));
+          console.log("error", error);
+        });
 
-    setCreateAcc(false);
-    console.log(userInfo);
+    // setCreateAcc(false);
   };
 
   const handleChange = (prop) => (event) => {
@@ -162,7 +168,7 @@ const Login = () => {
     event.preventDefault();
   };
 
-  console.log({ userInfo }, { signInData });
+  // console.log({ userInfo }, { signInData });
   return (
     <main className={classes.root}>
       <Grid container>
@@ -185,8 +191,9 @@ const Login = () => {
               <>
                 <Typography className={classes.heading}>Enter Otp</Typography>
                 <Typography className={classes.otpInfo}>
-                  Hey, {userInfo.name}, We’ve sent an OTP to your registered
-                  Email Address Which is <strong>{userInfo.email}</strong>
+                  Hey, <strong>{userInfo.name}</strong>, We’ve sent an OTP to
+                  your registered Email Address Which is{" "}
+                  <strong>{userInfo.email}</strong>
                   <img src={Edit} alt="edit" style={{ marginLeft: "15px" }} />
                 </Typography>
               </>

@@ -35,7 +35,7 @@ const MuiProgress = ({ open, close }) => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={open}
+        open={Boolean(open)}
         onClose={close}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -43,7 +43,10 @@ const MuiProgress = ({ open, close }) => {
           timeout: 500,
         }}
       >
-        <Fade in={open}>
+        <Fade 
+        // in={open}
+        in
+        >
           <Box sx={{ width: "100%" }}>
             <LinearProgress  />
           </Box>

@@ -1,6 +1,6 @@
 import { Container, Divider } from "@material-ui/core";
 import { Box, makeStyles, Paper, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
 import Footer from "./Footer";
 
@@ -141,8 +141,8 @@ const Suggestions = () => {
           {topics.map((data) => {
             const lastOne = topics.length - 1;
             return (
-              <>
-                <li key={data.key} className={classes.buttons}>
+              <Fragment key={data.label}>
+                <li className={classes.buttons}>
                   <OutlineButton  onClick={handleClick} size="small">
                     {data.label} +
                   </OutlineButton>
@@ -154,7 +154,7 @@ const Suggestions = () => {
                     </OutlineButton>
                   </li>
                 )}
-              </>
+              </Fragment>
             );
           })}
         </Paper>

@@ -68,8 +68,8 @@ const Novel = () => {
 
   const headers = {
     Authorization: localStorage.getItem("token"),
-    "Access-Control-Allow-Origin": "*",
-    "content-type": "application/json",
+    // "Access-Control-Allow-Origin": "*",
+    // "content-type": "application/json",
   };
 
   const CreateNovel = (data) => {

@@ -8,7 +8,9 @@ import {
 let initialState = {
   page: "Writing",
   writing: null,
-  todo: "",
+  todo: {
+    edit: false,
+  },
   postId: "",
 };
 

@@ -69,7 +69,7 @@ const Header = () => {
           container
           spacing={2}
           justifyContent="flex-start"
-          alignItems="flex-center"
+          alignItems="center"
         >
           <Grid className={classes.left} item sm={12} md={6}>
             <Paper className={classes.left}>
