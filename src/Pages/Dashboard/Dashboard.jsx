@@ -24,7 +24,6 @@ import { NavLink } from "react-router-dom";
 import { grey } from "@material-ui/core/colors";
 import { BlackButton } from "../../muiComponents/BlackButton";
 import MenuModal from "../../Components/Dashboard/MenuModal";
-import Article from "../../Components/Dashboard/Writing/Article";
 import Novel from "../../Components/Dashboard/Writing/Novel";
 import MediaCast from "../../Components/Dashboard/Writing/MediaCast";
 import EditProfile from "../../Components/Dashboard/ProfileSettings/EditProfile";
@@ -33,6 +32,7 @@ import DashboardTable from "../../Components/Dashboard/DashboardTable.jsx";
 import NavLoginPreference from "../../Components/Shared/NavLoginPreference";
 import { setPage, setWriting } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
+import WritePost from "../../Components/Dashboard/Writing/WritePost";
 
 const drawerWidth = 250;
 
@@ -326,7 +326,10 @@ const Dashboard = (props) => {
               page === "Writing" && (
                 <Container maxWidth="md">
                   <Typography className={classes.title}>
-                    Write Your {writing === "Short Story" ? "Novel" : writing}
+                    Write Your{" "}
+                    {writing === "story"
+                      ? "Novel"
+                      : writing.charAt(0).toUpperCase() + writing.slice(1)}
                   </Typography>
                 </Container>
               )
@@ -354,18 +357,18 @@ const Dashboard = (props) => {
         )}
 
         {/* Article Writing */}
-        {((page === "Writing" && writing === "Article") ||
-          (page === "Writing" && writing === "Poetry") ||
-          (page === "Writing" && writing === "Reviews")) && (
-          <Article type={writing} />
+        {((page === "Writing" && writing === "article") ||
+          (page === "Writing" && writing === "poetry") ||
+          (page === "Writing" && writing === "review")) && (
+          <WritePost type={writing} />
         )}
 
         {/* Novel Writing */}
-        {page === "Writing" && writing === "Short Story" && <Novel />}
+        {page === "Writing" && writing === "story" && <Novel />}
 
         {/* Podcast || Videocast Writing */}
-        {((page === "Writing" && writing === "Podcast") ||
-          (page === "Writing" && writing === "Videocast")) && (
+        {((page === "Writing" && writing === "podcast") ||
+          (page === "Writing" && writing === "videocast")) && (
           <MediaCast type={writing} />
         )}
         {/* Reading Section */}

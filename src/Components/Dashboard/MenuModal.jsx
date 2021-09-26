@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     maxWidth: "750px",
     margin: "0 auto",
-    padding: "20px"
+    padding: "20px",
   },
   paper: {
     border: `1px solid rgba(196, 196, 196, 0.5)`,
@@ -54,31 +54,37 @@ const MenuModal = ({ open, handleClose, setWrite }) => {
     {
       id: 1,
       title: "Article",
+      write: "article",
       icon: ArticleIcon,
     },
     {
       id: 2,
       title: "Short Story",
+      write: "story",
       icon: ShortStoryIcon,
     },
     {
       id: 3,
       title: "Podcast",
+      write: "podcast",
       icon: PodcastIcon,
     },
     {
       id: 4,
       title: "Poetry",
+      write: "poetry",
       icon: PoetryIcon,
     },
     {
       id: 5,
       title: "Reviews",
+      write: "review",
       icon: ReviewIcon,
     },
     {
       id: 6,
       title: "Videocast",
+      write: "videocast",
       icon: VideocastIcon,
     },
   ];
@@ -111,7 +117,7 @@ const MenuModal = ({ open, handleClose, setWrite }) => {
               {menuList.map((obj) => (
                 <Grid key={obj.id} item xs={4}>
                   <Paper
-                    onClick={() => handleRender(obj.title)}
+                    onClick={() => handleRender(obj.write)}
                     className={classes.paper}
                   >
                     <div className={classes.iconHolder}>

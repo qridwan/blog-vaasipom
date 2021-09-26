@@ -99,13 +99,13 @@ const useStyles = makeStyles((theme) => ({
 const SubNavigation = () => {
   const classes = useStyles();
   const [lookingFor] = useState([
-    { key: 6, label: "All" },
-    { key: 0, label: "Podcast", count: 323 },
-    { key: 4, label: "Videocast", count: 553 },
-    { key: 1, label: "Short Stories", count: 23 },
-    { key: 2, label: "Articles", count: 131 },
-    { key: 3, label: "Poetries", count: 432 },
-    { key: 5, label: "Reviews", count: 565 },
+    { key: 6, label: "All" , page: 'all'},
+    { key: 0, label: "Podcast", count: 323 , page: 'podcast'},
+    { key: 4, label: "Videocast", count: 553, page: 'videocast' },
+    { key: 1, label: "Short Stories", count: 23 , page: 'story'},
+    { key: 2, label: "Articles", count: 131, page: 'article'},
+    { key: 3, label: "Poetries", count: 432, page: 'poetry'},
+    { key: 5, label: "Reviews", count: 565, page: 'review'},
   ]);
   let { path } = useRouteMatch();
   console.log(
@@ -119,12 +119,13 @@ const SubNavigation = () => {
           <Toolbar className={classes.toolArea}>
             <div className={classes.leftItems}>
               {lookingFor.map((data) => {
-                let page = "/" + data.label.toLowerCase();
+                // let page = "/" + data.label.toLowerCase();
+                let page = "/" + data.page;
                 if (page === "/all") {
                   page = "/";
                 }
                 return (
-                  <NavLink to={page} key={data.label}>
+                  <NavLink to={page} key={data.page}>
                     <Typography
                       className={
                         path === page ? classes.darkTitle : classes.title

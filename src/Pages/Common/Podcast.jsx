@@ -9,6 +9,7 @@ import Navigation from "./Navigation";
 import TopicSlider from "../../Components/Shared/TopicSlider";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl.config";
+import Feed from "../../Components/Shared/Feed";
 
 const podcastStyles = makeStyles({
   right: {
@@ -21,15 +22,15 @@ const podcastStyles = makeStyles({
   },
 });
 
-
-
 const Podcast = () => {
   const classes = podcastStyles();
   const [allPost, setAllPost] = useState([]);
   const [isAudioPlay, setIsAudioPlay] = useState(false);
   const getPost = () => {
     axios
-      .get(BaseUrl + `/auth/home/posts?categoryList=podcast&page=1&allPost=true`)
+      .get(
+        BaseUrl + `/auth/home/posts?categoryList=podcast&page=1&allPost=true`
+      )
       .then((response) => {
         console.log("response:", response);
         setAllPost(response.data);
@@ -41,7 +42,7 @@ const Podcast = () => {
 
   useEffect(() => {
     document.title = "Blog | Podcast";
-    getPost()
+    getPost();
   }, []);
   return (
     <Container maxWidth="lg">
@@ -54,10 +55,11 @@ const Podcast = () => {
         spacing={3}
         justifyContent="flex-start"
         alignItems="flex-start"
-        style={{marginTop: "-20px"}}
+        style={{ marginTop: "-20px" }}
       >
         <Grid item sm={12} md={8} className={classes.left}>
-          <PodcastFeed data={allPost} setIsAudioPlay={setIsAudioPlay} />
+          {/* <PodcastFeed data={allPost} setIsAudioPlay={setIsAudioPlay} /> */}
+          <Feed data={allPost} type="podcast" />
         </Grid>
         <Grid item sm={12} md={4} className={classes.right}>
           <Suggestions />

@@ -5,103 +5,25 @@ import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
 import Suggestions from "../../Components/Shared/Suggestions.jsx";
 import { Container, Grid, Paper } from "@material-ui/core";
 import { landingPageStyles } from "../../Styles/muiStyles.js";
-// import FeedImg from "../../Assets/img/feedImg.png";
-import FeedImg2 from "../../Assets/img/demo-post-1.jpg";
-import FeedImg3 from "../../Assets/img/demo-post-2.jpg";
-import FeedImg4 from "../../Assets/img/demo-post-3.jpg";
 import Navigation from "./Navigation.jsx";
 import { connect } from "react-redux";
 import { hideHeader } from "../../redux/actions/headerAction.js";
-import { BaseUrl } from "../../BaseUrl.config.js";
-import axios from "axios";
 import { PaginationBlog } from "../../muiComponents/PaginationBlog.jsx";
 import { useRouteMatch } from "react-router-dom";
 import MuiProgress from "../../muiComponents/MuiProgress.jsx";
+// import { fetchPost } from "../../redux/actions/landingPage.Action.js";
+import axios from "axios";
+import { BaseUrl } from "../../BaseUrl.config.js";
 
-export const allData = [
-  {
-    id: 1,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet, adipiscing elit. Dolor sit amet, adipiscing",
-    img: FeedImg2,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4 Min",
-    topic: "Videocast",
-  },
-  {
-    id: 12,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet, adipiscing elit. Dolor sit amet, adipiscing",
-    img: FeedImg4,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4 Min",
-    topic: "Podcast",
-  },
-  {
-    id: 13,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet, adipiscing elit. Dolor sit amet, adipiscing",
-    img: FeedImg3,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4 Min",
-    topic: "Novel",
-  },
-  {
-    id: 3,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg4,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "4 Min",
-    topic: "Podcast",
-  },
-  {
-    id: 5,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg2,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "3 Min",
-    topic: "Article",
-  },
-  {
-    id: 6,
-    author: "Aadavan",
-    title: "The art of writing Create a blog post subtitle",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor sit amet,adipiscing elit. Dolor sit amet,adipiscing",
-    img: FeedImg3,
-    likes: 529,
-    views: 768,
-    date: "10th August",
-    readTime: "6 Min",
-    topic: "Videocast",
-  },
-];
-
-const LandingPage = ({ headerVisible, hideHeader }) => {
-console.log("🚀 ~ LandingPage ~ headerVisible", headerVisible)
+const LandingPage = (props) => {
+  const { headerVisible, hideHeader, LandingPageState } = props;
+  console.log("🚀 ~ LandingPage ~ LandingPageState", LandingPageState)
+  // const { posts } = LandingPageState;
+  console.log("🚀 ~ LandingPage ~ Props", props);
   const classes = landingPageStyles();
-  // const [token, setToken] = useState(false);
   const [page, setPage] = useState(1);
   const [allPost, setAllPost] = useState([]);
   const [categoryItem, setCategoryItem] = useState("");
-  const [subUrl, setSubUrl] = useState();
-
   // LOADER
   const [isLoading, setIsLoading] = useState(false);
   const handleOpen = () => {
@@ -110,16 +32,35 @@ console.log("🚀 ~ LandingPage ~ headerVisible", headerVisible)
   const handleClose = () => {
     setIsLoading(false);
   };
-  // end loader func
 
   const { path } = useRouteMatch();
+
+  useEffect(() => {
+    document.title = "Blog | Home";
+    path === "/poetry" && setCategoryItem("poetry");
+    path === "/story" && setCategoryItem("story");
+    path === "/article" && setCategoryItem("article");
+    path === "/review" && setCategoryItem("review");
+    path === "/" &&
+      setCategoryItem("story,article,poetry,review,podcast,videocast");
+      getPost()
+    return () => hideHeader();
+  }, [categoryItem]);
+
+  // useEffect(() => {
+  //    getPost();
+  //   posts.length && setIsLoading(false);
+  // }, [posts.length]);
+
   const getPost = () => {
-    handleOpen();
-    // console.log(subUrl);
+    setIsLoading(true);
+    // fetchPost(categoryItem, page);
     axios
-      .get(BaseUrl + subUrl)
+      .get(
+        BaseUrl +
+          `/auth/home/posts?categoryList=${categoryItem}&page=${page}&allPost=true`
+      )
       .then((response) => {
-        console.log("response:", response);
         setAllPost(response.data);
         handleClose();
       })
@@ -129,26 +70,11 @@ console.log("🚀 ~ LandingPage ~ headerVisible", headerVisible)
       });
   };
 
-  useEffect(() => {
-    document.title = "Blog | Home";
-    // localStorage.token ? setToken(true) : setToken(false);
-    path === "/poetries" && setCategoryItem("poetry");
-    path === "/short stories" && setCategoryItem("story");
-    path === "/articles" && setCategoryItem("article");
-    path === "/"
-      ? setSubUrl(
-          `/auth/home/posts?categoryList=story,article,poetry,review,podcast,videocast&page=${page}&allPost=true`
-        )
-      : setSubUrl(`/auth/welcome/posts/${categoryItem}`);
-    getPost();
-    return () => hideHeader();
-  }, [page, subUrl]);
-
-  console.log( { allPost });
+  console.log({ allPost });
   return (
     <Container maxWidth="lg">
       <Navigation />
-      {(!localStorage.token && headerVisible) && <Header />}
+      {!localStorage.token && headerVisible && <Header />}
       <SubNavigation />
       <Container>
         <Grid
@@ -163,8 +89,13 @@ console.log("🚀 ~ LandingPage ~ headerVisible", headerVisible)
               {isLoading && (
                 <MuiProgress open={handleOpen} close={handleClose} />
               )}
+
               <Feed data={allPost} type="allFeed" />
-              <PaginationBlog page={page} setPage={setPage} />
+              {!isLoading && (
+                <>
+                  <PaginationBlog page={page} setPage={setPage} />
+                </>
+              )}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4} className={classes.right}>
@@ -181,5 +112,6 @@ console.log("🚀 ~ LandingPage ~ headerVisible", headerVisible)
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   hideHeader: hideHeader,
+  // fetchPost: fetchPost,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

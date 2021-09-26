@@ -28,7 +28,7 @@ export const tags = [
 
 export const interests = ["Novel", "Poet", "Fiction", "Economy"];
 
-const Article = ({
+const WritePost = ({
   type,
   dashboardState,
   setPostId,
@@ -36,17 +36,18 @@ const Article = ({
   setWriting,
   setTodo,
 }) => {
-  // console.log("🚀 ~ Article ~ dashboardState", dashboardState);
   const { todo } = dashboardState;
+  console.log("🚀 ~ todo", todo);
   const [suggTags, setSuggTags] = useState([]);
   const [interest, setInterest] = useState([]);
   const [editorValue, setEditorValue] = useState();
   const [loading, setLoading] = useState(false);
   const ref = useRef(null);
   const [image, setImage] = useState(``);
+
   const cleanReduxState = () => {
     setTodo({
-      edit: false
+      edit: false,
     });
     setPostId("");
     setEditorValue("");
@@ -63,17 +64,20 @@ const Article = ({
   });
 
   useEffect(() => {
-    document.title = `Blog | Writing | ${type}`;
+    document.title = `Blog | Writing | ${type.toUpperCase()}`;
     setIsEdit(todo.edit);
-    todo.edit && setEditorValue(todo.article.content);
+    todo.edit && setEditorValue(todo.content);
     // todo && setInterest([todo.article.topic]);
-    todo.edit && setImage(todo.article.mainImage);
+    todo.edit && setImage(todo.mainImage);
+    todo.edit && setSuggTags(todo.tags);
     todo.edit &&
       setAllData({
         ...allData,
-        articleId: dashboardState.postId,
-        title: todo.article.title,
-        mainImage: todo.article.mainImage,
+        [`${type}Id`]: todo[`${type}Id`],
+        title: todo.title,
+        subTitle: todo.subTitle,
+        mainImage: todo.mainImage,
+        tags: todo.tags,
       });
     setLoading(true);
     return () => cleanReduxState();
@@ -97,7 +101,7 @@ const Article = ({
     articleContent();
     const content = ref.current.getContent();
     let selectedTags = [];
-
+    // console.log({ suggTags });
     suggTags.forEach((tag) => selectedTags.push(tag.label));
     // console.log({ data, tags, interest, content });
     const postData = {
@@ -108,8 +112,10 @@ const Article = ({
     };
     const editData = {
       ...allData,
+      tags: selectedTags.join(),
       content: content,
     };
+    console.log({ editData, postData });
     param === "publish" && CreateArticle(isEdit ? editData : postData);
     param === "draft" && SaveAsDraft(postData);
   };
@@ -122,7 +128,7 @@ const Article = ({
 
   const CreateArticle = (data) => {
     console.log("-data-", data);
-    todo.todo
+    todo.edit
       ? axios
           .put(BaseUrl + `/${category}`, data, {
             headers, //headers Authorization: localStorage.getItem("token"),
@@ -172,7 +178,7 @@ const Article = ({
           <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">Title</CustomLabel>
             <InputArea
-              defaultValue={isEdit ? todo.article.title : ""}
+              defaultValue={isEdit ? todo.title : ""}
               type="text"
               name="title"
               onChange={handleChange}
@@ -181,7 +187,7 @@ const Article = ({
           <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">Sub-Title</CustomLabel>
             <InputArea
-              defaultValue={isEdit ? todo.article.subTitle : ""}
+              defaultValue={isEdit ? todo.subTitle : ""}
               type="text"
               name="subTitle"
               onChange={handleChange}
@@ -204,13 +210,13 @@ const Article = ({
                     setSelectItems={setInterest}
                   />
                 </Grid>
-                <Grid item xs={12} sm={12}>
-                  <CustomLabel htmlFor="">Add Tags</CustomLabel>
-
-                  <AddTags setTags={setSuggTags} defaultTags={tags} />
-                </Grid>
               </>
             )}
+            <Grid item xs={12} sm={12}>
+              <CustomLabel htmlFor="">Add Tags</CustomLabel>
+
+              <AddTags setTags={setSuggTags} defaultTags={suggTags} />
+            </Grid>
             <Grid item xs={12} sm={12}>
               <Box
                 display="flex"
@@ -259,4 +265,4 @@ const mapDispatchToProps = {
   setPage: setPage,
   setWriting: setWriting,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default connect(mapStateToProps, mapDispatchToProps)(WritePost);

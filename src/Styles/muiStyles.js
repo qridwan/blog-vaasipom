@@ -73,7 +73,7 @@ export const feedCardStyles = makeStyles((theme) => {
     media: {
       marginTop: "5%",
       width: "100%",
-      height: "85%",
+      height: "145px",
       backgroundSize: "130% 110%",
       backgroundPosition: "cover",
       borderRadius: "2px",
@@ -84,8 +84,10 @@ export const feedCardStyles = makeStyles((theme) => {
     title: {
       fontWeight: "bold",
       fontSize: "22px",
-      lineHeight: "140%",
+      lineHeight: "135%",
+      height: "58px",
       paddingBottom: "5px",
+
       color: "#121212",
       "@media (max-width:800px)": {
         fontSize: "18px",

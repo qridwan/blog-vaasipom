@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Paper from "@material-ui/core/Paper";
 import { InputArea } from "./InputArea";
 import { OutlineButton } from "./OutlineButton";
-import { Box, InputAdornment } from "@material-ui/core";
+import { InputAdornment } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,11 +34,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "transparent",
   },
 }));
+
 const AddTags = ({ setTags }) => {
   const classes = useStyles();
   const [chipData, setChipData] = useState([]);
   const [newTag, setNewTag] = useState([]);
-  const [allTag, setAllTag] = useState([]);
+  // const [allTag, setAllTag] = useState([]);
   const refTagInput = useRef(null);
 
   const handleDelete = (chipToDelete) => () => {
@@ -59,28 +60,24 @@ const AddTags = ({ setTags }) => {
 
   useEffect(() => {
     setTags(chipData);
-    // setTags([]);
-    // (chipData.map((obj) => setTags([...tags, obj.label])))
-    // setTags(allTag);
   }, [chipData]);
 
-  console.log({ chipData });
+  // console.log({ chipData });
   return (
     <Paper component="ul" className={classes.root}>
       {chipData.map((data, index) => {
         return (
-          <>
+          <Fragment key={index}>
             {data && (
-              <li key={index}>
+              <li>
                 <Chip
-                  //   icon={icon}
                   label={data.label}
                   onDelete={handleDelete(data)}
                   className={classes.chip}
                 />
               </li>
             )}
-          </>
+          </Fragment>
         );
       })}
 

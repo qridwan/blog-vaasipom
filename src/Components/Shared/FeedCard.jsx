@@ -30,11 +30,23 @@ import {
   setWriting,
 } from "../../redux/actions/dashboardAction";
 import { handleDelete } from "../../Function/Delete.api";
+import { deletePost } from "../../redux/actions/landingPage.Action";
 
-const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
+const FeedCard = ({
+  feed,
+  type,
+  setPage,
+  setWriting,
+  setPostId,
+  setTodo,
+  deletePost,
+}) => {
+  console.log("🚀 ~ FeedCard ~ feed", { feed, type });
   const classes = feedCardStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isUser, setIsUser] = useState(false);
+  const [feedId, setFeedId] = useState(``);
+  const [postContent, setPostContent] = useState({});
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,61 +55,81 @@ const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  const { article, author, category } = feed;
+  const { author, category } = feed;
+
   let { url } = useRouteMatch();
-  if (url === "/") {
+  if (
+    url === "/" ||
+    url === "/article" ||
+    url === "/poetry" ||
+    url === "/story" ||
+    url === "/review"
+  ) {
     url = "/feed";
   }
   const userEmail = localStorage.getItem("username");
 
   useEffect(() => {
+    setPostContent(feed[feed.category]);
     feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
   }, [feed]);
 
+  useEffect(() => {
+    setFeedId(postContent[`${category}Id`]);
+  }, [postContent]);
+  // const { createdDate, title, subTitle, readTime, reads, likes, mainImage } =postContent;
   //formating date
-  const createdDate = article?.createdDate;
-  const createdDateFormate = dateFormat(createdDate, "dS mmmm");
+  // const createdDate = article?.createdDate;
+  const createdDateFormate = dateFormat(postContent?.createdDate, "dS mmmm");
   //formate end
 
   //handeling edit route
   const handleEdit = () => {
     setPage(`Writing`);
-    setWriting(`Article`);
-    setPostId(article?.articleId);
+    setWriting(feed.category);
+    setPostId(feedId);
     setTodo({
-      todo: true,
+      // todo: true,
       edit: true,
-      ...feed,
+      ...postContent,
     });
   };
-
+  // console.log({ postContent });
+  // const { content } = postContent;
+  // const mainText = parse(content ? content : "");
+  // console.log("🚀 ~ FeedCard ~ content", mainText);
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={article?.mainImage ? 8 : 12}>
+        <Grid item xs={12} sm={postContent?.mainImage ? 8 : 12}>
           <CardActions className={classes.authorBtn}>
             <AuthorButton
               authorName={author?.name}
               authorImg={author?.profileImage}
             />
           </CardActions>
-          <NavLink to={`${url}/${category}/${article?.articleId}`}>
+          <NavLink to={`${url}/${category}/${feedId}`}>
             <CardActionArea className={classes.mainArea}>
               {/* title */}
               <Typography className={classes.title}>
-                {article?.title}
+                {postContent?.title?.length > 70
+                  ? postContent?.title?.slice(0, 70) + "..."
+                  : postContent?.title}
               </Typography>
               {/* description */}
-              {article?.subTitle && (
+              {postContent?.subTitle && (
                 <Typography className={classes.desc}>
-                  {parse(article?.subTitle)}
+                  {postContent?.subTitle?.length > 90
+                    ? postContent?.subTitle?.slice(0, 90) + "..."
+                    : postContent?.subTitle}
+                  {/* {mainText} */}
                 </Typography>
               )}
             </CardActionArea>
           </NavLink>
           <PostFooterInfo
             date={createdDateFormate}
-            readTime={article?.readTime}
+            readTime={postContent?.readTime}
             topic={category}
           />
           <Box
@@ -108,10 +140,10 @@ const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
             py={0}
           >
             <PostCountInfo
-              likes={article?.likes}
-              views={article?.reads}
+              likes={postContent?.likes}
+              views={postContent?.reads}
               category={category}
-              id={article?.articleId}
+              id={feedId}
             />
             <Box
               display="flex"
@@ -157,8 +189,12 @@ const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
                       <Button
                         style={{ color: "#FF0000" }}
                         className={classes.button}
-                        onClick={() =>
-                          handleDelete(category, article?.articleId)
+                        onClick={
+                          () => {
+                            handleClose();
+                            deletePost(category, feedId);
+                          }
+                          // handleDelete(category, feedId)
                         }
                       >
                         Delete
@@ -172,11 +208,11 @@ const FeedCard = ({ feed, type, setPage, setWriting, setPostId, setTodo }) => {
         </Grid>
 
         {/* image */}
-        {article?.mainImage && (
+        {postContent?.mainImage && (
           <Grid item xs={12} sm={4}>
             <CardMedia
               className={classes.media}
-              image={article?.mainImage}
+              image={postContent?.mainImage}
               title="Feed Cover Photo"
             />
           </Grid>
@@ -193,5 +229,6 @@ const mapDispatchToProps = {
   setWriting: setWriting,
   setPostId: setPostId,
   setTodo: setTodo,
+  deletePost: deletePost,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FeedCard);

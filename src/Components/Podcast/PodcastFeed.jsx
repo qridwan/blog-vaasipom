@@ -63,8 +63,8 @@ const PodcastFeed = ({ setIsAudioPlay, data }) => {
       <Typography className={classes.title}>Popular Trending</Typography>
       <PodcastSlider setIsAudioPlay={setIsAudioPlay} />
       <Box my={10}>
-        {data.map((feed) => (
-          <FeedCard key={feed} feed={feed} podcast={true} />
+        {data.map((feed, index) => (
+          <FeedCard key={index} feed={feed} type="podcast" />
         ))}
       </Box>
       <Typography

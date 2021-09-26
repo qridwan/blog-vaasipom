@@ -1,6 +1,5 @@
 import {makeStyles } from "@material-ui/core";
 import React from "react";
-import { PaginationBlog } from "../../muiComponents/PaginationBlog";
 import FeedCard from "./FeedCard";
 
 const feedStyles = makeStyles({
@@ -11,6 +10,7 @@ const feedStyles = makeStyles({
 });
 const Feed = ({ data, type }) => {
   const classes = feedStyles();
+
   return (
     <div className={classes.root}>
       {data.map((feed, index) => (
