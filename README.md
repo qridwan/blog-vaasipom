@@ -21,7 +21,7 @@ Project is created with:
 
 ```
     $ git clone https://github.com/Bipolar-Factory/blog-website.git
-    $ cd ../blog-website
+    $ cd ./blog-website
     $ npm install
     $ npm start
 ```

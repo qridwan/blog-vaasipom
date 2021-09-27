@@ -41,7 +41,7 @@ const FeedCard = ({
   setTodo,
   deletePost,
 }) => {
-  console.log("🚀 ~ FeedCard ~ feed", { feed, type });
+  // console.log("🚀 ~ FeedCard ~ feed", { feed, type });
   const classes = feedCardStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isUser, setIsUser] = useState(false);
@@ -106,6 +106,7 @@ const FeedCard = ({
             <AuthorButton
               authorName={author?.name}
               authorImg={author?.profileImage}
+              authorEmail={author?.email}
             />
           </CardActions>
           <NavLink to={`${url}/${category}/${feedId}`}>

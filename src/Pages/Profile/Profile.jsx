@@ -22,36 +22,50 @@ import { PaginationBlog } from "../../muiComponents/PaginationBlog";
 import { profileStyles } from "../../Styles/muiStyles";
 import { connect } from "react-redux";
 import { setPage } from "../../redux/actions/dashboardAction";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const Profile = ({ type, setPage, dashboardState }) => {
   console.log("🚀 ~ Profile ~ dashboardState", dashboardState);
   const classes = profileStyles();
   const [userInfo, setUserInfo] = useState({});
   const [writings, setWritings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { path } = useRouteMatch();
   const [pageNo, setPageNo] = useState(1);
-  console.log("🚀 ~ Profile ~ path", path);
-  
-  
+  const { user } = useParams();
+  console.log("🚀 ~ Profile ~ user", user);
   const headers = {
     Authorization: localStorage.getItem("token"),
     // "Access-Control-Allow-Origin": "*",
   };
+
   const getMyProfileInfo = () => {
     axios
       .get(BaseUrl + `/myprofile`, { headers })
       .then((response) => {
         console.log(response.data);
         setUserInfo(response.data);
+        setLoading(false);
       })
       .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
+  };
+
+  const getUserProfile = () => {
+    console.log("userURLB", BaseUrl + `/profile/user?user=${user}`);
+    axios
+      .get(BaseUrl + `/profile/user?user=${user}`, { headers })
+      .then((response) => {
+        console.log(response.data);
+        setUserInfo(response.data);
+        setLoading(false);
+      })
+      .catch((err) => console.log({ err }, BaseUrl + `/profile`));
   };
   // author/writings?category=article&page=1
   const getMyWritings = (paginate) => {
     axios
       .get(BaseUrl + `/author/writings?category=article&page=${paginate}`, {
-        headers
+        headers,
       })
       .then((response) => {
         console.log(response.data);
@@ -63,11 +77,13 @@ const Profile = ({ type, setPage, dashboardState }) => {
     if (path === "/myprofile") {
       getMyProfileInfo();
       getMyWritings(pageNo);
+    } else {
+      getUserProfile();
     }
   }, [pageNo]);
   const {
     // country,
-    email,
+    // email,
     firstName,
     followersCount,
     // phone,
@@ -87,21 +103,27 @@ const Profile = ({ type, setPage, dashboardState }) => {
       {/* <SubNavigation /> */}
       <Grid container spacing={3}>
         <Grid item xs={12} sm={3}>
-          {email && (
+          {!loading && (
             <Box textAlign="center" mt={5} className={classes.profileCard}>
               <img src={profileImgLink} alt="dp" className={classes.profile} />
               <Typography className={classes.name}>
-                {firstName ? firstName?.charAt(0).toUpperCase() + firstName?.slice(1) : "Set Your Name"}
+                {firstName
+                  ? firstName?.charAt(0).toUpperCase() + firstName?.slice(1)
+                  : "Set Your Name"}
               </Typography>
-              <Typography className={classes.title}>{profileTitle ? profileTitle : "Title"}</Typography>
+              <Typography className={classes.title}>
+                {profileTitle ? profileTitle : "Title"}
+              </Typography>
               <Typography>
                 <span className={classes.follower}>{followersCount} </span>{" "}
                 Followers
               </Typography>
 
-              <OutlineButton size="small" onClick={handleEdit}>
-                Edit
-              </OutlineButton>
+              {path === "/myprofile" && (
+                <OutlineButton size="small" onClick={handleEdit}>
+                  Edit
+                </OutlineButton>
+              )}
               <Box my={3}>
                 <IconButton>
                   <img src={linkedIn} alt="li" />

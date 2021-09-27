@@ -12,7 +12,7 @@ import Profile from "./Pages/Profile/Profile";
 export const Routes = [
   { path: "/podcast", component: Podcast, exact: true },
   { path: "/login", component: Login, exact: true },
-  { path: "/profile", component: Profile, exact: true },
+  { path: "/profile/:user", component: Profile},
   { path: "/myprofile", component: Profile, exact: true },
   { path: "/forgotPassword", component: ForgotPassword, exact: true },
   { path: "/podcast/:title", component: FullFeed },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Feed from "../../Components/Shared/Feed.jsx";
 import Header from "../../Components/LandingPage/Header.jsx";
 import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
@@ -8,23 +8,16 @@ import { landingPageStyles } from "../../Styles/muiStyles.js";
 import Navigation from "./Navigation.jsx";
 import { connect } from "react-redux";
 import { hideHeader } from "../../redux/actions/headerAction.js";
-import { PaginationBlog } from "../../muiComponents/PaginationBlog.jsx";
 import { useRouteMatch } from "react-router-dom";
 import MuiProgress from "../../muiComponents/MuiProgress.jsx";
-// import { fetchPost } from "../../redux/actions/landingPage.Action.js";
-import axios from "axios";
-import { BaseUrl } from "../../BaseUrl.config.js";
+import TopicSlider from "../../Components/Shared/TopicSlider.jsx";
+import GetPosts from "../../Function/GetPosts.js";
 
 const LandingPage = (props) => {
-  const { headerVisible, hideHeader, LandingPageState } = props;
-  console.log("🚀 ~ LandingPage ~ LandingPageState", LandingPageState)
-  // const { posts } = LandingPageState;
-  console.log("🚀 ~ LandingPage ~ Props", props);
+  const { headerVisible, hideHeader } = props;
   const classes = landingPageStyles();
   const [page, setPage] = useState(1);
-  const [allPost, setAllPost] = useState([]);
   const [categoryItem, setCategoryItem] = useState("");
-  // LOADER
   const [isLoading, setIsLoading] = useState(false);
   const handleOpen = () => {
     setIsLoading(true);
@@ -32,9 +25,7 @@ const LandingPage = (props) => {
   const handleClose = () => {
     setIsLoading(false);
   };
-
   const { path } = useRouteMatch();
-
   useEffect(() => {
     document.title = "Blog | Home";
     path === "/poetry" && setCategoryItem("poetry");
@@ -43,38 +34,37 @@ const LandingPage = (props) => {
     path === "/review" && setCategoryItem("review");
     path === "/" &&
       setCategoryItem("story,article,poetry,review,podcast,videocast");
-      getPost()
+    // getPost();
     return () => hideHeader();
-  }, [categoryItem]);
+  }, [path, page]);
 
-  // useEffect(() => {
-  //    getPost();
-  //   posts.length && setIsLoading(false);
-  // }, [posts.length]);
-
-  const getPost = () => {
-    setIsLoading(true);
-    // fetchPost(categoryItem, page);
-    axios
-      .get(
-        BaseUrl +
-          `/auth/home/posts?categoryList=${categoryItem}&page=${page}&allPost=true`
-      )
-      .then((response) => {
-        setAllPost(response.data);
-        handleClose();
-      })
-      .catch((error) => {
-        console.log("error", error);
-        handleClose();
+  const { posts, hasMore, loading, error } = GetPosts(categoryItem, page);
+  const observer = useRef();
+  const lastFeedRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
       });
-  };
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
 
-  console.log({ allPost });
+  console.log({
+    posts,
+    hasMore,
+    loading,
+    error,
+  });
   return (
     <Container maxWidth="lg">
       <Navigation />
       {!localStorage.token && headerVisible && <Header />}
+      {path !== "/" && <TopicSlider />}
       <SubNavigation />
       <Container>
         <Grid
@@ -89,12 +79,11 @@ const LandingPage = (props) => {
               {isLoading && (
                 <MuiProgress open={handleOpen} close={handleClose} />
               )}
-
-              <Feed data={allPost} type="allFeed" />
-              {!isLoading && (
-                <>
-                  <PaginationBlog page={page} setPage={setPage} />
-                </>
+              <Feed data={posts} type="allFeed" loading={loading} />
+              {!loading && (
+                <p style={{ margin: "0 auto" }} ref={lastFeedRef}>
+                  . . .
+                </p>
               )}
             </Paper>
           </Grid>
@@ -112,6 +101,5 @@ const LandingPage = (props) => {
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   hideHeader: hideHeader,
-  // fetchPost: fetchPost,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

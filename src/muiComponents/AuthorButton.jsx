@@ -33,10 +33,10 @@ const authorButtonStyles = makeStyles((theme) => {
     },
   };
 });
-const AuthorButton = ({ authorName, authorImg }) => {
+const AuthorButton = ({ authorName, authorImg, authorEmail }) => {
   const classes = authorButtonStyles();
   return (
-    <NavLink to="/profile">
+    <NavLink to={`/profile/${authorEmail}`}>
       <MyButton>
         <Avatar alt="Author" src={authorImg} className={classes.btnAvatar} />
         {authorName}

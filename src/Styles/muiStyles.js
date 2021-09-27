@@ -128,7 +128,7 @@ export const fullFeedStyles = makeStyles({
   },
   media: {
     width: "100%",
-    height: "400px",
+    height: "450px",
     backgroundSize: "100% 100%",
     backgroundPosition: "cover",
     borderRadius: "20px",
