@@ -2,7 +2,7 @@ import { Avatar, Box, Button, IconButton, Popover } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { NavigationStyles } from "../../Styles/muiStyles";
-import User from "../../Assets/img/user.png";
+// import User from "../../Assets/img/user.png";
 import NotifyIcon from "../../Assets/icons/notification.png";
 import WriteIcon from "../../Assets/icons/writing.png";
 import { BaseUrl } from "../../BaseUrl.config";
@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { setPage, setWriting } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 // import { headers } from "../../header.config";
+import imageToBase64 from "image-to-base64/browser";
 
 const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
   const classes = NavigationStyles();
@@ -24,18 +25,68 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type }) => {
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  const [userImg, setUserImg] = useState('');
+  const [userImg, setUserImg] = useState("");
+
+  // const toDataURL = (url) =>
+  //   url &&
+  //   fetch(url)
+  //     .then((response) => response.blob())
+  //     .then((blob) =>
+  //       new Promise((resolve, reject) => {
+  //         const reader = new FileReader();
+  //         reader.onloadend = () => resolve(reader.result);
+  //         reader.onerror = reject;
+  //         reader.readAsDataURL(blob);
+  //       }).then((dataUrl) => {
+  //         console.log("RESULT:", dataUrl);
+  //         // localStorage.setItem("useravatar", response.data.profileImgLink);
+  //         localStorage.setItem("useravatar", dataUrl);
+  //       })
+  //     );
 
   const getMyProfileInfo = () => {
     const headers = {
       Authorization: localStorage.getItem("token"),
+      "Access-Control-Allow-Origin": "*",
+      "content-type": "application/json",
     };
+
     !userImg &&
       axios
         .get(BaseUrl + `/myprofile`, { headers })
         .then((response) => {
+          console.log("Image link", response.data.profileImgLink);
           setUserImg(response.data.profileImgLink);
           localStorage.setItem("useravatar", response.data.profileImgLink);
+          // imageToBase64(`${response.data.profileImgLink}`, { mode: "no-cors" })
+          //   .then((response) => {
+          //     console.log(response);
+          //     setUserImg(response);
+          //     localStorage.setItem("useravatar", response);
+          //   })
+          //   .catch((error) => {
+          //     console.log(error); // Logs an error if there was one
+          //   });
+          // fetch(response.data.profileImgLink, {
+          //   mode: 'no-cors', headers })
+          //   .then((res) => res.blob())
+          //   .then((blob) =>
+          //     new Promise((resolve, reject) => {
+          //       const reader = new FileReader();
+          //       reader.onloadend = () => resolve(reader.result);
+          //       reader.onerror = reject;
+          //       reader.readAsDataURL(blob);
+          //     }).then((dataUrl) => {
+          //       console.log("RESULT:", dataUrl);
+          //       // localStorage.setItem("useravatar", response.data.profileImgLink);
+          //       localStorage.setItem("useravatar", dataUrl);
+          //     })
+          //   );
+          //   toDataURL(response.data.profileImgLink).then((dataUrl) => {
+          //     console.log("RESULT:", dataUrl);
+          //     // localStorage.setItem("useravatar", response.data.profileImgLink);
+          //     localStorage.setItem("useravatar", dataUrl);
+          //   });
         })
         .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
   };

@@ -12,7 +12,8 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import TextsmsIcon from "@material-ui/icons/Textsms";
 import Favorite from "@material-ui/icons/Favorite";
 import { grey } from "@material-ui/core/colors";
-import { handleLike } from "../../Function/Like.Api";
+import { BaseUrl } from "../../BaseUrl.config";
+import axios from "axios";
 
 const postCountStyles = makeStyles(() => {
   return {
@@ -36,9 +37,40 @@ const postCountStyles = makeStyles(() => {
   };
 });
 
-const PostCountInfo = ({ views, likes, category, id }) => {
-  const classes = postCountStyles();
+const headers = {
+  Authorization: localStorage.getItem("token"),
+  "Access-Control-Allow-Origin": "*",
+  "Content-Type": "application/json",
+};
 
+const PostCountInfo = ({ views, likes, category, id, liked }) => {
+  const classes = postCountStyles();
+  const handleDislike = () => {
+    axios
+      .delete(BaseUrl + `/${category}/like?postId=${id}`, { headers })
+      .then((response) => {
+        console.log(response, "--liked--");
+        alert(`${category}--disliked--`);
+      })
+      .catch((err) => {
+        console.log({ err });
+        alert(`${err} 
+        ${BaseUrl + `/${category}/like?postId=${id}`}`);
+      });
+  };
+  const handleLike = () => {
+    axios
+      .post(BaseUrl + `/${category}/like?postId=${id}`, {}, { headers })
+      .then((response) => {
+        console.log(response, "--liked--");
+        alert(`${category}--liked--`);
+      })
+      .catch((err) => {
+        console.log({ err });
+        alert(`${err} 
+        ${BaseUrl + `/${category}/like?postId=${id}`}`);
+      });
+  };
   return (
     <Box
       className={classes.mainBox}
@@ -52,9 +84,9 @@ const PostCountInfo = ({ views, likes, category, id }) => {
         <Typography className={classes.text}>{views}</Typography>
       </Box>
       <Box display="flex" alignItems="center" py={0} mr={1}>
-        <FormControlLabel
+        {/* <FormControlLabel
           className={classes.root}
-          onClick={() => handleLike(category, id)}
+          onClick={handleLike}
           control={
             <Checkbox
               style={{ padding: "2px" }}
@@ -63,7 +95,18 @@ const PostCountInfo = ({ views, likes, category, id }) => {
               name="checkedH"
             />
           }
-        />
+        /> */}
+        <IconButton
+          className={classes.root}
+          onClick={!liked ? handleLike : handleDislike}
+          style={{ padding: "2px" }}
+        >
+          {liked ? (
+            <Favorite className={classes.icon} />
+          ) : (
+            <FavoriteBorderOutlinedIcon className={classes.icon} />
+          )}
+        </IconButton>
 
         <Typography className={classes.text}>{likes}</Typography>
       </Box>

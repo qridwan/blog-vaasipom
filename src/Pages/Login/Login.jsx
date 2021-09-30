@@ -37,10 +37,10 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [signInData, setSignInData] = useState({
-    username: "",
-    password: "",
-  });
+  // const [signInData, setSignInData] = useState({
+  //   username: "",
+  //   password: "",
+  // });
   const [isNewUser, setIsNewUser] = useState(true);
   const [createAcc, setCreateAcc] = useState(false);
 
@@ -56,11 +56,10 @@ const Login = () => {
     // formState: { errors },
   } = useForm();
   const handleLocalStorage = (data) => {
-    localStorage.setItem("token", "Bearer " + data.accessToken);
+  localStorage.setItem("token", "Bearer " + data.accessToken);
     localStorage.setItem("username", data.username);
   };
   const onSubmit = (data) => {
-    console.log("🚀 ~ file: Login.jsx ~ line 61 ~ onSubmit ~ data", data);
     let formData = {};
     isNewUser
       ? (formData = {
@@ -94,22 +93,11 @@ const Login = () => {
       axios
         .get(BaseUrl + "/auth/email/otp?email=" + data.email)
         .then((response) => {
-          // setUserInfo({
-          //   name: data.full_name,
-          //   email: data.email,
-          //   password: values.password,
-          //   message: response.data.message,
-          //   verifyOtp: 1,
-          // });
           console.log(response.data);
           alert(`You OTP Sent on ${data.email}`);
         })
         .catch((error) => {
           console.log("error", error);
-          // setUserInfo((data) => ({
-          //   ...data,
-          //   verifyOtp: 0,
-          // }));
         });
 
     isNewUser && setCreateAcc(true);
@@ -117,11 +105,6 @@ const Login = () => {
 
   const submitOtp = (data) => {
     console.log("🚀", data);
-    // setOtp(data.otp);
-    // setUserInfo({
-    //   ...userInfo,
-    //   otp: values.otp,
-    // });
     const signUpForm = {
       ...userInfo,
       otp: values.otp,
@@ -137,22 +120,10 @@ const Login = () => {
           console.log("response:", response);
           alert(`Sign Up Confirmed`);
           setCreateAcc(false);
-          // setRes((data) => ({
-          //   ...data,
-          //   message: response.data.message,
-          //   passwordconfirmation: 0,
-          // }));
         })
         .catch((error) => {
-          // setRes((data) => ({
-          //   ...data,
-          //   message: data.message,
-          //   passwordconfirmation: 0,
-          // }));
           console.log("error", error);
         });
-
-    // setCreateAcc(false);
   };
 
   const handleChange = (prop) => (event) => {

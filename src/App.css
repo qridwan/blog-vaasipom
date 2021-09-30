@@ -21,20 +21,27 @@ a {
   width: 5px;
 }
 
-.swiper-button-next, .swiper-button-prev {
+.swiper-button-next,
+.swiper-button-prev {
   top: 50% !important;
 }
-.swiper-button-next::after , .swiper-button-prev::after{
-  background:rgb(255, 255, 255);
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  background: rgb(255, 255, 255);
   padding: 10px 25px;
   border-radius: 10px;
   font-size: 1.5rem !important;
   font-weight: 900;
+  color: rgba(44, 43, 43, 0.445);
 }
 
-.swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
   opacity: 0 !important;
 }
+/* .swipper-slide {
+  margin-top: 25px !important;
+} */
 
 /* .swiper-button-next {
   background-image: url(./Assets/icons/arrowForward.svg);

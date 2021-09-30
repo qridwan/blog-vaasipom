@@ -112,7 +112,7 @@ const WritePost = ({
     };
     const editData = {
       ...allData,
-      tags: selectedTags.join(),
+      // tags: selectedTags.join(),
       content: content,
     };
     console.log({ editData, postData });
@@ -127,14 +127,15 @@ const WritePost = ({
   };
 
   const CreateArticle = (data) => {
-    console.log("-data-", data);
+    console.log("-Request Body-", data);
+    console.log(BaseUrl + `/${category}`);
     todo.edit
       ? axios
           .put(BaseUrl + `/${category}`, data, {
             headers, //headers Authorization: localStorage.getItem("token"),
           })
           .then((response) => {
-            console.log("Posted Data--", response.data);
+            console.log("Body--", response.data);
             alert(`${category} Updated`);
           })
           .catch((error) => {

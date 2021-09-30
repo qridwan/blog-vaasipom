@@ -1,109 +1,90 @@
 import { Container, Divider } from "@material-ui/core";
-import { Box, makeStyles, Paper, Typography } from "@material-ui/core";
-import React, { Fragment, useState } from "react";
+import { Box, Paper, Typography } from "@material-ui/core";
+import axios from "axios";
+import React, { Fragment, useEffect, useState } from "react";
+import { BaseUrl } from "../../BaseUrl.config";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
+import { suggestionStyles } from "../../Styles/muiStyles";
 import Footer from "./Footer";
 
-const suggestionStyles = makeStyles((theme) => ({
-  container: {
-    padding: 0,
-    boxSizing: "border-box",
-    position: "sticky",
-    top: "0",
-  },
-  box: {
-    margin: "25px 0 0 30px",
-  },
-  root: {
-    display: "flex",
-    justifyContent: "start",
-    flexWrap: "wrap",
-    listStyle: "none",
-    padding: "5px 0",
-    margin: theme.spacing(1),
-    boxShadow: "none",
-  },
-  card: {
-    display: "flex",
-    justifyContent: "start",
-    alignItems: "center",
-    flexWrap: "wrap",
-    listStyle: "none",
-    textAlign: "start",
-    margin: 0,
-    boxShadow: "none",
-  },
-  avatar: {
-    // backgroundColor: red[500],
-  },
-  text: {
-    textAlign: "start",
-    fontWeight: "600",
-    fontSize: "16px",
-    lineHeight: "20px",
-    color: "#000000",
-    marginBottom : "15px"
-  },
-
-  follow: {
-    margin: 0,
-    padding: "6px, 20px ",
-    alignSelf: "center",
-    "&:focus": {
-      background: "#000000 !important",
-      color: "white",
-    },
-  },
-  unFollow: {
-    margin: 0,
-    padding: "6px, 20px",
-    "&:focus": {
-      background: "#ffffff !important",
-    },
-  },
-  title: {
-    color: "#00000",
-    fontSize: "18px",
-    fontWeight: "bold",
-  },
-  subheader: {
-    fontSize: "12px",
-    width: "90%",
-    lineHeight: "150%",
-    color: "#797979",
-  },
-  buttons: {
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-}));
-
 const Suggestions = () => {
-  // const location = useLocation();
   const classes = suggestionStyles();
-  // const { pathname } = location;
-  // const splitLocation = pathname.split("/")[1];
+  const [topics, setTopics] = useState(false);
+  const [isAddTopic, setIsAddTopic] = useState(false);
+  const [showTopics, setShowTopics] = useState([]);
 
-  // const [lookingFor, setLookingFor] = useState([
-  //   { key: 0, label: "Podcast" },
-  //   { key: 1, label: "Short Stories" },
-  //   { key: 2, label: "Articles" },
-  //   { key: 3, label: "Poetries" },
-  //   { key: 4, label: "Videocast" },
-  //   { key: 5, label: "Reviews" },
-  //   { key: 6, label: "All" },
-  // ]);
-  const [topics, setTopics] = useState([
-    { key: 0, label: "Software" },
-    { key: 1, label: "Books" },
-    { key: 2, label: "Science" },
-    { key: 3, label: "Sports" },
-    { key: 4, label: "Technology" },
-    { key: 5, label: "Entertainment" },
-  ]);
+  const headers = {
+    Authorization: localStorage.getItem("token"),
+  };
 
-  const handleClick = () => {};
+  const getMyTopics = (allTopics) => {
+    axios
+      .get(BaseUrl + `/topic/interests`, { headers })
+      .then((res) => {
+        // setMyTopics(res.data);
+        for (let i = 0; i < res.data.length; i++) {
+          const myTopicId = res.data[i].interestId;
+          for (let j = 0; j < allTopics.length; j++) {
+            const suggTopicId = allTopics[j].interestId;
+            if (myTopicId === suggTopicId) {
+              allTopics.splice(j, 1);
+            }
+          }
+        }
+        setShowTopics(allTopics.slice(0, 5));
+      })
+      .catch((err) => console.error(err));
+  };
 
+  const addTopicOfInterest = (topic) => {
+    console.log(
+      "--Add topics--",
+      BaseUrl + `/topic/interest?topic=${topic}`,
+      {},
+      { headers }
+    );
+    axios
+      .post(BaseUrl + `/topic/interest?topic=${topic}`, {}, { headers })
+      .then((response) => {
+        setIsAddTopic(true);
+        alert(`${topic} Added as your interest`);
+      })
+      .catch((error) => {
+        alert(`${topic} failed`);
+        console.error(error);
+      });
+  };
+
+  const handleShowTopics = () => {
+    console.log({ topics, showTopics });
+    const newTopics = [
+      ...showTopics,
+      ...topics?.slice(showTopics.length, showTopics.length + 5),
+    ];
+    console.log("🚀 ~ handleShowTopics ~ newTopics", newTopics);
+    setShowTopics(newTopics);
+  };
+
+  useEffect(() => {
+    localStorage.token
+      ? axios
+          .get(BaseUrl + `/interests?`, { headers })
+          .then((res) => {
+            setTopics(res.data);
+            getMyTopics(res.data);
+            // setShowTopics(res.data.slice(0, 5));
+          })
+          .catch((err) => console.error(err))
+      : axios
+          .get(BaseUrl + `/auth/interests?`, { headers })
+          .then((res) => {
+            setTopics(res.data);
+            setShowTopics(res.data.slice(0, 5));
+          })
+          .catch((err) => console.error(err));
+
+    // return () => setIsAddTopic(false);
+  }, [isAddTopic]);
   return (
     <Container className={classes.container}>
       {/* What Looking for
@@ -138,25 +119,28 @@ const Suggestions = () => {
       <Box className={classes.box}>
         <Typography className={classes.text}>Topics To Follow </Typography>
         <Paper component="ul" className={classes.root}>
-          {topics.map((data) => {
-            const lastOne = topics.length - 1;
-            return (
-              <Fragment key={data.label}>
-                <li className={classes.buttons}>
-                  <OutlineButton  onClick={handleClick} size="small">
-                    {data.label} +
-                  </OutlineButton>
-                </li>
-                {data.key === lastOne && (
+          {topics &&
+            showTopics.map((data, index) => {
+              return (
+                <Fragment key={data.interestId}>
                   <li className={classes.buttons}>
-                    <OutlineButton size="small" onClick={handleClick}>
-                      +
+                    <OutlineButton
+                      onClick={() => addTopicOfInterest(data.interestId)}
+                      size="small"
+                    >
+                      {data.interestName} +
                     </OutlineButton>
                   </li>
-                )}
-              </Fragment>
-            );
-          })}
+                  {index === showTopics.length - 1 && (
+                    <li className={classes.buttons}>
+                      <OutlineButton size="small" onClick={handleShowTopics}>
+                        +
+                      </OutlineButton>
+                    </li>
+                  )}
+                </Fragment>
+              );
+            })}
         </Paper>
       </Box>
 

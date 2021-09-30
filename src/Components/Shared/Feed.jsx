@@ -14,8 +14,8 @@ const Feed = ({ data, type, loading }) => {
   return (
     <div className={classes.root}>
       {data.map((feed, index) => (
-        <Suspense fallback={<p>Loading...</p>}>
-          <FeedCard key={index} feed={feed} type={type} />
+        <Suspense key={index} fallback={<p>Loading...</p>}>
+          <FeedCard  feed={feed} type={type} />
         </Suspense>
       ))}
       <div>{loading && "Loading..."}</div>

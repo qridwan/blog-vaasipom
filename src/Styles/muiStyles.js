@@ -361,3 +361,77 @@ export const loginStyles = makeStyles((theme) => {
     },
   };
 });
+
+export const suggestionStyles = makeStyles((theme) => ({
+  container: {
+    padding: 0,
+    boxSizing: "border-box",
+    position: "sticky",
+    top: "0",
+  },
+  box: {
+    margin: "25px 0 0 30px",
+  },
+  root: {
+    display: "flex",
+    justifyContent: "start",
+    flexWrap: "wrap",
+    listStyle: "none",
+    padding: "5px 0",
+    margin: theme.spacing(1),
+    boxShadow: "none",
+  },
+  card: {
+    display: "flex",
+    justifyContent: "start",
+    alignItems: "center",
+    flexWrap: "wrap",
+    listStyle: "none",
+    textAlign: "start",
+    margin: 0,
+    boxShadow: "none",
+  },
+  avatar: {
+    // backgroundColor: red[500],
+  },
+  text: {
+    textAlign: "start",
+    fontWeight: "600",
+    fontSize: "16px",
+    lineHeight: "20px",
+    color: "#000000",
+    marginBottom: "15px",
+  },
+
+  follow: {
+    margin: 0,
+    padding: "6px, 20px ",
+    alignSelf: "center",
+    "&:focus": {
+      background: "#000000 !important",
+      color: "white",
+    },
+  },
+  unFollow: {
+    margin: 0,
+    padding: "6px, 20px",
+    "&:focus": {
+      background: "#ffffff !important",
+    },
+  },
+  title: {
+    color: "#00000",
+    fontSize: "18px",
+    fontWeight: "bold",
+  },
+  subheader: {
+    fontSize: "12px",
+    width: "90%",
+    lineHeight: "150%",
+    color: "#797979",
+  },
+  buttons: {
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+}));

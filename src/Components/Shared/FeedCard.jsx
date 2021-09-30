@@ -15,11 +15,9 @@ import { Typography } from "@material-ui/core";
 import { feedCardStyles } from "../../Styles/muiStyles";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
 import { NavLink, useRouteMatch } from "react-router-dom";
-// import authorImg from "../../Assets/img/authorbtnImg.png";
 import AuthorButton from "../../muiComponents/AuthorButton";
 import PostCountInfo from "./PostCountInfo";
 import PostFooterInfo from "./PostFooterInfo";
-import parse from "html-react-parser";
 import dateFormat from "dateformat";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { connect } from "react-redux";
@@ -29,7 +27,6 @@ import {
   setTodo,
   setWriting,
 } from "../../redux/actions/dashboardAction";
-import { handleDelete } from "../../Function/Delete.api";
 import { deletePost } from "../../redux/actions/landingPage.Action";
 
 const FeedCard = ({
@@ -41,12 +38,12 @@ const FeedCard = ({
   setTodo,
   deletePost,
 }) => {
-  // console.log("🚀 ~ FeedCard ~ feed", { feed, type });
   const classes = feedCardStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isUser, setIsUser] = useState(false);
   const [feedId, setFeedId] = useState(``);
   const [postContent, setPostContent] = useState({});
+  console.log("🚀 ~ postContent", postContent)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,7 +65,10 @@ const FeedCard = ({
     url = "/feed";
   }
   const userEmail = localStorage.getItem("username");
-
+  const headers = {
+    Authorization: localStorage.getItem("token"),
+    // "Access-Control-Allow-Origin": "*",
+  };
   useEffect(() => {
     setPostContent(feed[feed.category]);
     feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
@@ -77,13 +77,8 @@ const FeedCard = ({
   useEffect(() => {
     setFeedId(postContent[`${category}Id`]);
   }, [postContent]);
-  // const { createdDate, title, subTitle, readTime, reads, likes, mainImage } =postContent;
-  //formating date
-  // const createdDate = article?.createdDate;
+  
   const createdDateFormate = dateFormat(postContent?.createdDate, "dS mmmm");
-  //formate end
-
-  //handeling edit route
   const handleEdit = () => {
     setPage(`Writing`);
     setWriting(feed.category);
@@ -94,10 +89,6 @@ const FeedCard = ({
       ...postContent,
     });
   };
-  // console.log({ postContent });
-  // const { content } = postContent;
-  // const mainText = parse(content ? content : "");
-  // console.log("🚀 ~ FeedCard ~ content", mainText);
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
@@ -145,6 +136,7 @@ const FeedCard = ({
               views={postContent?.reads}
               category={category}
               id={feedId}
+              liked={postContent?.liked}
             />
             <Box
               display="flex"

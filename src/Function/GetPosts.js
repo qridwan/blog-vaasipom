@@ -7,15 +7,22 @@ const GetPosts = (category, pageNumber) => {
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(false);
+  const headers = {
+    Authorization: localStorage.getItem("token"),
+    // "Access-Control-Allow-Origin": "*",
+    // "content-type": "application/json",
+  };
 
   useEffect(() => {
     setPosts([]);
   }, [category]);
 
   const checkHasMore = () => {
+    const subUrl = headers.Authorization ? `/home/posts` : `/auth/home/posts`;
     axios({
       method: "GET",
-      url: BaseUrl + `/auth/home/posts`,
+      url: BaseUrl + subUrl,
+      headers: headers,
       params: { categoryList: category, page: pageNumber + 1, allPost: true },
     })
       .then((res) => {
@@ -27,15 +34,20 @@ const GetPosts = (category, pageNumber) => {
   };
   useEffect(() => {
     setLoading(true);
+    const subUrl = headers.Authorization
+      ? `/home/posts`
+      : `/auth/home/posts`;
     setError(false);
     let cancel;
     axios({
       method: "GET",
-      url: BaseUrl + `/auth/home/posts`,
+      url: BaseUrl + subUrl,
+      headers: headers ,
       params: { categoryList: category, page: pageNumber, allPost: true },
       cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })
       .then((res) => {
+        console.log(BaseUrl + subUrl);
         setPosts((prevposts) => {
           return [...new Set([...prevposts, ...res.data])];
         });

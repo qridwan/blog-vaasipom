@@ -6,7 +6,7 @@ import axios from "axios";
 // import { headers } from "../../../header.config";
 const headers = {
   Authorization: localStorage.getItem("token"),
-  // "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "*",
   // "content-type": "application/json",
 };
 const inputImageStyles = makeStyles(() => ({
@@ -67,7 +67,6 @@ const ImageInput = ({ category, setData, image }) => {
       .post(BaseUrl + `/${category}/image`, data, { headers })
       .then((response) => {
         console.log("response:", response);
-
         category !== "profile" &&
           setData((data) => ({
             ...data,
@@ -77,6 +76,7 @@ const ImageInput = ({ category, setData, image }) => {
         //Console
         console.log("Upload success: Link--", response.data.imageLink);
         console.log("Data--", data);
+        alert(`successfully uploaded`);
       })
       .catch((error) => {
         console.log("file-53", file, "Data", data);

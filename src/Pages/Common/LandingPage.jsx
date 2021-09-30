@@ -17,6 +17,7 @@ const LandingPage = (props) => {
   const { headerVisible, hideHeader } = props;
   const classes = landingPageStyles();
   const [page, setPage] = useState(1);
+  
   const [categoryItem, setCategoryItem] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const handleOpen = () => {

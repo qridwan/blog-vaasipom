@@ -29,6 +29,11 @@ const headers = {
 const EditProfile = () => {
   // const classes = useStyles();
   // const [userInfo, setUserInfo] = useState({});
+  const headers = {
+    Authorization: localStorage.getItem("token"),
+    "Access-Control-Allow-Origin": "*",
+    // "content-type": "application/json",
+  };
   const [loading, setLoading] = useState(false);
   const [allData, setAllData] = useState({
     firstName: "",

@@ -64,9 +64,26 @@ const Profile = ({ type, setPage, dashboardState }) => {
   // author/writings?category=article&page=1
   const getMyWritings = (paginate) => {
     axios
-      .get(BaseUrl + `/author/writings?category=article&page=${paginate}`, {
+      .get(BaseUrl + `/mywritings?page=${paginate}`, {
         headers,
       })
+      .then((response) => {
+        console.log(response.data);
+        setWritings(response.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // Get Author writings
+  const getAuthorWritings = (author, page) => {
+    axios
+      .get(
+        BaseUrl +
+          `/posts/interests?categoryList=story,article,poetry,review,podcast,videocast&page=${page}&allPost=false&author=${author}`,
+        {
+          headers,
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setWritings(response.data);
@@ -79,6 +96,7 @@ const Profile = ({ type, setPage, dashboardState }) => {
       getMyWritings(pageNo);
     } else {
       getUserProfile();
+      getAuthorWritings(user, pageNo);
     }
   }, [pageNo]);
   const {
