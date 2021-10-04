@@ -12,14 +12,13 @@ import Profile from "./Pages/Profile/Profile";
 export const Routes = [
   { path: "/podcast", component: Podcast, exact: true },
   { path: "/login", component: Login, exact: true },
-  { path: "/profile/:user", component: Profile},
+  { path: "/profile/:user", component: Profile },
   { path: "/myprofile", component: Profile, exact: true },
   { path: "/forgotPassword", component: ForgotPassword, exact: true },
   { path: "/podcast/:title", component: FullFeed },
   { path: "/feed/:category/:postId", component: FullFeed },
   { path: "/myprofile/:category/:postId", component: FullFeed },
-
-  { path: "/videocast/:title", component: VideoDetails },
+  // { path: "video/:videocast/:postId", component: VideoDetails },
   { path: "/videocast", component: Videocast },
   { path: "/dashboard", component: Dashboard },
   // { path: "/articles", component: LandingPage },

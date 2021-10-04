@@ -5,19 +5,20 @@ import SubNavigation from "../../Components/LandingPage/SubNavigation.jsx";
 import Suggestions from "../../Components/Shared/Suggestions.jsx";
 import { Container, Grid, Paper } from "@material-ui/core";
 import { landingPageStyles } from "../../Styles/muiStyles.js";
-import Navigation from "./Navigation.jsx";
+// import Navigation from "./Navigation.jsx";
 import { connect } from "react-redux";
 import { hideHeader } from "../../redux/actions/headerAction.js";
+import { setPage } from "../../redux/actions/dashboardAction";
 import { useRouteMatch } from "react-router-dom";
 import MuiProgress from "../../muiComponents/MuiProgress.jsx";
-import TopicSlider from "../../Components/Shared/TopicSlider.jsx";
+// import TopicSlider from "../../Components/Shared/TopicSlider.jsx";
 import GetPosts from "../../Function/GetPosts.js";
 
 const LandingPage = (props) => {
-  const { headerVisible, hideHeader } = props;
+  const { headerVisible, hideHeader, setPage } = props;
   const classes = landingPageStyles();
-  const [page, setPage] = useState(1);
-  
+  const [pageNo, setPageNo] = useState(1);
+
   const [categoryItem, setCategoryItem] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const handleOpen = () => {
@@ -29,6 +30,7 @@ const LandingPage = (props) => {
   const { path } = useRouteMatch();
   useEffect(() => {
     document.title = "Blog | Home";
+    setPage("");
     path === "/poetry" && setCategoryItem("poetry");
     path === "/story" && setCategoryItem("story");
     path === "/article" && setCategoryItem("article");
@@ -37,9 +39,9 @@ const LandingPage = (props) => {
       setCategoryItem("story,article,poetry,review,podcast,videocast");
     // getPost();
     return () => hideHeader();
-  }, [path, page]);
+  }, [path, pageNo]);
 
-  const { posts, hasMore, loading, error } = GetPosts(categoryItem, page);
+  const { posts, hasMore, loading } = GetPosts(categoryItem, pageNo);
   const observer = useRef();
   const lastFeedRef = useCallback(
     (node) => {
@@ -47,7 +49,7 @@ const LandingPage = (props) => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setPage((prevPage) => prevPage + 1);
+          setPageNo((prevPage) => prevPage + 1);
         }
       });
       if (node) observer.current.observe(node);
@@ -55,17 +57,10 @@ const LandingPage = (props) => {
     [loading, hasMore]
   );
 
-  console.log({
-    posts,
-    hasMore,
-    loading,
-    error,
-  });
   return (
     <Container maxWidth="lg">
-      <Navigation />
       {!localStorage.token && headerVisible && <Header />}
-      {path !== "/" && <TopicSlider />}
+      {/* {path !== "/" && <TopicSlider />} */}
       <SubNavigation />
       <Container>
         <Grid
@@ -102,5 +97,6 @@ const LandingPage = (props) => {
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   hideHeader: hideHeader,
+  setPage: setPage,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

@@ -15,7 +15,7 @@ const BlogEditor = forwardRef((props, ref) => {
       initialValue={value}
       apiKey="ch28zotn1q8tkyz28lqf0bnwaaex2ava1lxdleg5mgisod5j"
       init={{
-        icons: "jam",
+        // icons: "jam",
         height: 350,
         menubar: false,
         branding: false,

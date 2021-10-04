@@ -1,17 +1,19 @@
 import {
   SET_PAGE,
   SET_POSTID,
+  SET_SHOW_TOPICS,
   SET_TODO,
   SET_WRITING,
 } from "../actions/dashboardAction";
 
 let initialState = {
-  page: "Writing",
+  page: "",
   writing: null,
   todo: {
     edit: false,
   },
   postId: "",
+  showTopics: true,
 };
 
 export const dashboardState = (state = initialState, action) => {
@@ -36,6 +38,11 @@ export const dashboardState = (state = initialState, action) => {
       return {
         ...state,
         postId: action.postId,
+      };
+    case SET_SHOW_TOPICS:
+      return {
+        ...state,
+        showTopics: action.showTopics,
       };
     default:
       return state;

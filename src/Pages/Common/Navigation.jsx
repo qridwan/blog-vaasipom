@@ -12,12 +12,10 @@ const Navigation = ({ type }) => {
   const classes = NavigationStyles();
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
-    console.log("token?", localStorage.getItem("token"));
     localStorage.token ? setIsLogin(true) : setIsLogin(false);
   }, [isLogin]);
-  console.log({ isLogin });
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>

@@ -183,6 +183,18 @@ export const fullFeedStyles = makeStyles({
     color: "#000000",
     marginBottom: "20px",
   },
+  playerWrapper: {
+    position: "relative",
+    margin: "2% 0 0 0",
+    height: "380px",
+    display: "block"
+  },
+  player: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    overflow: "hidden",
+  },
 });
 
 //Profile styling

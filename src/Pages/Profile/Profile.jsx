@@ -21,11 +21,10 @@ import axios from "axios";
 import { PaginationBlog } from "../../muiComponents/PaginationBlog";
 import { profileStyles } from "../../Styles/muiStyles";
 import { connect } from "react-redux";
-import { setPage } from "../../redux/actions/dashboardAction";
+import { setPage, setShowTopics } from "../../redux/actions/dashboardAction";
 import { useHistory, useParams } from "react-router-dom";
 
-const Profile = ({ type, setPage, dashboardState }) => {
-  console.log("🚀 ~ Profile ~ dashboardState", dashboardState);
+const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
   const classes = profileStyles();
   const [userInfo, setUserInfo] = useState({});
   const [writings, setWritings] = useState([]);
@@ -91,6 +90,11 @@ const Profile = ({ type, setPage, dashboardState }) => {
       .catch((err) => console.log(err));
   };
   useEffect(() => {
+    setPage(``);
+    setShowTopics(false);
+    return () => setShowTopics(true);
+  }, []);
+  useEffect(() => {
     if (path === "/myprofile") {
       getMyProfileInfo();
       getMyWritings(pageNo);
@@ -99,26 +103,16 @@ const Profile = ({ type, setPage, dashboardState }) => {
       getAuthorWritings(user, pageNo);
     }
   }, [pageNo]);
-  const {
-    // country,
-    // email,
-    firstName,
-    followersCount,
-    // phone,
-    profileImgLink,
-    profileTitle,
-  } = userInfo;
+  const { firstName, followersCount, profileImgLink, profileTitle } = userInfo;
   const history = useHistory();
   const handleEdit = () => {
     setPage(`Settings`);
     history.push("/dashboard");
     console.log("clicked", `color: red`);
   };
-
+  console.log("🚀 ~ Profile ~ dashboardState", dashboardState);
   return (
     <Container maxWidth="lg">
-      <Navigation />
-      {/* <SubNavigation /> */}
       <Grid container spacing={3}>
         <Grid item xs={12} sm={3}>
           {!loading && (
@@ -170,5 +164,6 @@ const Profile = ({ type, setPage, dashboardState }) => {
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   setPage: setPage,
+  setShowTopics: setShowTopics,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

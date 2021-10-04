@@ -5,7 +5,7 @@ import { OutlineButton } from "../../muiComponents/OutlineButton";
 import "swiper/swiper.min.css";
 import "swiper/components/pagination/pagination.min.css";
 import "swiper/components/navigation/navigation.min.css";
-import { Box } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl.config";
 
@@ -14,8 +14,6 @@ const TopicSlider = () => {
   const [topics, setTopics] = useState(false);
   const headers = {
     Authorization: localStorage.getItem("token"),
-    // "Access-Control-Allow-Origin": "*",
-    // "content-type": "application/json",
   };
   useEffect(() => {
     localStorage.token &&
@@ -27,9 +25,11 @@ const TopicSlider = () => {
         })
         .catch((err) => console.error(err));
   }, []);
-
+  const handleShowPost = (topic) => {
+    // axios.get(BaseUrl + `/posts/interests?categoryList=story,article,poetry,review,podcast,videocast&page=1&allPost=false&topic=${topic}`, { headers })
+  };
   return (
-    <>
+    <Container maxWidth="lg">
       {topics && (
         <Box my={3} mx={3}>
           <Swiper
@@ -73,7 +73,11 @@ const TopicSlider = () => {
                 key={data.interestName}
                 style={{ width: "min-content", margin: "15px" }}
               >
-                <OutlineButton size="small" style={{ whiteSpace: "nowrap" }}>
+                <OutlineButton
+                  size="small"
+                  style={{ whiteSpace: "nowrap" }}
+                  onClick={() => handleShowPost(data.interestId)}
+                >
                   {data.interestName}
                 </OutlineButton>
               </SwiperSlide>
@@ -81,7 +85,7 @@ const TopicSlider = () => {
           </Swiper>
         </Box>
       )}
-    </>
+    </Container>
   );
 };
 

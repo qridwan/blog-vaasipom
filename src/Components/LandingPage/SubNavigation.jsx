@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-// import InputBase from "@material-ui/core/InputBase";
 import { alpha, makeStyles } from "@material-ui/core/styles";
-// import SearchIcon from "@material-ui/icons/Search";
 import { grey } from "@material-ui/core/colors";
 import { NavLink, useRouteMatch } from "react-router-dom";
 import { Container } from "@material-ui/core";
@@ -99,23 +97,23 @@ const useStyles = makeStyles((theme) => ({
 const SubNavigation = () => {
   const classes = useStyles();
   const [lookingFor] = useState([
-    { key: 6, label: "All" , page: 'all'},
-    { key: 0, label: "Podcast", count: 323 , page: 'podcast'},
-    { key: 4, label: "Videocast", count: 553, page: 'videocast' },
-    { key: 1, label: "Short Stories", count: 23 , page: 'story'},
-    { key: 2, label: "Articles", count: 131, page: 'article'},
-    { key: 3, label: "Poetries", count: 432, page: 'poetry'},
-    { key: 5, label: "Reviews", count: 565, page: 'review'},
+    { key: 6, label: "All", page: "all" },
+    { key: 0, label: "Podcast", count: 323, page: "podcast" },
+    { key: 4, label: "Videocast", count: 553, page: "videocast" },
+    { key: 1, label: "Short Stories", count: 23, page: "story" },
+    { key: 2, label: "Articles", count: 131, page: "article" },
+    { key: 3, label: "Poetries", count: 432, page: "poetry" },
+    { key: 5, label: "Reviews", count: 565, page: "review" },
   ]);
   let { path } = useRouteMatch();
-  console.log(
-    "🚀 ~ file: SubNavigation.jsx ~ line 90 ~ SubNavigation ~ path",
-    path
-  );
   return (
     <Container maxWidth="xl">
       <div className={classes.root}>
-        <AppBar className={classes.appBar} color="transparent" position="static">
+        <AppBar
+          className={classes.appBar}
+          color="transparent"
+          position="static"
+        >
           <Toolbar className={classes.toolArea}>
             <div className={classes.leftItems}>
               {lookingFor.map((data) => {

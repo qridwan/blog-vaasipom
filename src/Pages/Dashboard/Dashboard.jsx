@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
@@ -163,6 +163,10 @@ const Dashboard = (props) => {
   const [open, setOpen] = useState(false);
 
   const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    page === "" && setPage("Writing");
+  }, []);
   const handleOpen = () => {
     setOpen(true);
   };

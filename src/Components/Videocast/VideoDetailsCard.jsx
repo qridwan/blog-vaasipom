@@ -17,8 +17,6 @@ const videoCardStyle = makeStyles({
     boxShadow: "none",
     textAlign: "start",
     paddingBottom: "50px",
-    // borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-    // borderRight: "1px solid rgba(0, 0, 0, 0.1)",
   },
   media: {
     width: "100%",
@@ -57,7 +55,6 @@ const videoCardStyle = makeStyles({
     position: "absolute",
     top: 0,
     left: 0,
-    // borderRadius: "10px",
     overflow: "hidden",
   },
 });

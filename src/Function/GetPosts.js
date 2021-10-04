@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BaseUrl } from "../BaseUrl.config";
 
-const GetPosts = (category, pageNumber) => {
+const GetPosts = (category, pageNumber, user) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -18,7 +18,7 @@ const GetPosts = (category, pageNumber) => {
   }, [category]);
 
   const checkHasMore = () => {
-    const subUrl = headers.Authorization ? `/home/posts` : `/auth/home/posts`;
+    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
     axios({
       method: "GET",
       url: BaseUrl + subUrl,
@@ -34,15 +34,13 @@ const GetPosts = (category, pageNumber) => {
   };
   useEffect(() => {
     setLoading(true);
-    const subUrl = headers.Authorization
-      ? `/home/posts`
-      : `/auth/home/posts`;
+    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
     setError(false);
     let cancel;
     axios({
       method: "GET",
       url: BaseUrl + subUrl,
-      headers: headers ,
+      headers: headers,
       params: { categoryList: category, page: pageNumber, allPost: true },
       cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })

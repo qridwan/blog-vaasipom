@@ -1,5 +1,5 @@
 import { Container, Grid, makeStyles } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import Suggestions from "../../Components/Shared/Suggestions";
 import AudioPlayer from "../../Components/Podcast/AudioPlayer";
@@ -10,6 +10,7 @@ import TopicSlider from "../../Components/Shared/TopicSlider";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl.config";
 import Feed from "../../Components/Shared/Feed";
+import GetPosts from "../../Function/GetPosts";
 
 const podcastStyles = makeStyles({
   right: {
@@ -24,31 +25,53 @@ const podcastStyles = makeStyles({
 
 const Podcast = () => {
   const classes = podcastStyles();
-  const [allPost, setAllPost] = useState([]);
+  // const [allPost, setAllPost] = useState([]);
+  const [page, setPage] = useState(1);
   const [isAudioPlay, setIsAudioPlay] = useState(false);
-  const getPost = () => {
-    axios
-      .get(
-        BaseUrl + `/auth/home/posts?categoryList=podcast&page=1&allPost=true`
-      )
-      .then((response) => {
-        console.log("response:", response);
-        setAllPost(response.data);
-      })
-      .catch((error) => {
-        console.log("error", error);
+  const { posts, hasMore, loading, error } = GetPosts("podcast", page);
+  const observer = useRef();
+  const lastFeedRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
       });
-  };
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
+
+  console.log({
+    posts,
+    hasMore,
+    loading,
+    error,
+  });
+
+  // const getPost = () => {
+  //   axios
+  //     .get(
+  //       BaseUrl + `/auth/home/posts?categoryList=podcast&page=1&allPost=true`
+  //     )
+  //     .then((response) => {
+  //       console.log("response:", response);
+  //       setAllPost(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log("error", error);
+  //     });
+  // };
 
   useEffect(() => {
     document.title = "Blog | Podcast";
-    getPost();
+    // getPost();
   }, []);
   return (
     <Container maxWidth="lg">
-      <Navigation />
-      {/* <Header /> */}
-      <TopicSlider />
+      {/* <TopicSlider /> */}
       <SubNavigation />
       <Grid
         container
@@ -59,7 +82,12 @@ const Podcast = () => {
       >
         <Grid item sm={12} md={8} className={classes.left}>
           {/* <PodcastFeed data={allPost} setIsAudioPlay={setIsAudioPlay} /> */}
-          <Feed data={allPost} type="podcast" />
+          <Feed data={posts} type="podcast" loading={loading} />
+          {!loading && (
+            <p style={{ margin: "0 auto" }} ref={lastFeedRef}>
+              
+            </p>
+          )}
         </Grid>
         <Grid item sm={12} md={4} className={classes.right}>
           <Suggestions />

@@ -16,7 +16,6 @@ import {
   setWriting,
 } from "../../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
-// import { headeeConf } from "../../../Function/Header.info";
 
 export const tags = [
   "Science",
@@ -255,8 +254,6 @@ const WritePost = ({
     </Container>
   );
 };
-
-// export default Article;
 
 // using redux
 const mapStateToProps = (state) => state;

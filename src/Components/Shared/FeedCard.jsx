@@ -43,7 +43,6 @@ const FeedCard = ({
   const [isUser, setIsUser] = useState(false);
   const [feedId, setFeedId] = useState(``);
   const [postContent, setPostContent] = useState({});
-  console.log("🚀 ~ postContent", postContent)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -60,15 +59,20 @@ const FeedCard = ({
     url === "/article" ||
     url === "/poetry" ||
     url === "/story" ||
-    url === "/review"
+    url === "/review" ||
+    url === "/podcast" ||
+    url === "/videocast"
   ) {
     url = "/feed";
   }
+  // else if (url === "/videocast") {
+  // url = "/video";
+  // }
   const userEmail = localStorage.getItem("username");
-  const headers = {
-    Authorization: localStorage.getItem("token"),
-    // "Access-Control-Allow-Origin": "*",
-  };
+  // const headers = {
+  //   Authorization: localStorage.getItem("token"),
+  //   // "Access-Control-Allow-Origin": "*",
+  // };
   useEffect(() => {
     setPostContent(feed[feed.category]);
     feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
@@ -77,7 +81,7 @@ const FeedCard = ({
   useEffect(() => {
     setFeedId(postContent[`${category}Id`]);
   }, [postContent]);
-  
+
   const createdDateFormate = dateFormat(postContent?.createdDate, "dS mmmm");
   const handleEdit = () => {
     setPage(`Writing`);
