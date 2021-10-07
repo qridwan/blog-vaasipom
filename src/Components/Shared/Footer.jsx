@@ -1,7 +1,8 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
+import { withTranslation } from "react-i18next";
 
-const Footer = () => {
+const Footer = ({ t }) => {
   return (
     <Box
       display="flex"
@@ -11,13 +12,13 @@ const Footer = () => {
       my={3}
       style={{ paddingLeft: "30px" }}
     >
-      <Button>Help</Button>
-      <Button>Privacy</Button>
-      <Button>Terms</Button>
-      <Button>About</Button>
-      <Button>Contact</Button>
+      <Button>{t(`footer_help`)}</Button>
+      <Button>{t(`footer_privacy`)}</Button>
+      <Button>{t(`footer_terms`)}</Button>
+      <Button>{t(`footer_about`)}</Button>
+      <Button>{t(`footer_contact`)}</Button>
     </Box>
   );
 };
 
-export default Footer;
+export default withTranslation()(Footer);

@@ -16,6 +16,7 @@ import {
   setWriting,
 } from "../../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
+import { withTranslation } from "react-i18next";
 
 const types = ["New", "Existing"];
 const interests = ["Mystery", "Horror", "Romantic", "Solo"];
@@ -27,6 +28,7 @@ const Novel = ({
   setPage,
   setWriting,
   setTodo,
+  t,
 }) => {
   const { todo } = dashboardState;
   console.log("🚀 ~ todo", todo);
@@ -86,7 +88,7 @@ const Novel = ({
     novelContent();
     const content = novelRef.current.getContent();
     let selectedTags = [];
-   !isEdit && suggTags.forEach((tag) => selectedTags.push(tag.label));
+    !isEdit && suggTags.forEach((tag) => selectedTags.push(tag.label));
 
     const postData = {
       ...allData,
@@ -169,7 +171,7 @@ const Novel = ({
           <Grid container spacing={3}>
             <Grid item xs={12} sm={3}>
               <CustomLabel shrink htmlFor="">
-                Novel Type
+                {t(`writing_label_novelType`)}
               </CustomLabel>
               <CustomSelect
                 type="single"
@@ -180,7 +182,7 @@ const Novel = ({
             </Grid>
             <Grid item xs={12} sm={novelType !== "New" ? 6 : 9}>
               <CustomLabel shrink htmlFor="">
-                Title
+                {t(`writing_label_title`)}
               </CustomLabel>
               <InputArea
                 defaultValue={isEdit ? todo.title : ""}
@@ -193,7 +195,7 @@ const Novel = ({
             {novelType !== "New" && (
               <Grid item xs={12} sm={3}>
                 <CustomLabel shrink htmlFor="">
-                  Episode Number
+                  {t(`writing_label_epiNumber`)}
                 </CustomLabel>
                 <InputArea
                   defaultValue=""
@@ -206,7 +208,7 @@ const Novel = ({
 
             <Grid item xs={12} sm={12}>
               <CustomLabel shrink htmlFor="">
-                Episode Title
+                {t(`writing_label_epiTitle`)}
               </CustomLabel>
               <InputArea
                 defaultValue={isEdit ? todo.subTitle : ""}
@@ -217,14 +219,17 @@ const Novel = ({
             </Grid>
             <Grid item xs={12} sm={12}>
               <CustomLabel shrink htmlFor="">
-                Write Here
+                {t(`writing_label_writeHere`)}
               </CustomLabel>
               <BlogEditor ref={novelRef} value={editorValue} />
             </Grid>
             {novelType === "New" && (
               <Grid item xs={12} sm={7} spacing={3}>
                 <Grid item xs={12} sm={12}>
-                  <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
+                  <CustomLabel htmlFor="">
+                    {" "}
+                    {t(`writing_label_interest`)}
+                  </CustomLabel>
                   <CustomSelect
                     data={interests}
                     selectItems={interest}
@@ -232,7 +237,10 @@ const Novel = ({
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
-                  <CustomLabel htmlFor="">Add Tags</CustomLabel>
+                  <CustomLabel htmlFor="">
+                    {" "}
+                    {t(`writing_label_tags`)}
+                  </CustomLabel>
                   <AddTags setTags={setSuggTags} defaultTags="" />
                 </Grid>
                 <Grid item xs={12} sm={12}>
@@ -244,20 +252,20 @@ const Novel = ({
                     justifyContent="start"
                   >
                     <BlackButton onClick={() => HandlePost("publish")}>
-                      Publish
+                      {t(`publish_btn`)}
                     </BlackButton>
                     <OutlineButton
                       onClick={() => HandlePost("draft")}
                       style={{ marginLeft: "30px" }}
                     >
-                      Save as Draft
+                      {t(`draft_btn`)}
                     </OutlineButton>
                   </Box>
                 </Grid>
               </Grid>
             )}
             <Grid item xs={12} sm={4}>
-              <CustomLabel>Add Image</CustomLabel>
+              <CustomLabel>{t(`inputLabel_addImage`)}</CustomLabel>
               <ImageInput
                 setData={setAllData}
                 category={"story"}
@@ -274,14 +282,14 @@ const Novel = ({
               justifyContent="start"
             >
               <BlackButton onClick={() => HandlePost("publish")}>
-                {isEdit ? "Update" : "Publish"}
+                {isEdit ? t(`update_btn`) : t(`publish_btn`)}
               </BlackButton>
               {!isEdit && (
                 <OutlineButton
                   onClick={() => HandlePost("draft")}
                   style={{ marginLeft: "30px" }}
                 >
-                  Save as Draft
+                  {t(`draft_btn`)}
                 </OutlineButton>
               )}
             </Box>
@@ -292,6 +300,7 @@ const Novel = ({
   );
 };
 
+const WriteNovel = withTranslation()(Novel);
 // using redux
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
@@ -300,4 +309,4 @@ const mapDispatchToProps = {
   setPage: setPage,
   setWriting: setWriting,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Novel);
+export default connect(mapStateToProps, mapDispatchToProps)(WriteNovel);

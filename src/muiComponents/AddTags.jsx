@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import { InputArea } from "./InputArea";
 import { OutlineButton } from "./OutlineButton";
 import { InputAdornment } from "@material-ui/core";
+import { withTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddTags = ({ setTags }) => {
+const AddTags = ({ setTags , t}) => {
   const classes = useStyles();
   const [chipData, setChipData] = useState([]);
   const [newTag, setNewTag] = useState([]);
@@ -60,7 +61,7 @@ const AddTags = ({ setTags }) => {
 
   useEffect(() => {
     setTags(chipData);
-  }, [chipData]);
+  }, [chipData, setTags]);
 
   // console.log({ chipData });
   return (
@@ -92,7 +93,7 @@ const AddTags = ({ setTags }) => {
           type=""
           endAdornment={
             <InputAdornment position="end" onClick={addTag}>
-              <OutlineButton> ADD </OutlineButton>
+              <OutlineButton> {t(`add_btn`)} </OutlineButton>
             </InputAdornment>
           }
           variant="outlined"
@@ -109,4 +110,4 @@ const AddTags = ({ setTags }) => {
   );
 };
 
-export default AddTags;
+export default withTranslation()(AddTags);

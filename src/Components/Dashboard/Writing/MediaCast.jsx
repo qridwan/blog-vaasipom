@@ -17,6 +17,7 @@ import {
   setTodo,
   setWriting,
 } from "../../../redux/actions/dashboardAction";
+import { withTranslation } from "react-i18next";
 
 const MediaCast = ({
   type,
@@ -25,6 +26,7 @@ const MediaCast = ({
   setPage,
   setWriting,
   setTodo,
+  t,
 }) => {
   const category = type.toLowerCase();
   const [interest, setInterest] = useState([]);
@@ -54,7 +56,7 @@ const MediaCast = ({
   };
 
   const { todo } = dashboardState;
-  console.log("🚀 ~ todo", todo)
+  // console.log("🚀 ~ todo", todo)
   useEffect(() => {
     document.title = `Writing | ${type}`;
     setIsEdit(todo.edit);
@@ -170,7 +172,7 @@ const MediaCast = ({
       {loading && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Title</CustomLabel>
+            <CustomLabel htmlFor=""> {t(`writing_label_title`)}</CustomLabel>
             <InputArea
               defaultValue={isEdit ? todo.title : ""}
               name="title"
@@ -178,7 +180,9 @@ const MediaCast = ({
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">{type} URL</CustomLabel>
+            <CustomLabel htmlFor="">
+              {t(`writing_label_${type}Url`)}
+            </CustomLabel>
             <InputArea
               defaultValue={isEdit ? todo.url : ""}
               name="url"
@@ -188,13 +192,19 @@ const MediaCast = ({
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Write Here</CustomLabel>
+            <CustomLabel htmlFor="">
+              {" "}
+              {t(`writing_label_writeHere`)}
+            </CustomLabel>
             <BlogEditor ref={mediaRef} value={editorValue} />
           </Grid>
 
           <Grid item xs={12} sm={7} spacing={3}>
             <Grid item xs={12} sm={12}>
-              <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
+              <CustomLabel htmlFor="">
+                {" "}
+                {t(`writing_label_interest`)}
+              </CustomLabel>
               <CustomSelect
                 data={interests}
                 selectItems={interest}
@@ -202,7 +212,7 @@ const MediaCast = ({
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <CustomLabel htmlFor="">Add Tags</CustomLabel>
+              <CustomLabel htmlFor=""> {t(`writing_label_tags`)}</CustomLabel>
               <AddTags setTags={setTags} />
               {/* <CustomSelect
                 data={tags}
@@ -219,20 +229,20 @@ const MediaCast = ({
                 justifyContent="start"
               >
                 <BlackButton onClick={() => HandlePost("publish")}>
-                  Publish
+                  {t(`publish_btn`)}
                 </BlackButton>
                 <OutlineButton
                   onClick={() => HandlePost("draft")}
                   style={{ marginLeft: "30px" }}
                 >
-                  Save as Draft
+                  {t(`draft_btn`)}
                 </OutlineButton>
               </Box>
             </Grid>
           </Grid>
 
           <Grid item xs={12} sm={5}>
-            <CustomLabel>Add Image</CustomLabel>
+            <CustomLabel> {t(`inputLabel_addImage`)}</CustomLabel>
             <ImageInput
               setData={setAllData}
               category={category}
@@ -244,7 +254,7 @@ const MediaCast = ({
     </Container>
   );
 };
-
+const WriteMedia = withTranslation()(MediaCast);
 // using redux
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
@@ -253,4 +263,4 @@ const mapDispatchToProps = {
   setPage: setPage,
   setWriting: setWriting,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(MediaCast);
+export default connect(mapStateToProps, mapDispatchToProps)(WriteMedia);

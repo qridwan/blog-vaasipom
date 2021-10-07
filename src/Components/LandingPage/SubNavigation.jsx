@@ -6,6 +6,7 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import { grey } from "@material-ui/core/colors";
 import { NavLink, useRouteMatch } from "react-router-dom";
 import { Container } from "@material-ui/core";
+import { withTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,16 +95,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubNavigation = () => {
+const SubNavigation = ({ t }) => {
   const classes = useStyles();
   const [lookingFor] = useState([
-    { key: 6, label: "All", page: "all" },
-    { key: 0, label: "Podcast", count: 323, page: "podcast" },
-    { key: 4, label: "Videocast", count: 553, page: "videocast" },
-    { key: 1, label: "Short Stories", count: 23, page: "story" },
-    { key: 2, label: "Articles", count: 131, page: "article" },
-    { key: 3, label: "Poetries", count: 432, page: "poetry" },
-    { key: 5, label: "Reviews", count: 565, page: "review" },
+    { key: 6, trans_label: "nav_all", page: "all" },
+    { key: 0, trans_label: "nav_podcast", page: "podcast" },
+    { key: 4, trans_label: "nav_videocast", page: "videocast" },
+    { key: 1, trans_label: "nav_story", page: "story" },
+    { key: 2, trans_label: "nav_article", page: "article" },
+    { key: 3, trans_label: "nav_poetry", page: "poetry" },
+    { key: 5, trans_label: "nav_review", page: "review" },
   ]);
   let { path } = useRouteMatch();
   return (
@@ -130,7 +131,7 @@ const SubNavigation = () => {
                       }
                       noWrap
                     >
-                      {data.label}
+                      {t(`${data.trans_label}`)}
                       {/* {data.count && (
                         <span className={classes.titleSpan}>{data.count}</span>
                       )} */}
@@ -160,4 +161,4 @@ const SubNavigation = () => {
   );
 };
 
-export default SubNavigation;
+export default withTranslation()(SubNavigation);

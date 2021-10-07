@@ -3,9 +3,6 @@ import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
-// import User from "../../Assets/img/user.png";
-// import NotifyIcon from "../../Assets/icons/notification.png";
-// import WriteIcon from "../../Assets/icons/writing.png";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -33,6 +30,7 @@ import NavLoginPreference from "../../Components/Shared/NavLoginPreference";
 import { setPage, setWriting } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 import WritePost from "../../Components/Dashboard/Writing/WritePost";
+import { withTranslation } from "react-i18next";
 
 const drawerWidth = 250;
 
@@ -148,21 +146,21 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = (props) => {
   const { window } = props;
-  const { dashboardState, setPage, setWrite } = props;
+  const { dashboardState, setPage, setWrite, t } = props;
   const { page, writing } = dashboardState;
-  console.log("🚀 ~ Dashboard --", { page, writing });
   const classes = useStyles();
   const theme = useTheme();
   const [lookingFor] = useState([
-    { key: 1, label: "All", count: 553 },
-    { key: 2, label: "Bookmarked", count: 323 },
-    { key: 3, label: "Liked", count: 53 },
+    { key: 1, label: "All", trans_label: "reading_nav_all" },
+    { key: 2, label: "Bookmarked", trans_label: "reading_nav_bookmarked" },
+    { key: 3, label: "Liked", trans_label: "reading_nav_liked" },
   ]);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reading, setReading] = useState("All");
   const [open, setOpen] = useState(false);
 
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     page === "" && setPage("Writing");
@@ -181,14 +179,17 @@ const Dashboard = (props) => {
   const drawerData = [
     {
       item: "Writing",
+      trans_label: "dashboard_sidebar_writing",
       icon: writingIcon,
     },
     {
       item: "Reading",
+      trans_label: "dashboard_sidebar_reading",
       icon: readingIcon,
     },
     {
       item: "Settings",
+      trans_label: "dashboard_sidebar_settings",
       icon: settingIcon,
     },
   ];
@@ -214,7 +215,7 @@ const Dashboard = (props) => {
               </ListItemIcon>
               <ListItemText
                 className={classes.listItemText}
-                primary={obj.item}
+                primary={t(`${obj.trans_label}`)}
               />
             </ListItem>
           );
@@ -256,10 +257,7 @@ const Dashboard = (props) => {
                     }
                     noWrap
                   >
-                    {data.label}
-                    {data.count && (
-                      <span className={classes.navTitleSpan}>{data.count}</span>
-                    )}
+                    {t(`${data.trans_label}`)}
                   </Typography>
                 );
               })}
@@ -272,7 +270,7 @@ const Dashboard = (props) => {
           </div>
 
           <Box>
-            <NavLoginPreference setIsLogin={setIsLogin} type={"dashboard"} />
+            <NavLoginPreference type={"dashboard"} />
           </Box>
         </Toolbar>
       </AppBar>
@@ -288,7 +286,7 @@ const Dashboard = (props) => {
               paper: classes.drawerPaper,
             }}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             }}
           >
             {drawer}
@@ -317,23 +315,23 @@ const Dashboard = (props) => {
                   className={classes.title}
                   style={{ paddingBottom: "40px" }}
                 >
-                  Your Publishes
+                  {t("your_publishes_title")}
                 </Typography>
                 <BlackButton
                   style={{ marginRight: "35px" }}
                   onClick={handleOpen}
                 >
-                  Publish
+                  {t("dashboard_publish_btn")}
                 </BlackButton>
               </>
             ) : (
               page === "Writing" && (
                 <Container maxWidth="md">
                   <Typography className={classes.title}>
-                    Write Your{" "}
+                    {t(`write_headings`) + " "}
                     {writing === "story"
-                      ? "Novel"
-                      : writing.charAt(0).toUpperCase() + writing.slice(1)}
+                      ? t("nav_novel")
+                      : t(`dash_modal_${writing}`)}
                   </Typography>
                 </Container>
               )
@@ -341,7 +339,7 @@ const Dashboard = (props) => {
             {page === "Settings" && (
               <Container maxWidth="xl">
                 <Typography className={classes.title}>
-                  Edit Your Profile
+                  {t(`settings_heading`)}
                 </Typography>
                 <EditProfile />
               </Container>
@@ -382,9 +380,10 @@ const Dashboard = (props) => {
   );
 };
 
+const transDashboard = withTranslation()(Dashboard);
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   setPage: setPage,
   setWrite: setWriting,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(transDashboard);

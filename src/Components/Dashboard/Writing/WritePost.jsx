@@ -16,6 +16,7 @@ import {
   setWriting,
 } from "../../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
+import { withTranslation } from "react-i18next";
 
 export const tags = [
   "Science",
@@ -34,6 +35,7 @@ const WritePost = ({
   setPage,
   setWriting,
   setTodo,
+  t,
 }) => {
   const { todo } = dashboardState;
   console.log("🚀 ~ todo", todo);
@@ -176,7 +178,7 @@ const WritePost = ({
       {loading && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Title</CustomLabel>
+            <CustomLabel htmlFor="">{t(`writing_label_title`)}</CustomLabel>
             <InputArea
               defaultValue={isEdit ? todo.title : ""}
               type="text"
@@ -185,7 +187,7 @@ const WritePost = ({
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Sub-Title</CustomLabel>
+            <CustomLabel htmlFor="">{t(`writing_label_subTitle`)}</CustomLabel>
             <InputArea
               defaultValue={isEdit ? todo.subTitle : ""}
               type="text"
@@ -194,7 +196,7 @@ const WritePost = ({
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Write Here</CustomLabel>
+            <CustomLabel htmlFor="">{t(`writing_label_writeHere`)}</CustomLabel>
             <BlogEditor ref={ref} value={editorValue} />
           </Grid>
 
@@ -203,7 +205,9 @@ const WritePost = ({
               <>
                 {" "}
                 <Grid item xs={12} sm={12}>
-                  <CustomLabel htmlFor="">Topic Of Interest</CustomLabel>
+                  <CustomLabel htmlFor="">
+                    {t(`writing_label_interest`)}
+                  </CustomLabel>
                   <CustomSelect
                     data={interests}
                     selectItems={interest}
@@ -213,7 +217,7 @@ const WritePost = ({
               </>
             )}
             <Grid item xs={12} sm={12}>
-              <CustomLabel htmlFor="">Add Tags</CustomLabel>
+              <CustomLabel htmlFor="">{t(`writing_label_tags`)}</CustomLabel>
 
               <AddTags setTags={setSuggTags} defaultTags={suggTags} />
             </Grid>
@@ -226,7 +230,7 @@ const WritePost = ({
                 justifyContent="start"
               >
                 <BlackButton onClick={() => HandlePost("publish")}>
-                  {isEdit ? "Update" : "Publish"}
+                  {isEdit ? t(`update_btn`) : t(`publish_btn`)}
                 </BlackButton>
                 {!isEdit && (
                   <OutlineButton
@@ -234,7 +238,7 @@ const WritePost = ({
                     style={{ marginLeft: "30px" }}
                     onClick={() => HandlePost("draft")}
                   >
-                    Save as Draft
+                    {t(`draft_btn`)}
                   </OutlineButton>
                 )}
               </Box>
@@ -242,7 +246,7 @@ const WritePost = ({
           </Grid>
 
           <Grid item xs={12} sm={5}>
-            <CustomLabel>Add Image</CustomLabel>
+            <CustomLabel>{t(`inputLabel_addImage`)}</CustomLabel>
             <ImageInput
               setData={setAllData}
               category={category}
@@ -256,6 +260,7 @@ const WritePost = ({
 };
 
 // using redux
+const writeApost = withTranslation()(WritePost);
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   setTodo: setTodo,
@@ -263,4 +268,4 @@ const mapDispatchToProps = {
   setPage: setPage,
   setWriting: setWriting,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(WritePost);
+export default connect(mapStateToProps, mapDispatchToProps)(writeApost);

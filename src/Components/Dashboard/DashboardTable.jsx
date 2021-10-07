@@ -12,6 +12,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Popover from "@material-ui/core/Popover";
 import { Button } from "@material-ui/core";
 import { tableStyles } from "../../Styles/muiStyles";
+import { withTranslation } from "react-i18next";
 
 const headTableData = [
   {
@@ -19,18 +20,50 @@ const headTableData = [
     numeric: false,
     disablePadding: false,
     label: "Title",
+    trans_label: "mypublish_table_title",
     width: 220,
   },
-  { id: "category", numeric: false, disablePadding: false, label: "Category" },
-  { id: "status", numeric: false, disablePadding: false, label: "Status" },
-  { id: "date", numeric: false, disablePadding: false, label: "Date" },
-  { id: "likes", numeric: true, disablePadding: false, label: "Likes" },
-  { id: "views", numeric: true, disablePadding: false, label: "Views" },
+  {
+    id: "category",
+    numeric: false,
+    disablePadding: false,
+    label: "Category",
+    trans_label: "mypublish_table_category",
+  },
+  {
+    id: "status",
+    numeric: false,
+    disablePadding: false,
+    label: "Status",
+    trans_label: "mypublish_table_status",
+  },
+  {
+    id: "date",
+    numeric: false,
+    disablePadding: false,
+    label: "Date",
+    trans_label: "mypublish_table_date",
+  },
+  {
+    id: "likes",
+    numeric: true,
+    disablePadding: false,
+    label: "Likes",
+    trans_label: "mypublish_table_likes",
+  },
+  {
+    id: "views",
+    numeric: true,
+    disablePadding: false,
+    label: "Views",
+    trans_label: "mypublish_table_views",
+  },
   {
     id: "comment",
     numeric: true,
     disablePadding: false,
     label: "Comment",
+    trans_label: "mypublish_table_comment",
     size: "small",
   },
   {
@@ -38,8 +71,10 @@ const headTableData = [
     numeric: true,
     disablePadding: false,
     label: "Performance",
+    trans_label: "mypublish_table_performance",
   },
 ];
+
 function createData(
   title,
   category,
@@ -166,7 +201,7 @@ const rows = [
   ),
 ];
 
-const DashboardTable = () => {
+const DashboardTable = ({t}) => {
   const classes = tableStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [order, setOrder] = useState("asc");
@@ -288,12 +323,12 @@ const DashboardTable = () => {
                         elevation={1}
                       >
                         <Box mx={2} align="center">
-                          <Button className={classes.button}>Edit</Button>
+                          <Button className={classes.button}>{t("edit")}</Button>
                           <Button
                             style={{ color: "#FF0000" }}
                             className={classes.button}
                           >
-                            Delete
+                            {t("delete")}
                           </Button>
                         </Box>
                       </Popover>
@@ -317,4 +352,4 @@ const DashboardTable = () => {
   );
 };
 
-export default DashboardTable;
+export default withTranslation()(DashboardTable);

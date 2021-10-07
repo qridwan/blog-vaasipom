@@ -76,11 +76,11 @@ const FeedCard = ({
   useEffect(() => {
     setPostContent(feed[feed.category]);
     feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
-  }, [feed]);
+  }, [feed, userEmail]);
 
   useEffect(() => {
     setFeedId(postContent[`${category}Id`]);
-  }, [postContent]);
+  }, [postContent, category]);
 
   const createdDateFormate = dateFormat(postContent?.createdDate, "dS mmmm");
   const handleEdit = () => {

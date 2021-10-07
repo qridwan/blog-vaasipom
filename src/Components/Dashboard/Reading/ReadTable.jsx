@@ -4,7 +4,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TablePagination,
   TableRow,
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -17,6 +16,7 @@ const readHeadCells = [
     numeric: false,
     disablePadding: false,
     label: "Author",
+    trans_label: "readtable_head_author",
     width: 200,
   },
   {
@@ -24,6 +24,7 @@ const readHeadCells = [
     numeric: false,
     disablePadding: false,
     label: "Title",
+    trans_label: "readtable_head_title",
     width: 220,
   },
   {
@@ -31,9 +32,16 @@ const readHeadCells = [
     numeric: false,
     disablePadding: false,
     label: "Description",
+    trans_label: "readtable_head_description",
     width: 220,
   },
-  { id: "category", numeric: false, disablePadding: false, label: "Category" },
+  {
+    id: "category",
+    numeric: false,
+    disablePadding: false,
+    label: "Category",
+    trans_label: "readtable_head_category",
+  },
 ];
 
 function createData(author, title, description, category) {
@@ -56,16 +64,16 @@ const rows = [
 ];
 const ReadTable = () => {
   const classes = tableStyles();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const [page] = useState(0);
+  const [rowsPerPage] = useState(10);
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setPage(0);
+  // };
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
@@ -84,7 +92,12 @@ const ReadTable = () => {
               .map((row, index) => {
                 const description = row.description.slice(0, 45);
                 return (
-                  <TableRow hover className={classes.tableRow} tabIndex={-1} key={row.title}>
+                  <TableRow
+                    hover
+                    className={classes.tableRow}
+                    tabIndex={-1}
+                    key={row.title}
+                  >
                     <TableCell
                       className={classes.tableCell}
                       component="th"
@@ -111,7 +124,7 @@ const ReadTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
+      {/* <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={rows.length}
@@ -119,7 +132,7 @@ const ReadTable = () => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      /> */}
     </Paper>
   );
 };

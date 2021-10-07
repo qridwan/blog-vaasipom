@@ -9,8 +9,6 @@ const GetPosts = (category, pageNumber, user) => {
   const [hasMore, setHasMore] = useState(false);
   const headers = {
     Authorization: localStorage.getItem("token"),
-    // "Access-Control-Allow-Origin": "*",
-    // "content-type": "application/json",
   };
 
   useEffect(() => {

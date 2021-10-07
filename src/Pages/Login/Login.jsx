@@ -23,8 +23,10 @@ import { loginStyles } from "../../Styles/muiStyles";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl.config.js";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import { setPage } from "../../redux/actions/dashboardAction";
 
-const Login = () => {
+const Login = ({ setPage }) => {
   const classes = loginStyles();
   const history = useHistory();
   const [values, setValues] = useState({
@@ -37,26 +39,20 @@ const Login = () => {
     email: "",
     password: "",
   });
-  // const [signInData, setSignInData] = useState({
-  //   username: "",
-  //   password: "",
-  // });
+
   const [isNewUser, setIsNewUser] = useState(true);
   const [createAcc, setCreateAcc] = useState(false);
 
   useEffect(() => {
     document.title = "Blog | Login";
+    setPage("login");
     if (localStorage.token) {
       history.push("/");
     }
   }, []);
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
   const handleLocalStorage = (data) => {
-  localStorage.setItem("token", "Bearer " + data.accessToken);
+    localStorage.setItem("token", "Bearer " + data.accessToken);
     localStorage.setItem("username", data.username);
   };
   const onSubmit = (data) => {
@@ -74,6 +70,7 @@ const Login = () => {
 
     console.log("🚀 ~ onSubmit ~ formData", formData);
     setUserInfo(formData);
+
     // FOR SIGN IN
     !isNewUser &&
       axios
@@ -88,7 +85,6 @@ const Login = () => {
         });
 
     // SEND OTP TO EMAIL
-
     isNewUser &&
       axios
         .get(BaseUrl + "/auth/email/otp?email=" + data.email)
@@ -109,8 +105,6 @@ const Login = () => {
       ...userInfo,
       otp: values.otp,
     };
-
-    console.log("🚀 ~ submitOtp ~ signUpForm", signUpForm);
 
     //FOR SIGN UP
     isNewUser &&
@@ -139,7 +133,6 @@ const Login = () => {
     event.preventDefault();
   };
 
-  // console.log({ userInfo }, { signInData });
   return (
     <main className={classes.root}>
       <Grid container>
@@ -286,7 +279,6 @@ const Login = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  // {...register("otp")}
                   onChange={handleChange("otp")}
                 />
                 <BlackButton type="submit" className={classes.btn}>
@@ -301,4 +293,8 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setPage: setPage,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

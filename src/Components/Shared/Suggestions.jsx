@@ -1,6 +1,7 @@
 import { Container, Divider } from "@material-ui/core";
 import { Box, Paper, Typography } from "@material-ui/core";
 import axios from "axios";
+import i18next from "i18next";
 import React, { Fragment, useEffect, useState } from "react";
 import { BaseUrl } from "../../BaseUrl.config";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
@@ -117,7 +118,9 @@ const Suggestions = () => {
 
       {/*Topic to follow */}
       <Box className={classes.box}>
-        <Typography className={classes.text}>Topics To Follow </Typography>
+        <Typography className={classes.text}>
+          {i18next.t(`topics_to_follow`)}
+        </Typography>
         <Paper component="ul" className={classes.root}>
           {topics &&
             showTopics.map((data, index) => {

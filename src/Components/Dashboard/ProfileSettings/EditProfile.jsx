@@ -1,34 +1,14 @@
 import "date-fns";
-// import MomentUtils from '@date-io/moment';
-// import DateFnsUtils from '@date-io/date-fns';
 import { Box, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import ImageInput from "../Writing/ImageInput";
-// import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
-// import {
-//   KeyboardDatePicker,
-//   MuiPickersUtilsProvider,
-// } from "@material-ui/pickers";
+import { withTranslation } from "react-i18next";
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     margin: "10px 0",
-//   },
-// }));
-const headers = {
-  Authorization: localStorage.getItem("token"),
-  // "Access-Control-Allow-Origin": "*",
-  // "content-type": "application/json",
-};
-
-const EditProfile = () => {
-  // const classes = useStyles();
-  // const [userInfo, setUserInfo] = useState({});
+const EditProfile = ({ t }) => {
   const headers = {
     Authorization: localStorage.getItem("token"),
     "Access-Control-Allow-Origin": "*",
@@ -52,7 +32,7 @@ const EditProfile = () => {
   });
   useEffect(() => {
     document.title = "Blog | Profile | Settings";
-    console.log(`URL---`, BaseUrl + `/myprofile`, { headers })
+    console.log(`URL---`, BaseUrl + `/myprofile`, { headers });
     axios
       .get(BaseUrl + `/myprofile`, { headers })
       .then((response) => {
@@ -104,7 +84,7 @@ const EditProfile = () => {
       {loading && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <CustomLabel htmlFor="">Name</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_name`)}</CustomLabel>
             <InputArea
               defaultValue={firstName}
               name="firstName"
@@ -112,7 +92,7 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <CustomLabel htmlFor="">Profile Title</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_profileTitle`)}</CustomLabel>
             <InputArea
               defaultValue={profileTitle}
               placeholder="eg. Writer, Publisher"
@@ -121,7 +101,7 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <CustomLabel htmlFor="">Profile Description</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_profileDesc`)}</CustomLabel>
             <InputArea
               defaultValue={profileDesc}
               placeholder=""
@@ -130,7 +110,7 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <CustomLabel htmlFor="">Date Of Birth</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_dob`)}</CustomLabel>
             <InputArea
               type="date"
               defaultValue={dob}
@@ -139,7 +119,7 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <CustomLabel htmlFor="">Email</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_email`)}</CustomLabel>
             <InputArea
               defaultValue={email}
               name="email"
@@ -147,13 +127,16 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <CustomLabel htmlFor="">Phone Number</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_phone`)}</CustomLabel>
             <InputArea
               defaultValue={phone}
               name="phone"
               onChange={handleChange}
             />
           </Grid>
+
+          {/* SOCIAL INPUT  */}
+
           {/* <Grid item xs={12} sm={3}>
             <CustomLabel htmlFor="">Website</CustomLabel>
             <InputArea
@@ -199,8 +182,10 @@ const EditProfile = () => {
               // onChange={handleChange}
             />
           </Grid> */}
+
+          
           <Grid item xs={12} sm={3}>
-            <CustomLabel htmlFor="">Country</CustomLabel>
+            <CustomLabel htmlFor="">{t(`inputLabel_country`)}</CustomLabel>
             <InputArea
               defaultValue={country}
               placeholder="Enter Your Country Here"
@@ -209,7 +194,7 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <CustomLabel>Add Image</CustomLabel>
+            <CustomLabel>{t(`inputLabel_addImage`)}</CustomLabel>
             <ImageInput
               setData={setAllData}
               category="profile"
@@ -217,7 +202,7 @@ const EditProfile = () => {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <BlackButton onClick={handleUpdateProfile}>Update</BlackButton>
+            <BlackButton onClick={handleUpdateProfile}>{t(`update_btn`)}</BlackButton>
           </Grid>
         </Grid>
       )}
@@ -225,4 +210,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default withTranslation()(EditProfile);

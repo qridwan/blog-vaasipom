@@ -23,8 +23,9 @@ import { profileStyles } from "../../Styles/muiStyles";
 import { connect } from "react-redux";
 import { setPage, setShowTopics } from "../../redux/actions/dashboardAction";
 import { useHistory, useParams } from "react-router-dom";
+import { withTranslation } from "react-i18next";
 
-const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
+const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
   const classes = profileStyles();
   const [userInfo, setUserInfo] = useState({});
   const [writings, setWritings] = useState([]);
@@ -32,10 +33,9 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
   const { path } = useRouteMatch();
   const [pageNo, setPageNo] = useState(1);
   const { user } = useParams();
-  console.log("🚀 ~ Profile ~ user", user);
+
   const headers = {
     Authorization: localStorage.getItem("token"),
-    // "Access-Control-Allow-Origin": "*",
   };
 
   const getMyProfileInfo = () => {
@@ -60,7 +60,6 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
       })
       .catch((err) => console.log({ err }, BaseUrl + `/profile`));
   };
-  // author/writings?category=article&page=1
   const getMyWritings = (paginate) => {
     axios
       .get(BaseUrl + `/mywritings?page=${paginate}`, {
@@ -93,7 +92,8 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
     setPage(``);
     setShowTopics(false);
     return () => setShowTopics(true);
-  }, []);
+  }, [setPage, setShowTopics]);
+
   useEffect(() => {
     if (path === "/myprofile") {
       getMyProfileInfo();
@@ -103,6 +103,7 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
       getAuthorWritings(user, pageNo);
     }
   }, [pageNo]);
+
   const { firstName, followersCount, profileImgLink, profileTitle } = userInfo;
   const history = useHistory();
   const handleEdit = () => {
@@ -110,7 +111,7 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
     history.push("/dashboard");
     console.log("clicked", `color: red`);
   };
-  console.log("🚀 ~ Profile ~ dashboardState", dashboardState);
+
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3}>
@@ -127,13 +128,13 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
                 {profileTitle ? profileTitle : "Title"}
               </Typography>
               <Typography>
-                <span className={classes.follower}>{followersCount} </span>{" "}
+                <span className={classes.follower}>{followersCount} </span>
                 Followers
               </Typography>
 
               {path === "/myprofile" && (
                 <OutlineButton size="small" onClick={handleEdit}>
-                  Edit
+                  {t(`edit`)}
                 </OutlineButton>
               )}
               <Box my={3}>
@@ -161,9 +162,10 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState }) => {
   );
 };
 
+const TransProfile = withTranslation()(Profile);
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {
   setPage: setPage,
   setShowTopics: setShowTopics,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(TransProfile);

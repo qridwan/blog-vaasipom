@@ -5,6 +5,7 @@ import {
   TableSortLabel,
 } from "@material-ui/core";
 import React from "react";
+import { withTranslation } from "react-i18next";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -32,7 +33,7 @@ export function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 const CustomTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort, data } = props;
+  const { classes, order, orderBy, onRequestSort, data, t } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -44,9 +45,7 @@ const CustomTableHead = (props) => {
             key={headCell.id}
             style={{ width: headCell.width }}
             className={classes.headCell}
-            // style={{width: headCell.width}}
             align={headCell.numeric ? "center" : "start"}
-            // padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy && (orderBy === headCell.id ? order : false)}
           >
             {order ? (
@@ -55,10 +54,10 @@ const CustomTableHead = (props) => {
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
-                {headCell.label}
+                {t(`${headCell.trans_label}`)}
               </TableSortLabel>
             ) : (
-              <> {headCell.label}</>
+              <>{t(`${headCell.trans_label}`)}</>
             )}
           </TableCell>
         ))}
@@ -69,5 +68,4 @@ const CustomTableHead = (props) => {
     </TableHead>
   );
 };
-
-export default CustomTableHead;
+export default withTranslation()(CustomTableHead);

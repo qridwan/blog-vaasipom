@@ -1,10 +1,10 @@
 import { Container } from "@material-ui/core";
 import { Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { withTranslation } from "react-i18next";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import CustomSelect from "../../../muiComponents/CustomSelect";
-import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
-import DashboardTable from "../DashboardTable";
+import { InputArea } from "../../../muiComponents/InputArea";
 import ReadTable from "./ReadTable";
 const categories = [
   "All",
@@ -14,7 +14,7 @@ const categories = [
   "Videocast",
   "Article",
 ];
-const Reading = () => {
+const Reading = ({ t }) => {
   const [status, setStatus] = useState([]);
   useEffect(() => {
     document.title = "Blog | Reading";
@@ -29,11 +29,12 @@ const Reading = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12}>
               <Typography variant="h5" style={{ fontWeight: "bold" }}>
-                Filters
+                {t(`reading_filter_heading`)}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={12}>
-              <InputArea placeholder="Search By Author Name"></InputArea>
+              <InputArea placeholder={t(`reading_search_placeholder`)}
+              ></InputArea>
             </Grid>
             <Grid item xs={12} sm={12}>
               <CustomSelect
@@ -45,7 +46,8 @@ const Reading = () => {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <BlackButton style={{marginTop: 10}}> Apply </BlackButton>
+              <BlackButton style={{ marginTop: 10 }}>  {t(`reading_apply_btn`)}
+               </BlackButton>
             </Grid>
           </Grid>
         </Grid>
@@ -54,4 +56,4 @@ const Reading = () => {
   );
 };
 
-export default Reading;
+export default withTranslation()(Reading);

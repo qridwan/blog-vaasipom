@@ -1,5 +1,4 @@
 import { createTheme, ThemeProvider } from "@material-ui/core";
-import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
@@ -8,6 +7,7 @@ import TopicSlider from "./Components/Shared/TopicSlider";
 import Navigation from "./Pages/Common/Navigation";
 import { setShowTopics } from "./redux/actions/dashboardAction";
 import { Routes } from "./routes";
+
 const fontTheme = createTheme({
   typography: {
     fontFamily: ["Manrope", "Times"].join(","),
@@ -31,13 +31,7 @@ function RouteWithSubRoutes(route) {
 }
 
 function App(props) {
-  console.log("🚀 ~ App ~ props", props);
-  const { dashboardState, setShowTopics } = props;
-
-  // const [isDashboard, setIsDashboard] = useState(false);
-  // useEffect(() => {
-  //   setShowTopics(true);
-  // }, []);
+  const { dashboardState } = props;
   const { page, showTopics } = dashboardState;
   return (
     <Router>

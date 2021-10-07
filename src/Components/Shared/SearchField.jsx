@@ -5,6 +5,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { InputBase, Typography } from "@material-ui/core";
 import FeedImg from "../../Assets/img/feedImg.png";
 import { grey } from "@material-ui/core/colors";
+import { withTranslation } from "react-i18next";
 
 const searchFieldStyles = makeStyles((theme) => ({
   label: {
@@ -108,7 +109,7 @@ const searchFieldStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchField = () => {
+const SearchField = ({ t }) => {
   const classes = searchFieldStyles();
   const {
     getRootProps,
@@ -128,7 +129,7 @@ const SearchField = () => {
           <SearchIcon />
         </div>
         <InputBase
-          placeholder="Search something here…"
+          placeholder={t(`search_input_placeholder`)}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
@@ -168,7 +169,7 @@ const SearchField = () => {
   );
 };
 
-export default SearchField;
+export default withTranslation()(SearchField);
 
 const top100Films = [
   {

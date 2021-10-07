@@ -15,6 +15,7 @@ import VideocastIcon from "../../Assets/icons/videocastIcon.svg";
 import PoetryIcon from "../../Assets/icons/poetryIcon.svg";
 import ReviewIcon from "../../Assets/icons/reviewIcon.svg";
 import MenuItemBg from "../../Assets/img/menuItemBg.svg";
+import { withTranslation } from "react-i18next";
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
@@ -46,48 +47,54 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {},
 }));
+const menuList = [
+  {
+    id: 1,
+    title: "Article",
+    trans_label: "dash_modal_article",
+    write: "article",
+    icon: ArticleIcon,
+  },
+  {
+    id: 2,
+    title: "Short Story",
+    trans_label: "dash_modal_story",
+    write: "story",
+    icon: ShortStoryIcon,
+  },
+  {
+    id: 3,
+    title: "Podcast",
+    trans_label: "dash_modal_podcast",
+    write: "podcast",
+    icon: PodcastIcon,
+  },
+  {
+    id: 4,
+    title: "Poetry",
+    trans_label: "dash_modal_poetry",
+    write: "poetry",
+    icon: PoetryIcon,
+  },
+  {
+    id: 5,
+    title: "Reviews",
+    trans_label: "dash_modal_review",
+    write: "review",
+    icon: ReviewIcon,
+  },
+  {
+    id: 6,
+    title: "Videocast",
+    trans_label: "dash_modal_videocast",
+    write: "videocast",
+    icon: VideocastIcon,
+  },
+];
 
-const MenuModal = ({ open, handleClose, setWrite }) => {
+
+const MenuModal = ({ open, handleClose, setWrite, t }) => {
   const classes = useStyles();
-
-  const menuList = [
-    {
-      id: 1,
-      title: "Article",
-      write: "article",
-      icon: ArticleIcon,
-    },
-    {
-      id: 2,
-      title: "Short Story",
-      write: "story",
-      icon: ShortStoryIcon,
-    },
-    {
-      id: 3,
-      title: "Podcast",
-      write: "podcast",
-      icon: PodcastIcon,
-    },
-    {
-      id: 4,
-      title: "Poetry",
-      write: "poetry",
-      icon: PoetryIcon,
-    },
-    {
-      id: 5,
-      title: "Reviews",
-      write: "review",
-      icon: ReviewIcon,
-    },
-    {
-      id: 6,
-      title: "Videocast",
-      write: "videocast",
-      icon: VideocastIcon,
-    },
-  ];
 
   const handleRender = (title) => {
     setWrite(title);
@@ -111,7 +118,7 @@ const MenuModal = ({ open, handleClose, setWrite }) => {
         <Fade in={open}>
           <div className={classes.paper}>
             <h1 id="transition-modal-title">
-              Any one can write. Show your creativity
+             {t('dash_modal_heading')}
             </h1>
             <Grid container spacing={4}>
               {menuList.map((obj) => (
@@ -126,7 +133,7 @@ const MenuModal = ({ open, handleClose, setWrite }) => {
                       </IconButton>
                     </div>
                     <Typography className={classes.title}>
-                      {obj.title}
+                      {t(`${obj.trans_label}`)}
                     </Typography>
                   </Paper>
                 </Grid>
@@ -139,4 +146,4 @@ const MenuModal = ({ open, handleClose, setWrite }) => {
   );
 };
 
-export default MenuModal;
+export default withTranslation()(MenuModal);
