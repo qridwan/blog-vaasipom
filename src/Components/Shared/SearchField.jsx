@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import useAutocomplete from "@material-ui/lab/useAutocomplete";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
@@ -14,6 +14,7 @@ const searchFieldStyles = makeStyles((theme) => ({
   input: {
     width: 300,
     border: "none",
+    color: "black",
     padding: "5px",
     fontSize: "16px",
     "& :focus": {
@@ -31,6 +32,7 @@ const searchFieldStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     padding: "10px 0",
+    zIndex: "5000",
   },
   suggImg: {
     borderRadius: "10%",
@@ -52,7 +54,7 @@ const searchFieldStyles = makeStyles((theme) => ({
     margin: 0,
     marginLeft: "10px",
     padding: 5,
-    zIndex: 1,
+    zIndex: 10000,
     position: "absolute",
     listStyle: "none",
     backgroundColor: theme.palette.background.paper,
@@ -87,6 +89,7 @@ const searchFieldStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 2),
     height: "100%",
     position: "absolute",
+    color: "black",
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
@@ -97,6 +100,7 @@ const searchFieldStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
+    color: "black",
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -110,6 +114,17 @@ const searchFieldStyles = makeStyles((theme) => ({
 }));
 
 const SearchField = ({ t }) => {
+  const [searchedPost, setSearchedPost] = useState([
+    {
+      title: "The Shawshank Redemption",
+      img: FeedImg,
+      desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
+    },
+  ]);
+  // const handleSearchInput = () => {
+  //   console.log("🚀 ~ handleSearchInput ~ clicked");
+    
+  // };
   const classes = searchFieldStyles();
   const {
     getRootProps,
@@ -119,9 +134,22 @@ const SearchField = ({ t }) => {
     groupedOptions,
   } = useAutocomplete({
     id: "use-autocomplete-demo",
-    options: top100Films,
+    options: searchedPost,
     getOptionLabel: (option) => option.title,
   });
+  // const inputArea = useRef(null);
+  // const {
+  //   getRootProps,
+  //   getInputProps,
+  //   getListboxProps,
+  //   getOptionProps,
+  //   groupedOptions,
+  // } = useAutocomplete({
+  //   id: "use-autocomplete-demo",
+  //   options: searchedPost,
+  //   getOptionLabel: (option) => option.title,
+  // });
+  console.log("🚀 ~ handleSearchInput ~getInputProps", getInputProps().value);
   return (
     <div>
       <div className={classes.search} {...getRootProps()}>
@@ -129,7 +157,9 @@ const SearchField = ({ t }) => {
           <SearchIcon />
         </div>
         <InputBase
+          // ref={inputArea}
           placeholder={t(`search_input_placeholder`)}
+          // onChange={handleSearchInput}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
@@ -171,7 +201,7 @@ const SearchField = ({ t }) => {
 
 export default withTranslation()(SearchField);
 
-const top100Films = [
+export const top100Films = [
   {
     title: "The Shawshank Redemption",
     img: FeedImg,

@@ -22,8 +22,10 @@ const PostFooterInfo = ({ date, readTime, topic, tags }) => {
     <Box display="flex" justifyContent="start" alignItems="center" my={0}>
       <Typography className={classes.text}>{date}</Typography>
       <span className={classes.span}> | </span>
-      <Typography className={classes.text}>{readTime}</Typography>
-      <span className={classes.span}> | </span>
+
+      {/* READ TIME */}
+      {/* <Typography className={classes.text}>{readTime}</Typography>
+      <span className={classes.span}> | </span> */}
       {topic && (
         <NavLink to={`/${topic}`}>
           <OutlineButton size="xsmall" style={{ color: grey[600] }}>

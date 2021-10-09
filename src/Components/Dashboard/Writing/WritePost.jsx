@@ -40,6 +40,7 @@ const WritePost = ({
   const { todo } = dashboardState;
   console.log("🚀 ~ todo", todo);
   const [suggTags, setSuggTags] = useState([]);
+  const [allIterest, setALlInterest] = useState([]);
   const [interest, setInterest] = useState([]);
   const [editorValue, setEditorValue] = useState();
   const [loading, setLoading] = useState(false);
@@ -63,7 +64,17 @@ const WritePost = ({
     // topic: "",
     content: "",
   });
-
+  const getAllInterest = () => {
+    axios
+      .get(BaseUrl + `/interests`, { headers })
+      .then((res) => {
+        console.log("🚀 ~ .then ~ res", res);
+        let allData = [];
+        res.data.forEach((data) => allData.push(data.interestId));
+        setALlInterest(allData);
+      })
+      .catch((err) => console.error(err));
+  };
   useEffect(() => {
     document.title = `Blog | Writing | ${type.toUpperCase()}`;
     setIsEdit(todo.edit);
@@ -81,6 +92,7 @@ const WritePost = ({
         tags: todo.tags,
       });
     setLoading(true);
+    getAllInterest();
     return () => cleanReduxState();
   }, []);
 
@@ -102,9 +114,11 @@ const WritePost = ({
     articleContent();
     const content = ref.current.getContent();
     let selectedTags = [];
-    // console.log({ suggTags });
+    console.log({ suggTags });
     suggTags.forEach((tag) => selectedTags.push(tag.label));
     // console.log({ data, tags, interest, content });
+
+    console.log("🚀 ~ HandlePost ~ selectedTags", selectedTags.join())
     const postData = {
       ...allData,
       tags: selectedTags.join(),
@@ -127,6 +141,7 @@ const WritePost = ({
     // "content-type": "application/json",
   };
 
+  console.log("🚀 ~ suggTags", suggTags)
   const CreateArticle = (data) => {
     console.log("-Request Body-", data);
     console.log(BaseUrl + `/${category}`);
@@ -209,7 +224,7 @@ const WritePost = ({
                     {t(`writing_label_interest`)}
                   </CustomLabel>
                   <CustomSelect
-                    data={interests}
+                    data={allIterest}
                     selectItems={interest}
                     setSelectItems={setInterest}
                   />

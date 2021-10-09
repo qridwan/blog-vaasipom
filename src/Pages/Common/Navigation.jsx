@@ -1,13 +1,13 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
 import VasipomLogo from "../../Assets/logos/VasipomLogo2.png";
-import { AppBar, Box, InputBase, Toolbar } from "@material-ui/core";
+import { AppBar, Box, Toolbar } from "@material-ui/core";
 import { NavigationStyles } from "../../Styles/muiStyles";
 import { Container } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import SearchIcon from "@material-ui/icons/Search";
 import { DarkButton } from "../../muiComponents/OutlineButton";
 import NavLoginPreference from "../../Components/Shared/NavLoginPreference";
+import SearchField from "../../Components/Shared/SearchField";
 
 const Navigation = ({ t }) => {
   const classes = NavigationStyles();
@@ -33,18 +33,10 @@ const Navigation = ({ t }) => {
                   />
                 </NavLink>
               </Box>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon style={{ color: "black" }} />
-                </div>
-                <InputBase
-                  placeholder={t("search_input_placeholder")}
-                  classes={{
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ "aria-label": "search" }}
-                />
+              <div className={classes.searchField}>
+                <SearchField style={{ color: "black" }} />
               </div>
+
               {/* After Login  */}
               {!isLogin && (
                 <NavLink to="/login">

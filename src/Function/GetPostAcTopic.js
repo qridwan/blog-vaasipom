@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BaseUrl } from "../BaseUrl.config";
 
-const GetPosts = (category, pageNumber, user,) => {
+const GetPostAcTopic = (topic, pageNumber, loadPost) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -10,45 +10,61 @@ const GetPosts = (category, pageNumber, user,) => {
   const headers = {
     Authorization: localStorage.getItem("token"),
   };
-
+  const category = `story,article,poetry,review,podcast,videocast`;
   useEffect(() => {
     setPosts([]);
-  }, [category]);
+  }, [topic, loadPost]);
 
   const checkHasMore = () => {
-    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
-    axios({
-      method: "GET",
-      url: BaseUrl + subUrl,
-      headers: headers,
-      params: { categoryList: category, page: pageNumber + 1, allPost: true },
-    })
-      .then((res) => {
-        setHasMore(res.data.length > 0);
+    const subUrl = localStorage.token
+      ? `/posts/interests`
+      : `/auth/posts/interests`;
+
+    topic &&
+      axios({
+        method: "GET",
+        url: BaseUrl + subUrl,
+        headers: headers,
+        params: {
+          categoryList: category,
+          page: pageNumber + 1,
+          allPost: false,
+          topic: topic,
+        },
       })
-      .catch((e) => {
-        console.error(e);
-      });
+        .then((res) => {
+          setHasMore(res.data.length > 0);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
   };
   useEffect(() => {
     setLoading(true);
-    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
+    const subUrl = localStorage.token
+      ? `/posts/interests?`
+      : `/auth/posts/interests?`;
     setError(false);
     let cancel;
     axios({
       method: "GET",
       url: BaseUrl + subUrl,
       headers: headers,
-      params: { categoryList: category, page: pageNumber, allPost: true },
+      params: {
+        categoryList: category,
+        page: pageNumber,
+        allPost: false,
+        topic: topic,
+      },
       cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })
       .then((res) => {
+        console.log("🚀 ~ .then ~ res", res);
         console.log(BaseUrl + subUrl);
         setPosts((prevposts) => {
           return [...new Set([...prevposts, ...res.data])];
         });
         checkHasMore();
-        // setHasMore(res.data.docs.length > 0);
         setLoading(false);
       })
       .catch((e) => {
@@ -56,8 +72,8 @@ const GetPosts = (category, pageNumber, user,) => {
         setError(true);
       });
     return () => cancel();
-  }, [category, pageNumber]);
+  }, [topic, pageNumber, loadPost]);
 
   return { loading, error, posts, hasMore };
 };
-export default GetPosts;
+export default GetPostAcTopic;

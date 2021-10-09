@@ -152,9 +152,10 @@ const FeedCard = ({
                   <QueueMusicIcon style={{ fontSize: "16px" }} />
                 </IconButton>
               )}
-              <IconButton style={{ padding: "2px" }}>
+              {/* BOOKMARKED */}
+              {/* <IconButton style={{ padding: "2px" }}>
                 <BookmarkIcon style={{ fontSize: "16px" }} />
-              </IconButton>
+              </IconButton> */}
 
               {/* edit option visible only for users post */}
               {isUser && (
@@ -209,7 +210,8 @@ const FeedCard = ({
           <Grid item xs={12} sm={4}>
             <CardMedia
               className={classes.media}
-              image={postContent?.mainImage}
+              // image={postContent?.mainImage}
+              image={postContent?.thumbnail}
               title="Feed Cover Photo"
             />
           </Grid>

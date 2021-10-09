@@ -71,6 +71,7 @@ const LandingPage = (props) => {
           className={classes.content}
         >
           <Grid item xs={12} sm={8} className={classes.left}>
+            
             <Paper className={classes.paper}>
               {isLoading && (
                 <MuiProgress open={handleOpen} close={handleClose} />

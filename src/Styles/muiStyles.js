@@ -9,7 +9,7 @@ export const NavigationStyles = makeStyles((theme) => {
       paddingTop: 12,
     },
     appBar: {
-      backgroundColor: "#ffffff",
+      backgroundColor: "transparent",
       boxShadow: "none",
       // display: "flex",
     },
@@ -31,7 +31,31 @@ export const NavigationStyles = makeStyles((theme) => {
       width: "100%",
       textTransform: "capitalize",
     },
+    searchField: {
+      display: "none",
+      [theme.breakpoints.up("sm")]: {
+        display: "block",
+        marginRight: "10px",
+        input: {
+          text: "black",
+        },
+      },
+    },
     search: {
+      position: "relative",
+      borderRadius: "25px",
+      border: `1px solid ${grey[300]}`,
+      "&:hover": {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+      },
+      marginLeft: 0,
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        marginLeft: theme.spacing(1),
+        width: "auto",
+      },
+    },
+    searchContainer: {
       display: "flex",
       border: `1px solid ${grey[300]}`,
       borderRadius: "5px",
@@ -56,6 +80,50 @@ export const NavigationStyles = makeStyles((theme) => {
         display: "block",
         width: "300px",
         padding: theme.spacing(1, 1, 1, 0),
+      },
+    },
+    searchSuggestion: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "10px 0",
+      zIndex: "5000",
+    },
+    suggImg: {
+      borderRadius: "10%",
+      marginRight: "5px",
+    },
+    suggTitle: {
+      fontWeight: "bold",
+      fontSize: "14px",
+      lineHeight: "150%",
+      color: "#121212",
+    },
+    suggSubTitle: {
+      fontSize: "12px",
+      lineHeight: "150%",
+      color: "#6B6B6B",
+    },
+    listbox: {
+      width: "35ch",
+      margin: 0,
+      marginLeft: "10px",
+      padding: 5,
+      zIndex: 1,
+      position: "absolute",
+      listStyle: "none",
+      backgroundColor: theme.palette.background.paper,
+      overflow: "auto",
+      maxHeight: 200,
+      border: "1px solid rgba(0,0,0,.25)",
+      '& li[data-focus="true"]': {
+        backgroundColor: "#4a8df6",
+        color: "white",
+        cursor: "pointer",
+      },
+      "& li:active": {
+        backgroundColor: "#2977f5",
+        color: "white",
       },
     },
   };
@@ -187,7 +255,7 @@ export const fullFeedStyles = makeStyles({
     position: "relative",
     margin: "2% 0 0 0",
     height: "380px",
-    display: "block"
+    display: "block",
   },
   player: {
     position: "absolute",
@@ -256,6 +324,116 @@ export const landingPageStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
     position: "sticky",
     top: "0",
+  },
+}));
+const drawerWidth = 250;
+export const dashboardStyle = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    // backgroundColor: "#ffffff",
+  },
+  brandLogo: {
+    textAlign: "center",
+    padding: "20px 0",
+  },
+  drawer: {
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth / 2,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+      paddingRight: drawerWidth / 2,
+      padding: drawerWidth / 20,
+      boxShadow: "none",
+    },
+  },
+  searchField: {
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "block",
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(1),
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+
+  listItem: {
+    padding: "20px 30px",
+    cursor: "pointer",
+  },
+  listItemSelected: {
+    padding: "20px 30px",
+    cursor: "pointer",
+    backgroundColor: grey[900],
+  },
+  listItemText: {
+    fontWeight: "500",
+    fontSize: "23.1689px",
+    lineHeight: "32px",
+    color: "#E5E5E5",
+  },
+  // necessary for content to be below app bar
+  toolbar: {
+    minHeight: "100px",
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    backgroundColor: "#000000",
+    color: "#ffffff",
+  },
+  content: {
+    flexGrow: 1,
+    padding: "30px 0 40px 0",
+    marginLeft: "150px",
+    backgroundColor: "#ffffff",
+    overflowX: "auto",
+  },
+  navIcon: {
+    marginLeft: "15px",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: "26px",
+    lineHeight: "150%",
+    color: "#121212",
+  },
+  readingNav: {
+    flexGrow: 1,
+  },
+  navTitle: {
+    display: "none",
+    color: "#767676",
+    fontSize: "16px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    marginRight: theme.spacing(3),
+    [theme.breakpoints.up("sm")]: {
+      display: "inline-block",
+    },
+  },
+  darkNavTitle: {
+    display: "none",
+    color: "#000000",
+    fontSize: "16px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.31)",
+    marginRight: theme.spacing(4),
+    [theme.breakpoints.up("sm")]: {
+      display: "inline-block",
+    },
+  },
+  navTitleSpan: {
+    color: "#aba7a7",
+    fontSize: "14px",
+    marginLeft: "5px",
   },
 }));
 

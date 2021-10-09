@@ -8,6 +8,7 @@ import "swiper/components/navigation/navigation.min.css";
 import { Box, Container } from "@material-ui/core";
 import axios from "axios";
 import { BaseUrl } from "../../BaseUrl.config";
+import { NavLink } from "react-router-dom";
 
 SwiperCore.use([Navigation]);
 const TopicSlider = () => {
@@ -25,9 +26,7 @@ const TopicSlider = () => {
         })
         .catch((err) => console.error(err));
   }, []);
-  const handleShowPost = (topic) => {
-    // axios.get(BaseUrl + `/posts/interests?categoryList=story,article,poetry,review,podcast,videocast&page=1&allPost=false&topic=${topic}`, { headers })
-  };
+
   return (
     <Container maxWidth="lg">
       {topics && (
@@ -73,13 +72,11 @@ const TopicSlider = () => {
                 key={data.interestName}
                 style={{ width: "min-content", margin: "15px" }}
               >
-                <OutlineButton
-                  size="small"
-                  style={{ whiteSpace: "nowrap" }}
-                  onClick={() => handleShowPost(data.interestId)}
-                >
-                  {data.interestName}
-                </OutlineButton>
+                <NavLink to={`/tag/${data.interestId}`}>
+                  <OutlineButton size="small" style={{ whiteSpace: "nowrap" }}>
+                    {data.interestName}
+                  </OutlineButton>
+                </NavLink>
               </SwiperSlide>
             ))}
           </Swiper>

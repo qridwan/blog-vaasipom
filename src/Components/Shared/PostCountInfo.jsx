@@ -91,18 +91,6 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
             <Typography className={classes.text}>{views}</Typography>
           </Box>
           <Box display="flex" alignItems="center" py={0} mr={1}>
-            {/* <FormControlLabel
-          className={classes.root}
-          onClick={handleLike}
-          control={
-            <Checkbox
-              style={{ padding: "2px" }}
-              icon={<FavoriteBorderOutlinedIcon className={classes.icon} />}
-              checkedIcon={<Favorite className={classes.icon} />}
-              name="checkedH"
-            />
-          }
-        /> */}
             <IconButton
               className={classes.root}
               onClick={isClicked ? handleDislike : handleLike}

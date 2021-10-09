@@ -9,7 +9,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Box, Container, IconButton } from "@material-ui/core";
 import SearchField from "../../Components/Shared/SearchField";
@@ -31,136 +31,24 @@ import { setPage, setWriting } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 import WritePost from "../../Components/Dashboard/Writing/WritePost";
 import { withTranslation } from "react-i18next";
-
-const drawerWidth = 250;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    backgroundColor: "#ffffff",
-  },
-  brandLogo: {
-    textAlign: "center",
-    padding: "20px 0",
-  },
-  drawer: {
-    [theme.breakpoints.up("sm")]: {
-      width: drawerWidth / 2,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    [theme.breakpoints.up("sm")]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-      paddingRight: drawerWidth / 2,
-      padding: drawerWidth / 20,
-      boxShadow: "none",
-    },
-  },
-  searchField: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(1),
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
-  },
-
-  listItem: {
-    padding: "20px 30px",
-    cursor: "pointer",
-  },
-  listItemSelected: {
-    padding: "20px 30px",
-    cursor: "pointer",
-    backgroundColor: grey[900],
-  },
-  listItemText: {
-    fontWeight: "500",
-    fontSize: "23.1689px",
-    lineHeight: "32px",
-    color: "#E5E5E5",
-  },
-  // necessary for content to be below app bar
-  toolbar: {
-    minHeight: "100px",
-  },
-  drawerPaper: {
-    width: drawerWidth,
-    backgroundColor: "#000000",
-    color: "#ffffff",
-  },
-  content: {
-    flexGrow: 1,
-    padding: "30px 0 40px 0",
-    marginLeft: "150px",
-    backgroundColor: "#ffffff",
-    overflowX: "auto",
-  },
-  navIcon: {
-    marginLeft: "15px",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: "26px",
-    lineHeight: "150%",
-    color: "#121212",
-  },
-  readingNav: {
-    flexGrow: 1,
-  },
-  navTitle: {
-    display: "none",
-    color: "#767676",
-    fontSize: "16px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    marginRight: theme.spacing(3),
-    [theme.breakpoints.up("sm")]: {
-      display: "inline-block",
-    },
-  },
-  darkNavTitle: {
-    display: "none",
-    color: "#000000",
-    fontSize: "16px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    borderBottom: "1px solid rgba(0, 0, 0, 0.31)",
-    marginRight: theme.spacing(4),
-    [theme.breakpoints.up("sm")]: {
-      display: "inline-block",
-    },
-  },
-  navTitleSpan: {
-    color: "#aba7a7",
-    fontSize: "14px",
-    marginLeft: "5px",
-  },
-}));
+import { dashboardStyle } from "../../Styles/muiStyles";
 
 const Dashboard = (props) => {
   const { window } = props;
   const { dashboardState, setPage, setWrite, t } = props;
   const { page, writing } = dashboardState;
-  const classes = useStyles();
+  const classes = dashboardStyle();
   const theme = useTheme();
-  const [lookingFor] = useState([
-    { key: 1, label: "All", trans_label: "reading_nav_all" },
-    { key: 2, label: "Bookmarked", trans_label: "reading_nav_bookmarked" },
-    { key: 3, label: "Liked", trans_label: "reading_nav_liked" },
-  ]);
-
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [reading, setReading] = useState("All");
   const [open, setOpen] = useState(false);
 
-  // const [isLogin, setIsLogin] = useState(false);
+  // READING PART-------------
+  // const [lookingFor] = useState([
+  //   { key: 1, label: "All", trans_label: "reading_nav_all" },
+  //   { key: 2, label: "Bookmarked", trans_label: "reading_nav_bookmarked" },
+  //   { key: 3, label: "Liked", trans_label: "reading_nav_liked" },
+  // ]);
+  // const [reading, setReading] = useState("All");
 
   useEffect(() => {
     page === "" && setPage("Writing");
@@ -182,11 +70,12 @@ const Dashboard = (props) => {
       trans_label: "dashboard_sidebar_writing",
       icon: writingIcon,
     },
-    {
-      item: "Reading",
-      trans_label: "dashboard_sidebar_reading",
-      icon: readingIcon,
-    },
+    // READING PART
+    // {
+    //   item: "Reading",
+    //   trans_label: "dashboard_sidebar_reading",
+    //   icon: readingIcon,
+    // },
     {
       item: "Settings",
       trans_label: "dashboard_sidebar_settings",
@@ -223,10 +112,12 @@ const Dashboard = (props) => {
       </List>
     </div>
   );
-  const handleReadingNav = (page, event) => {
-    console.log(page, event);
-    setReading(page);
-  };
+
+  // Reading PART---------------
+  // const handleReadingNav = (page, event) => {
+  //   console.log(page, event);
+  //   setReading(page);
+  // };
   const container =
     window !== undefined ? () => window().document.body : undefined;
   console.log({ page, writing });
@@ -245,7 +136,8 @@ const Dashboard = (props) => {
           <MenuIcon />
         </IconButton>
         <Toolbar>
-          {page === "Reading" && (
+          {/* READING PART */}
+          {/* {page === "Reading" && (
             <div className={classes.readingNav}>
               {lookingFor.map((data) => {
                 let page = data.label;
@@ -262,9 +154,8 @@ const Dashboard = (props) => {
                 );
               })}
             </div>
-          )}
+          )} */}
           <Box display="flex" alignItems="center" flexGrow="1"></Box>
-
           <div className={classes.searchField}>
             <SearchField />
           </div>
@@ -373,8 +264,9 @@ const Dashboard = (props) => {
           (page === "Writing" && writing === "videocast")) && (
           <MediaCast type={writing} />
         )}
+
         {/* Reading Section */}
-        {page === "Reading" && <Reading />}
+        {/* {page === "Reading" && <Reading />} */}
       </main>
     </Container>
   );
