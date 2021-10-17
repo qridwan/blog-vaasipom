@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import CustomTableHead, { getComparator, stableSort } from "./TableHead";
 import { Box, IconButton } from "@material-ui/core";
@@ -13,8 +12,23 @@ import Popover from "@material-ui/core/Popover";
 import { Button } from "@material-ui/core";
 import { tableStyles } from "../../Styles/muiStyles";
 import { withTranslation } from "react-i18next";
+import LoadingAtom from "../../muiComponents/LoadingAtom";
+import { PaginationBlog } from "../../muiComponents/PaginationBlog";
+import GetMywritings from "../../Function/GetMywritings";
+import DateFormater from "../../Function/DateFormater";
+import { connect } from "react-redux";
+import { deletePost } from "../../redux/actions/landingPage.Action";
+import {
+  setPage,
+  setPostId,
+  setTodo,
+  setWriting,
+} from "../../redux/actions/dashboardAction";
+import { NavLink } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import HandleDelete from "../../Function/HandleDelete";
 
-const headTableData = [
+const headDashboardTableData = [
   {
     id: "title",
     numeric: false,
@@ -46,33 +60,33 @@ const headTableData = [
   },
   {
     id: "likes",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "Likes",
     trans_label: "mypublish_table_likes",
   },
   {
     id: "views",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "Views",
     trans_label: "mypublish_table_views",
   },
-  {
-    id: "comment",
-    numeric: true,
-    disablePadding: false,
-    label: "Comment",
-    trans_label: "mypublish_table_comment",
-    size: "small",
-  },
-  {
-    id: "performance",
-    numeric: true,
-    disablePadding: false,
-    label: "Performance",
-    trans_label: "mypublish_table_performance",
-  },
+  // {
+  //   id: "comment",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "Comment",
+  //   trans_label: "mypublish_table_comment",
+  //   size: "small",
+  // },
+  // {
+  //   id: "performance",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "Performance",
+  //   trans_label: "mypublish_table_performance",
+  // },
 ];
 
 function createData(
@@ -201,13 +215,45 @@ const rows = [
   ),
 ];
 
-const DashboardTable = ({t}) => {
+const DashboardTable = ({
+  t,
+  category,
+  setPage,
+  setWriting,
+  setPostId,
+  setTodo,
+  deletePost,
+}) => {
   const classes = tableStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("calories");
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [orderBy, setOrderBy] = useState("title");
+  const [pageNo, setPageNo] = useState(0);
+  const [isChanged, setIsChanged] = useState(false);
+  useEffect(() => {
+    setPageNo(0);
+  }, [category]);
+  const { enqueueSnackbar } = useSnackbar();
+  const handleEdit = (postId, fullPost) => {
+    setPage("StartWriting");
+    setWriting(category);
+    setPostId(postId);
+    setTodo({
+      edit: true,
+      ...fullPost,
+    });
+  };
+  const handleDelete = (categ, feedId) => {
+    const success = HandleDelete(categ, feedId, enqueueSnackbar);
+    console.log("🚀 ~ handleDelete ~ success", success)
+    success && setIsChanged(true);
+  };
+
+  const { posts, hasMore, loading } = GetMywritings(
+    category,
+    pageNo + 1,
+    isChanged
+  );
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -220,15 +266,6 @@ const DashboardTable = ({t}) => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -236,120 +273,160 @@ const DashboardTable = ({t}) => {
   };
   return (
     <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <CustomTableHead
-            classes={classes}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            rowCount={rows.length}
-            data={headTableData}
-          />
-          <TableBody>
-            {stableSort(rows, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
-                let performanceTextColor = "";
-                let statusTextColor = "";
-                if (row.performance > 0) {
-                  performanceTextColor = "#1AB82F";
-                }
-                if (row.status === "Active") {
-                  statusTextColor = "#1AB82F";
-                }
-                return (
-                  <TableRow hover tabIndex={-1} key={row.name}>
-                    <TableCell
-                      className={classes.tableCell}
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                    >
-                      {row.title}
-                    </TableCell>
-                    <TableCell className={classes.tableCell} align="start">
-                      {row.category}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="start"
-                      style={{ color: statusTextColor }}
-                    >
-                      {row.status}
-                    </TableCell>
-                    <TableCell className={classes.tableCell} align="start">
-                      {row.date}
-                    </TableCell>
-                    <TableCell className={classes.tableCell} align="start">
-                      {row.likes}
-                    </TableCell>
-                    <TableCell className={classes.tableCell} align="start">
-                      {row.views}
-                    </TableCell>
-                    <TableCell className={classes.tableCell} align="center">
+      {!loading ? (
+        <>
+          <TableContainer className={classes.container}>
+            <Table stickyHeader aria-label="sticky table">
+              <CustomTableHead
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={posts.length}
+                data={headDashboardTableData}
+              />
+              <TableBody>
+                {stableSort(posts, getComparator(order, orderBy)).map(
+                  (row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`;
+                    // let performanceTextColor = "";
+                    // if (row.performance > 0) {
+                    // performanceTextColor = "#1AB82F";
+                    // }
+                    let status;
+                    let statusTextColor = "";
+
+                    if (row.status === "A") {
+                      status = "Active";
+                      statusTextColor = "#1AB82F";
+                    }
+                    if (row.status === "I") {
+                      status = "Inactive";
+                      statusTextColor = "#C70039";
+                    }
+                    const { date } = DateFormater(row.createdDate);
+                    return (
+                      <TableRow hover tabIndex={-1} key={index}>
+                        <TableCell
+                          className={classes.tableCell}
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                        >
+                          {row.title}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} align="start">
+                          {category}
+                        </TableCell>
+                        <TableCell
+                          className={classes.tableCell}
+                          align="start"
+                          style={{ color: statusTextColor }}
+                        >
+                          {status}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} align="start">
+                          {date}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} align="start">
+                          {row.likes}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} align="start">
+                          {row.reads}
+                        </TableCell>
+                        {/* <TableCell className={classes.tableCell} align="center">
                       {row.comment}
-                    </TableCell>
-                    <TableCell
+                    </TableCell> */}
+                        {/* <TableCell
                       className={classes.tableCell}
                       align="center"
                       style={{ color: performanceTextColor }}
                     >
                       {row.performance} %
-                    </TableCell>
-                    <TableCell className={classes.tableCell} align="center">
-                      <IconButton
-                        aria-describedby={id}
-                        variant="contained"
-                        color="primary"
-                        onClick={handleClick}
-                      >
-                        <MoreHorizIcon />
-                      </IconButton>
-                      <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "center",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "center",
-                        }}
-                        elevation={1}
-                      >
-                        <Box mx={2} align="center">
-                          <Button className={classes.button}>{t("edit")}</Button>
-                          <Button
-                            style={{ color: "#FF0000" }}
-                            className={classes.button}
+                    </TableCell> */}
+                        <TableCell className={classes.tableCell} align="center">
+                          <IconButton
+                            aria-describedby={id}
+                            variant="contained"
+                            color="primary"
+                            onClick={handleClick}
                           >
-                            {t("delete")}
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+                            <MoreHorizIcon />
+                          </IconButton>
+                          <Popover
+                            id={id}
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "center",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "center",
+                            }}
+                            elevation={1}
+                          >
+                            <Box mx={2} align="center">
+                              <Button
+                                onClick={() =>
+                                  handleEdit(row[`${category}Id`], row)
+                                }
+                                className={classes.button}
+                              >
+                                {t("edit")}
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  handleClose();
+                                  // deletePost(
+                                  //   category,
+                                  //   row[`${category}Id`],
+                                  //   enqueueSnackbar
+                                  // );
+                                  handleDelete(row[`${category}Id`], category);
+                                }}
+                                style={{ color: "#FF0000" }}
+                                className={classes.button}
+                              >
+                                {t("delete")}
+                              </Button>
+                            </Box>
+                          </Popover>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <PaginationBlog
+            page={pageNo}
+            setPage={setPageNo}
+            count={posts.length}
+            hasMore={hasMore}
+          />
+        </>
+      ) : (
+        <LoadingAtom />
+      )}
     </Paper>
   );
 };
 
-export default withTranslation()(DashboardTable);
+const TransDashboardTable = withTranslation()(DashboardTable);
+// using redux
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setPage: setPage,
+  setWriting: setWriting,
+  setPostId: setPostId,
+  setTodo: setTodo,
+  deletePost: deletePost,
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TransDashboardTable);

@@ -6,6 +6,7 @@ import Favorite from "@material-ui/icons/Favorite";
 import { grey } from "@material-ui/core/colors";
 import { BaseUrl } from "../../BaseUrl.config";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const postCountStyles = makeStyles(() => {
   return {
@@ -34,6 +35,7 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
   const classes = postCountStyles();
   const [isClicked, setIsClicked] = useState(Boolean(liked));
   const [countLikes, setCountLikes] = useState(likes);
+  const { enqueueSnackbar } = useSnackbar();
   const headers = {
     Authorization: localStorage.getItem("token"),
     "Access-Control-Allow-Origin": "*",
@@ -51,12 +53,14 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
         console.log(response, "--disliked--");
         setIsClicked(false);
         setCountLikes((prevCountLikes) => prevCountLikes - 1);
-        alert(`${category}--disliked--`);
+        enqueueSnackbar(`${category} disliked`, { variant: "warning" });
+        // alert(`${category}--disliked--`);
       })
       .catch((err) => {
+        enqueueSnackbar(`${category} dislike request failed!`, {
+          variant: "error",
+        });
         console.log("disLike", { err });
-        alert(`${err} 
-        ${BaseUrl + `/${category}/like?postId=${id}`}`);
       });
   };
 
@@ -64,15 +68,14 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
     axios
       .post(BaseUrl + `/${category}/like?postId=${id}`, {}, { headers })
       .then((response) => {
-        console.log(response, "--liked--");
-        alert(`${category}--liked--`);
         setIsClicked(true);
         setCountLikes(likes + 1);
       })
       .catch((err) => {
+        enqueueSnackbar(`${category} like request failed!`, {
+          variant: "error",
+        });
         console.log({ err });
-        alert(`${("handle Like", err)} 
-        ${BaseUrl + `/${category}/like?postId=${id}`}`);
       });
   };
 

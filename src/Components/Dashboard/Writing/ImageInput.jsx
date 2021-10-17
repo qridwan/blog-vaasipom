@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { grey } from "@material-ui/core/colors";
 import { BaseUrl } from "../../../BaseUrl.config";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 // import { headers } from "../../../header.config";
 const headers = {
   Authorization: localStorage.getItem("token"),
@@ -37,8 +38,8 @@ const inputImageStyles = makeStyles(() => ({
 
 const ImageInput = ({ category, setData, image }) => {
   const classes = inputImageStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
- 
   // Image handling
   const [ArticleImg, setArticleImg] = useState(image);
 
@@ -76,10 +77,12 @@ const ImageInput = ({ category, setData, image }) => {
         //Console
         console.log("Upload success: Link--", response.data.imageLink);
         console.log("Data--", data);
-        alert(`successfully uploaded`);
+        enqueueSnackbar(`Image successfully uploaded`, { variant: "success" });
+        // alert(`successfully uploaded`);
       })
       .catch((error) => {
         console.log("file-53", file, "Data", data);
+        enqueueSnackbar(`Image uploading failed!`, { variant: "error" });
         console.log("error", error);
       });
   };

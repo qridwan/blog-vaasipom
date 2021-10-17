@@ -3,27 +3,22 @@ import {
   Card,
   CardMedia,
   Container,
-  IconButton,
   Typography,
-  Grid,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import shareIcon from "../../Assets/icons/shareIcon.svg";
 import PostCountInfo from "../Shared/PostCountInfo";
 import PostFooterInfo from "../Shared/PostFooterInfo";
 import parse from "html-react-parser";
-import CommentTemp from "../Shared/CommentTemp";
-import PostComment from "../Shared/PostComment";
 import { useParams } from "react-router";
 import { BaseUrl } from "../../BaseUrl.config";
 import axios from "axios";
 import { fullFeedStyles } from "../../Styles/muiStyles";
-import dateFormat from "dateformat";
 import { setShowTopics } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 // import VideoDetailsCard from "../Videocast/VideoDetailsCard";
 import ReactPlayer from "react-player";
 import playIco from "../../Assets/icons/play.png";
+import DateFormater from "../../Function/DateFormater";
 
 const playIcon = <img src={playIco} alt="play icon" height="60" width="60" />;
 // const comments = [1, 2, 3, 4, 5, 6, 7];
@@ -63,8 +58,10 @@ const FullFeed = ({ setShowTopics }) => {
   }, []);
 
   const { title, mainImage, reads, likes, liked, content } = post;
-  const createdDateFormate = dateFormat(post?.createdDate, "dS mmmm");
+  console.log("🚀 ~ FullFeed ~ mainImage", mainImage);
+ 
   console.log({ post });
+  const {date} = DateFormater(post?.createdDate)
   return (
     <>
       {post && (
@@ -76,15 +73,15 @@ const FullFeed = ({ setShowTopics }) => {
               alignItems="center"
             >
               <Typography className={classes.title}>{title}</Typography>
-              <div>
+              {/* SHARE ICON */}
+              {/* <div>
                 <IconButton>
-                  {/* <ShareIcon /> */}
                   <img src={shareIcon} alt="Share" height={30} />
                 </IconButton>
-              </div>
+              </div> */}
             </Box>
             {category === "videocast" ? (
-              <Box  className={classes.playerWrapper}>
+              <Box className={classes.playerWrapper}>
                 <ReactPlayer
                   className={classes.player}
                   style={{ borderRadius: "30px" }}
@@ -123,7 +120,7 @@ const FullFeed = ({ setShowTopics }) => {
               />
 
               <PostFooterInfo
-                date={createdDateFormate}
+                date={date}
                 readTime={4}
                 topic={category}
               />

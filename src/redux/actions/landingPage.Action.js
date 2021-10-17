@@ -29,14 +29,13 @@ export const fetchPost = (categoryItem, page) => {
   };
 };
 
-export const deletePost = (category, id) => {
+export const deletePost = (category, id, enqueueSnackbar) => {
   return (dispatch) => {
     dispatch(fetchAllPost());
     return axios
       .delete(BaseUrl + `/${category}?${category}Id=${id}`, { headers })
       .then(() => {
-        // console.log(response, "--deleted--");
-        alert(`${category} deleted`);
+        enqueueSnackbar(`${category} deleted`, { variant: "success" });
         dispatch(fetchAllPost());
       })
       .catch((err) => {

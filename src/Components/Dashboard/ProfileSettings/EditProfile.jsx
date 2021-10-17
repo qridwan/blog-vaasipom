@@ -7,8 +7,10 @@ import ImageInput from "../Writing/ImageInput";
 import axios from "axios";
 import { BaseUrl } from "../../../BaseUrl.config";
 import { withTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 
 const EditProfile = ({ t }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const headers = {
     Authorization: localStorage.getItem("token"),
     "Access-Control-Allow-Origin": "*",
@@ -48,9 +50,10 @@ const EditProfile = ({ t }) => {
       .put(BaseUrl + "/myprofile", allData, { headers })
       .then((response) => {
         console.log(response);
-        alert("Profile Updated");
+        enqueueSnackbar(`Profile Updated`, { variant: "success" });
       })
       .catch((err) => {
+        enqueueSnackbar(`Profile updating failed`, { variant: "error" });
         console.log({ err });
       });
     console.log("🚀 ~ EditProfile ~ allData", allData);
@@ -183,7 +186,6 @@ const EditProfile = ({ t }) => {
             />
           </Grid> */}
 
-          
           <Grid item xs={12} sm={3}>
             <CustomLabel htmlFor="">{t(`inputLabel_country`)}</CustomLabel>
             <InputArea
@@ -202,7 +204,9 @@ const EditProfile = ({ t }) => {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <BlackButton onClick={handleUpdateProfile}>{t(`update_btn`)}</BlackButton>
+            <BlackButton onClick={handleUpdateProfile}>
+              {t(`update_btn`)}
+            </BlackButton>
           </Grid>
         </Grid>
       )}

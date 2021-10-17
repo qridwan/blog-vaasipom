@@ -153,7 +153,7 @@ export const feedCardStyles = makeStyles((theme) => {
       fontWeight: "bold",
       fontSize: "22px",
       lineHeight: "135%",
-      height: "58px",
+      // height: "58px",
       paddingBottom: "5px",
 
       color: "#121212",

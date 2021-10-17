@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BookmarkIcon from "@material-ui/icons/Bookmark";
+// import BookmarkIcon from "@material-ui/icons/Bookmark";
 import {
   Button,
   Card,
@@ -18,7 +18,6 @@ import { NavLink, useRouteMatch } from "react-router-dom";
 import AuthorButton from "../../muiComponents/AuthorButton";
 import PostCountInfo from "./PostCountInfo";
 import PostFooterInfo from "./PostFooterInfo";
-import dateFormat from "dateformat";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { connect } from "react-redux";
 import {
@@ -28,6 +27,8 @@ import {
   setWriting,
 } from "../../redux/actions/dashboardAction";
 import { deletePost } from "../../redux/actions/landingPage.Action";
+import { useSnackbar } from "notistack";
+import DateFormater from "../../Function/DateFormater";
 
 const FeedCard = ({
   feed,
@@ -43,12 +44,15 @@ const FeedCard = ({
   const [isUser, setIsUser] = useState(false);
   const [feedId, setFeedId] = useState(``);
   const [postContent, setPostContent] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const { author, category } = feed;
@@ -65,14 +69,8 @@ const FeedCard = ({
   ) {
     url = "/feed";
   }
-  // else if (url === "/videocast") {
-  // url = "/video";
-  // }
   const userEmail = localStorage.getItem("username");
-  // const headers = {
-  //   Authorization: localStorage.getItem("token"),
-  //   // "Access-Control-Allow-Origin": "*",
-  // };
+
   useEffect(() => {
     setPostContent(feed[feed.category]);
     feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
@@ -82,13 +80,12 @@ const FeedCard = ({
     setFeedId(postContent[`${category}Id`]);
   }, [postContent, category]);
 
-  const createdDateFormate = dateFormat(postContent?.createdDate, "dS mmmm");
+  const { date } = DateFormater(postContent?.createdDate);
   const handleEdit = () => {
-    setPage(`Writing`);
+    setPage(`StartWriting`);
     setWriting(feed.category);
     setPostId(feedId);
     setTodo({
-      // todo: true,
       edit: true,
       ...postContent,
     });
@@ -124,7 +121,7 @@ const FeedCard = ({
             </CardActionArea>
           </NavLink>
           <PostFooterInfo
-            date={createdDateFormate}
+            date={date}
             readTime={postContent?.readTime}
             topic={category}
           />
@@ -190,7 +187,7 @@ const FeedCard = ({
                         onClick={
                           () => {
                             handleClose();
-                            deletePost(category, feedId);
+                            deletePost(category, feedId, enqueueSnackbar);
                           }
                           // handleDelete(category, feedId)
                         }

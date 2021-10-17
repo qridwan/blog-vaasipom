@@ -63,3 +63,8 @@ a {
 .swiper-button-prev::after {
   display: none;
 } */
+
+
+.MuiTablePagination-input , .MuiTablePagination-caption{
+  display: none;
+}

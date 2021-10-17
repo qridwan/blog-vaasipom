@@ -17,16 +17,7 @@ import {
 } from "../../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
-
-export const tags = [
-  "Science",
-  "Travel",
-  "Swimming",
-  "Sports",
-  "International",
-];
-
-export const interests = ["Novel", "Poet", "Fiction", "Economy"];
+import { useSnackbar } from "notistack";
 
 const WritePost = ({
   type,
@@ -38,15 +29,14 @@ const WritePost = ({
   t,
 }) => {
   const { todo } = dashboardState;
-  console.log("🚀 ~ todo", todo);
-  const [suggTags, setSuggTags] = useState([]);
+  const [suggTags, setSuggTags] = useState();
   const [allIterest, setALlInterest] = useState([]);
   const [interest, setInterest] = useState([]);
   const [editorValue, setEditorValue] = useState();
   const [loading, setLoading] = useState(false);
   const ref = useRef(null);
   const [image, setImage] = useState(``);
-
+  const { enqueueSnackbar } = useSnackbar();
   const cleanReduxState = () => {
     setTodo({
       edit: false,
@@ -68,7 +58,6 @@ const WritePost = ({
     axios
       .get(BaseUrl + `/interests`, { headers })
       .then((res) => {
-        console.log("🚀 ~ .then ~ res", res);
         let allData = [];
         res.data.forEach((data) => allData.push(data.interestId));
         setALlInterest(allData);
@@ -114,11 +103,10 @@ const WritePost = ({
     articleContent();
     const content = ref.current.getContent();
     let selectedTags = [];
-    console.log({ suggTags });
-    suggTags.forEach((tag) => selectedTags.push(tag.label));
+    suggTags && suggTags.forEach((tag) => selectedTags.push(tag.label));
     // console.log({ data, tags, interest, content });
 
-    console.log("🚀 ~ HandlePost ~ selectedTags", selectedTags.join())
+    console.log("🚀 ~ HandlePost ~ selectedTags", selectedTags.join());
     const postData = {
       ...allData,
       tags: selectedTags.join(),
@@ -137,11 +125,8 @@ const WritePost = ({
 
   const headers = {
     Authorization: localStorage.getItem("token"),
-    // "Access-Control-Allow-Origin": "*",
-    // "content-type": "application/json",
   };
 
-  console.log("🚀 ~ suggTags", suggTags)
   const CreateArticle = (data) => {
     console.log("-Request Body-", data);
     console.log(BaseUrl + `/${category}`);
@@ -152,9 +137,13 @@ const WritePost = ({
           })
           .then((response) => {
             console.log("Body--", response.data);
-            alert(`${category} Updated`);
+            // alert(`${category} Updated`);
+            enqueueSnackbar(`${category} updated`, { variant: "success" });
           })
           .catch((error) => {
+            enqueueSnackbar(`${category} updating failed!`, {
+              variant: "error",
+            });
             console.log("error", error);
           })
       : axios
@@ -168,9 +157,13 @@ const WritePost = ({
               "Posted Data--",
               data
             );
-            alert(`${category} Posted`);
+            // alert(`${category} Posted`);
+            enqueueSnackbar(`${category} posted`, { variant: "success" });
           })
           .catch((error) => {
+            enqueueSnackbar(`${category} posting failed!`, {
+              variant: "error",
+            });
             console.log("error", error);
           });
   };
@@ -181,9 +174,10 @@ const WritePost = ({
       .post(BaseUrl + `/${category}/draft`, post, { headers })
       .then((response) => {
         console.log("response:", response);
-        alert(`${category} Saved`);
+        enqueueSnackbar(`${category} successfully saved`, { variant: "success" });
       })
       .catch((error) => {
+        enqueueSnackbar(`${category} saving failed!`, { variant: "error" });
         console.log("error", error);
       });
   };
@@ -229,13 +223,16 @@ const WritePost = ({
                     setSelectItems={setInterest}
                   />
                 </Grid>
+                <Grid item xs={12} sm={12}>
+                  <CustomLabel htmlFor="">
+                    {t(`writing_label_tags`)}
+                  </CustomLabel>
+
+                  <AddTags setTags={setSuggTags} defaultTags={suggTags} />
+                </Grid>
               </>
             )}
-            <Grid item xs={12} sm={12}>
-              <CustomLabel htmlFor="">{t(`writing_label_tags`)}</CustomLabel>
 
-              <AddTags setTags={setSuggTags} defaultTags={suggTags} />
-            </Grid>
             <Grid item xs={12} sm={12}>
               <Box
                 display="flex"

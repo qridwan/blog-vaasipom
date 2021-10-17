@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// import Pagination from "@material-ui/lab/Pagination";
 import { TablePagination } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,24 +13,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const PaginationBlog = ({ page, setPage }) => {
+export const PaginationBlog = ({ page, setPage, count, hasMore }) => {
   const classes = useStyles();
-  // const [value, setValue] = useState();
   const handleChange = (event, value) => {
     setPage(value);
-    // setValue(value);
   };
 
   return (
     <div className={classes.root}>
-      {/* <Typography>Page: {page}</Typography> */}
-      <p>Page: {page}</p>
-      {/* <p> count: {value}</p> */}
-      {/* <Pagination count={Infinity} page={page} onChange={handleChange} /> */}
+      {/* <p>Page: {page}</p> */}
       <TablePagination
         component="div"
-        rowsPerPage={0}
-        count={Infinity}
+        rowsPerPage={10}
+        count={count}
+        nextIconButtonProps={ {disabled: hasMore ? false : true }}
         page={page}
         onPageChange={handleChange}
       />

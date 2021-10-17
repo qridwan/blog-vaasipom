@@ -5,7 +5,7 @@ import { BlackButton } from "../../../muiComponents/BlackButton";
 import CustomSelect from "../../../muiComponents/CustomSelect";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
 import { OutlineButton } from "../../../muiComponents/OutlineButton";
-import { interests } from "./WritePost";
+// import { interests } from "./WritePost";
 import BlogEditor from "./BlogEditor";
 import ImageInput from "./ImageInput";
 import axios from "axios";
@@ -18,6 +18,7 @@ import {
   setWriting,
 } from "../../../redux/actions/dashboardAction";
 import { withTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 
 const MediaCast = ({
   type,
@@ -31,18 +32,19 @@ const MediaCast = ({
   const category = type.toLowerCase();
   const [interest, setInterest] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  // const [value, setValue] = useState();
+  const [allIterest, setALlInterest] = useState([]);
   const [tags, setTags] = useState([]);
   const [image, setImage] = useState(``);
   const [editorValue, setEditorValue] = useState();
   const [loading, setLoading] = useState(false);
   const [allData, setAllData] = useState({
     title: "",
-    subTitle: "First subtitle to the first article",
+    subTitle: "",
     mainImage: "",
     tags: "",
     url: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   const mediaRef = useRef();
 
@@ -56,7 +58,6 @@ const MediaCast = ({
   };
 
   const { todo } = dashboardState;
-  // console.log("🚀 ~ todo", todo)
   useEffect(() => {
     document.title = `Writing | ${type}`;
     setIsEdit(todo.edit);
@@ -125,25 +126,24 @@ const MediaCast = ({
               "Posted Data--",
               data
             );
-            alert(`${category} Posted`);
+            // alert(`${category} Posted`);
+            enqueueSnackbar(`${category} successfully posted`, {
+              variant: "success",
+            });
           })
           .catch((error) => {
+            enqueueSnackbar(`${category} posting failed!`, {
+              variant: "error",
+            });
             console.log("error", error);
           })
       : axios
           .put(BaseUrl + `/${category}`, data, { headers })
           .then((response) => {
-            console.log(
-              "URL :",
-              BaseUrl + `/${category}`,
-              "SUCCESSFULLY updated your post:",
-              response,
-              "Updated Data--",
-              data
-            );
-            alert(`${category} Updated`);
+            enqueueSnackbar(`${category} updated`, { variant: "success" });
           })
           .catch((error) => {
+            enqueueSnackbar(`${category} update failed`, { variant: "error" });
             console.log("error", error);
           });
   };
@@ -159,14 +159,25 @@ const MediaCast = ({
           "response:",
           response.data
         );
-        alert(`${category} Saved on draft box`);
+        // alert(`${category} Saved on draft box`);
+        enqueueSnackbar(`${category} saved as a draft`, { variant: "info" });
       })
       .catch((error) => {
+        enqueueSnackbar(`${category} saving failed`, { variant: "error" });
         console.log("error", error);
       });
   };
   console.log({ allData });
-
+  const getAllInterest = () => {
+    axios
+      .get(BaseUrl + `/interests`, { headers })
+      .then((res) => {
+        let allData = [];
+        res.data.forEach((data) => allData.push(data.interestId));
+        setALlInterest(allData);
+      })
+      .catch((err) => console.error(err));
+  };
   return (
     <Container maxWidth="md">
       {loading && (
@@ -176,6 +187,15 @@ const MediaCast = ({
             <InputArea
               defaultValue={isEdit ? todo.title : ""}
               name="title"
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <CustomLabel htmlFor="">{t(`writing_label_subTitle`)}</CustomLabel>
+            <InputArea
+              defaultValue={isEdit ? todo.subTitle : ""}
+              type="text"
+              name="subTitle"
               onChange={handleChange}
             />
           </Grid>
@@ -206,7 +226,7 @@ const MediaCast = ({
                 {t(`writing_label_interest`)}
               </CustomLabel>
               <CustomSelect
-                data={interests}
+                data={allIterest}
                 selectItems={interest}
                 setSelectItems={setInterest}
               />

@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
-import VasipomLogo from "../../Assets/logos/VasipomLogo2.png";
+import VasipomLogo from "../../Assets/logos/vaasipomIcon.png";
 import { AppBar, Box, Toolbar } from "@material-ui/core";
 import { NavigationStyles } from "../../Styles/muiStyles";
 import { Container } from "@material-ui/core";
