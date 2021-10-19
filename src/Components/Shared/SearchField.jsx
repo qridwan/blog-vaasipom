@@ -1,18 +1,24 @@
-import React, { useState, useRef } from "react";
-import useAutocomplete from "@material-ui/lab/useAutocomplete";
+import React, { useEffect, useState } from "react";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { InputBase, Typography } from "@material-ui/core";
-import FeedImg from "../../Assets/img/feedImg.png";
+import { TextField } from "@material-ui/core";
+// import FeedImg from "../../Assets/img/feedImg.png";
 import { grey } from "@material-ui/core/colors";
 import { withTranslation } from "react-i18next";
-
+import SearchPost from "../../Function/SearchPost";
+import { Autocomplete } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 const searchFieldStyles = makeStyles((theme) => ({
+  title: {
+    color: "black",
+    fontWeight: "bold",
+  },
   label: {
     display: "block",
   },
   input: {
-    width: 300,
+    width: 280,
     border: "none",
     color: "black",
     padding: "5px",
@@ -30,7 +36,7 @@ const searchFieldStyles = makeStyles((theme) => ({
   searchSuggestion: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-start",
     padding: "10px 0",
     zIndex: "5000",
   },
@@ -50,7 +56,7 @@ const searchFieldStyles = makeStyles((theme) => ({
     color: "#6B6B6B",
   },
   listbox: {
-    width: "35ch",
+    width: "32ch",
     margin: 0,
     marginLeft: "10px",
     padding: 5,
@@ -62,7 +68,7 @@ const searchFieldStyles = makeStyles((theme) => ({
     maxHeight: 200,
     border: "1px solid rgba(0,0,0,.25)",
     '& li[data-focus="true"]': {
-      backgroundColor: "#4a8df6",
+      backgroundColor: "#c4c7cc",
       color: "white",
       cursor: "pointer",
     },
@@ -114,30 +120,19 @@ const searchFieldStyles = makeStyles((theme) => ({
 }));
 
 const SearchField = ({ t }) => {
-  const [searchedPost, setSearchedPost] = useState([
-    {
-      title: "The Shawshank Redemption",
-      img: FeedImg,
-      desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
-    },
-  ]);
-  // const handleSearchInput = () => {
-  //   console.log("🚀 ~ handleSearchInput ~ clicked");
-    
-  // };
+  const [searchedPost, setSearchedPost] = useState([]);
   const classes = searchFieldStyles();
-  const {
-    getRootProps,
-    getInputProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-  } = useAutocomplete({
-    id: "use-autocomplete-demo",
-    options: searchedPost,
-    getOptionLabel: (option) => option.title,
-  });
-  // const inputArea = useRef(null);
+  const [inputChange, setInputChange] = useState("");
+  const [value, setValue] = useState("");
+  const history = useHistory();
+  const [categoryList] = useState([
+    "article",
+    "poetry",
+    "story",
+    "podcast",
+    "videocast",
+    "review",
+  ]);
   // const {
   //   getRootProps,
   //   getInputProps,
@@ -149,17 +144,71 @@ const SearchField = ({ t }) => {
   //   options: searchedPost,
   //   getOptionLabel: (option) => option.title,
   // });
-  console.log("🚀 ~ handleSearchInput ~getInputProps", getInputProps().value);
+
+  // const { posts, loading } = SearchPost(categoryList, getInputProps().value);
+  const { posts } = SearchPost(categoryList, inputChange);
+  useEffect(() => {
+    setSearchedPost(posts);
+  }, [posts]);
+  useEffect(() => {
+    return () => setInputChange("");
+  }, []);
+  const options2 = searchedPost.map((option) => {
+    const category = option.category.toUpperCase();
+    return {
+      category: category,
+      ...option,
+    };
+  });
+  const handleChange = (value) => {
+    setInputChange(value);
+  };
   return (
     <div>
-      <div className={classes.search} {...getRootProps()}>
+      <div className={classes.search}>
         <div className={classes.searchIcon}>
           <SearchIcon />
         </div>
+        <Autocomplete
+          root={classes.inputRoot}
+          input={classes.inputInput}
+          inputChange={inputChange}
+          onInputChange={(event, newInputValue) => {
+            handleChange(newInputValue);
+          }}
+          // value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            history.push(`/feed/${newValue.category}/${newValue.id}`);
+          }}
+          id="grouped-demo"
+          options={options2.sort(
+            (a, b) => -b.category.localeCompare(a.category)
+          )}
+          groupBy={(option) => option.category}
+          getOptionLabel={(option) => option.title}
+          sx={{ width: 300 }}
+          renderInput={(params) => {
+            return (
+              <TextField
+                {...params}
+                placeholder={t(`search_input_placeholder`)}
+                className={classes.inputInput}
+                // onChange={handleChange}
+              />
+            );
+          }}
+        />
+      </div>
+
+      {/* useAutocomplete Hook */}
+      {/* <div className={classes.search} {...getRootProps()}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+
         <InputBase
-          // ref={inputArea}
           placeholder={t(`search_input_placeholder`)}
-          // onChange={handleSearchInput}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
@@ -167,64 +216,46 @@ const SearchField = ({ t }) => {
           inputProps={{ "aria-label": "search" }}
           {...getInputProps()}
         />
-      </div>
-      {groupedOptions.length > 0 ? (
-        <ul className={classes.listbox} {...getListboxProps()}>
-          {groupedOptions.map((option, index) => (
-            <li>
-              <li {...getOptionProps({ option, index })}>
-                <li className={classes.searchSuggestion}>
-                  <img
-                    className={classes.suggImg}
-                    src={option.img}
-                    alt=""
-                    height="40"
-                    width="40"
-                  />
-                  <div>
-                    <Typography className={classes.suggTitle}>
-                      {option.title}
-                    </Typography>
-                    <Typography className={classes.suggSubTitle}>
-                      {option.desc}
-                    </Typography>
-                  </div>
-                </li>
-              </li>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      </div> */}
+      {/* {
+        groupedOptions.length > 0 ? (
+          <>
+            <ul className={classes.listbox} {...getListboxProps()}>
+              <li className={classes.title}> {category.toUpperCase()} </li>
+              {groupedOptions.map((option, index) => {
+                const postId = option.id;
+                return (
+                  <li key={postId}>
+                    <NavLink to={`/feed/${category}/${postId}`}>
+                      <li {...getOptionProps({ option, index })}>
+                        <li className={classes.searchSuggestion}>
+                          <div>
+                            <Typography className={classes.suggTitle}>
+                              {option.title}
+                            </Typography>
+                            <Typography className={classes.suggSubTitle}>
+                              {option.subTitle.slice(0, 30)} ...
+                            </Typography>
+                          </div>
+                        </li>
+                      </li>
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        ) : null
+        // <>
+        //   {!loading && groupedOptions.length === 0 && (
+        //     <ul className={classes.listbox} {...getListboxProps()}>
+        //       <li>Nothing Found </li>
+        //     </ul>
+        //   )}
+        // </>
+      } */}
     </div>
   );
 };
 
 export default withTranslation()(SearchField);
-
-export const top100Films = [
-  {
-    title: "The Shawshank Redemption",
-    img: FeedImg,
-    desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
-  },
-  {
-    title: "The Godfather",
-    img: FeedImg,
-    desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
-  },
-  {
-    title: "The Godfather: Part II",
-    img: FeedImg,
-    desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
-  },
-  {
-    title: "The Dark Knight",
-    img: FeedImg,
-    desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
-  },
-  {
-    title: "12 Angry Men",
-    img: FeedImg,
-    desc: " odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer ",
-  },
-];

@@ -13,7 +13,7 @@ const Navigation = ({ t }) => {
   const classes = NavigationStyles();
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
-    localStorage.token ? setIsLogin(true) : setIsLogin(false);
+    sessionStorage.token ? setIsLogin(true) : setIsLogin(false);
   }, [isLogin]);
 
   return (

@@ -25,10 +25,12 @@ import { BaseUrl } from "../../BaseUrl.config.js";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { setPage } from "../../redux/actions/dashboardAction";
+import { useSnackbar } from "notistack";
 
 const Login = ({ setPage }) => {
   const classes = loginStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [values, setValues] = useState({
     password: "",
     otp: "",
@@ -46,14 +48,14 @@ const Login = ({ setPage }) => {
   useEffect(() => {
     document.title = "Blog | Login";
     setPage("login");
-    if (localStorage.token) {
+    if (sessionStorage.token) {
       history.push("/");
     }
   }, []);
   const { register, handleSubmit } = useForm();
-  const handleLocalStorage = (data) => {
-    localStorage.setItem("token", "Bearer " + data.accessToken);
-    localStorage.setItem("username", data.username);
+  const handlesessionStorage = (data) => {
+    sessionStorage.setItem("token", "Bearer " + data.accessToken);
+    sessionStorage.setItem("username", data.username);
   };
   const onSubmit = (data) => {
     let formData = {};
@@ -68,7 +70,6 @@ const Login = ({ setPage }) => {
           password: values.password,
         });
 
-    console.log("🚀 ~ onSubmit ~ formData", formData);
     setUserInfo(formData);
 
     // FOR SIGN IN
@@ -76,12 +77,11 @@ const Login = ({ setPage }) => {
       axios
         .post(BaseUrl + "/auth/signin", formData)
         .then((response) => {
-          console.log("response:", response.data);
-          handleLocalStorage(response.data);
+          handlesessionStorage(response.data);
           history.push("/");
         })
         .catch((error) => {
-          console.log("error", error);
+          console.log("error", { error });
         });
 
     // SEND OTP TO EMAIL
@@ -89,8 +89,9 @@ const Login = ({ setPage }) => {
       axios
         .get(BaseUrl + "/auth/email/otp?email=" + data.email)
         .then((response) => {
-          console.log(response.data);
-          alert(`You OTP Sent on ${data.email}`);
+          enqueueSnackbar(`Your OTP sent at ${data.email}`, {
+            variant: "success",
+          });
         })
         .catch((error) => {
           console.log("error", error);
@@ -100,7 +101,6 @@ const Login = ({ setPage }) => {
   };
 
   const submitOtp = (data) => {
-    console.log("🚀", data);
     const signUpForm = {
       ...userInfo,
       otp: values.otp,
@@ -111,12 +111,11 @@ const Login = ({ setPage }) => {
       axios
         .post(BaseUrl + "/auth/user/signup", signUpForm)
         .then((response) => {
-          console.log("response:", response);
-          alert(`Sign Up Confirmed`);
+          enqueueSnackbar(`Sign Up Confirmed`, { variant: "success" });
           setCreateAcc(false);
         })
         .catch((error) => {
-          console.log("error", error);
+          enqueueSnackbar(`Request Failed`, { variant: "error" });
         });
   };
 

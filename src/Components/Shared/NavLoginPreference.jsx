@@ -27,7 +27,7 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
 
   const getMyProfileInfo = () => {
     const headers = {
-      Authorization: localStorage.getItem("token"),
+      Authorization: sessionStorage.getItem("token"),
       "Access-Control-Allow-Origin": "*",
       "content-type": "application/json",
     };
@@ -36,22 +36,20 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
       axios
         .get(BaseUrl + `/myprofile`, { headers })
         .then((response) => {
-          console.log("Image link", response.data.profileImgLink);
           setUserImg(response.data.profileImgLink);
-          localStorage.setItem("useravatar", response.data.profileImgLink);
+          sessionStorage.setItem("useravatar", response.data.profileImgLink);
         })
         .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
   };
 
   const handleLogout = () => {
     const headers = {
-      Authorization: localStorage.getItem("token"),
+      Authorization: sessionStorage.getItem("token"),
     };
     axios
       .post(BaseUrl + "/logout", {}, { headers })
       .then((response) => {
-        console.log("response:", response);
-        localStorage.clear();
+        sessionStorage.clear();
         history.push("/login");
       })
       .catch((error) => {

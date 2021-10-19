@@ -8,7 +8,7 @@ const GetMywritings = (category, pageNumber, isChanged) => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
   const URL = BaseUrl + `/author/writings`;
 

@@ -3,9 +3,9 @@ let user = {
 }
 let initialState = {};
 
-if (localStorage.getItem('token') !== null) {
+if (sessionStorage.getItem('token') !== null) {
     user = {
-        token: localStorage.getItem('token'),
+        token: sessionStorage.getItem('token'),
     };
     initialState = {
         loggedIn: true,

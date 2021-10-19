@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BaseUrl } from "../BaseUrl.config";
 const headers = {
-  Authorization: localStorage.getItem("token"),
+  Authorization: sessionStorage.getItem("token"),
 };
 const HandleDelete = (id, category, enqueueSnackbar) => {
   axios

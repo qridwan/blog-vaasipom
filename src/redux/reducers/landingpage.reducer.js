@@ -18,7 +18,6 @@ export const LandingPageState = (state = initialState, action) => {
       };
 
     case FETCH_POST_SUCCESS:
-      console.log({action});
       const allPost = action.posts;
       return {
         ...state,

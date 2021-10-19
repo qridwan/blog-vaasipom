@@ -18,7 +18,6 @@ const AcTopics = () => {
   //   const [postAcTopic, setPostAcTopic] = useState(false);
   useEffect(() => {
     setLoadPost(true);
-    console.log("🚀 ~ useEffect ~ load");
   }, [loadPost, setLoadPost]);
   const { posts, hasMore, loading } = GetPostAcTopic(topic, pageNo, loadPost);
   //   console.log("🚀 ~ AcTopics ~ posts", posts);

@@ -2,8 +2,12 @@ import {
   Box,
   Container,
   Divider,
+  FormControl,
   Grid,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
@@ -14,8 +18,6 @@ import linkedIn from "../../Assets/icons/linkedin.png";
 // import profileImage from "../../Assets/img/dp.png";
 import Feed from "../../Components/Shared/Feed";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
-// import { allData } from "../Common/LandingPage";
-import Navigation from "../Common/Navigation";
 import { BaseUrl } from "../../BaseUrl.config.js";
 import axios from "axios";
 import { PaginationBlog } from "../../muiComponents/PaginationBlog";
@@ -24,50 +26,87 @@ import { connect } from "react-redux";
 import { setPage, setShowTopics } from "../../redux/actions/dashboardAction";
 import { useHistory, useParams } from "react-router-dom";
 import { withTranslation } from "react-i18next";
+import LoadingAtom from "../../muiComponents/LoadingAtom";
 
 const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
   const classes = profileStyles();
   const [userInfo, setUserInfo] = useState({});
   const [writings, setWritings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [spinner, setSpinner] = useState(false);
   const { path } = useRouteMatch();
-  const [pageNo, setPageNo] = useState(1);
   const { user } = useParams();
-
+  const [pageNo, setPageNo] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [categoryItem, setCategoryItem] = useState("article");
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
+  };
+  const handleCategoryChange = (event) => {
+    setCategoryItem(event.target.value);
   };
 
+  const checkHasMore = (page, author) => {
+    let subUrl = "";
+    let params = {};
+    if (!author) {
+      subUrl = `/author/writings`;
+      params = {
+        category: categoryItem,
+        page: page + 1,
+      };
+    } else {
+      subUrl = `/posts/interests`;
+      params = {
+        categoryList: "story,article,poetry,review,podcast,videocast",
+        page: page + 1,
+        allPost: false,
+        author: author,
+      };
+    }
+    axios({
+      method: "GET",
+      url: BaseUrl + subUrl,
+      headers: headers,
+      params: params,
+    })
+      .then((res) => {
+        setHasMore(res.data.length > 0);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
   const getMyProfileInfo = () => {
     axios
       .get(BaseUrl + `/myprofile`, { headers })
       .then((response) => {
-        console.log(response.data);
         setUserInfo(response.data);
-        setLoading(false);
+        setIsLoading(false);
       })
       .catch((err) => console.log({ err }, BaseUrl + `/myprofile`));
   };
 
   const getUserProfile = () => {
-    console.log("userURLB", BaseUrl + `/profile/user?user=${user}`);
     axios
       .get(BaseUrl + `/profile/user?user=${user}`, { headers })
       .then((response) => {
-        console.log(response.data);
         setUserInfo(response.data);
-        setLoading(false);
+        setIsLoading(false);
       })
       .catch((err) => console.log({ err }, BaseUrl + `/profile`));
   };
   const getMyWritings = (paginate) => {
     axios
-      .get(BaseUrl + `/mywritings?page=${paginate}`, {
-        headers,
-      })
+      .get(
+        BaseUrl + `/author/writings?category=${categoryItem}&page=${paginate}`,
+        {
+          headers,
+        }
+      )
       .then((response) => {
-        console.log(response.data);
         setWritings(response.data);
+        setSpinner(false);
       })
       .catch((err) => console.log(err));
   };
@@ -83,8 +122,8 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
         }
       )
       .then((response) => {
-        console.log(response.data);
         setWritings(response.data);
+        setSpinner(false);
       })
       .catch((err) => console.log(err));
   };
@@ -95,28 +134,34 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
   }, [setPage, setShowTopics]);
 
   useEffect(() => {
+    setPageNo(0);
+  }, [categoryItem]);
+
+  useEffect(() => {
+    setSpinner(true);
     if (path === "/myprofile") {
       getMyProfileInfo();
-      getMyWritings(pageNo);
+      getMyWritings(pageNo + 1);
+      checkHasMore(pageNo + 1);
     } else {
       getUserProfile();
-      getAuthorWritings(user, pageNo);
+      getAuthorWritings(user, pageNo + 1);
+      checkHasMore(pageNo + 1, user);
     }
-  }, [pageNo]);
+  }, [pageNo, categoryItem]);
 
   const { firstName, followersCount, profileImgLink, profileTitle } = userInfo;
   const history = useHistory();
   const handleEdit = () => {
     setPage(`Settings`);
     history.push("/dashboard");
-    console.log("clicked", `color: red`);
   };
 
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3}>
         <Grid item xs={12} sm={3}>
-          {!loading && (
+          {!isLoading && (
             <Box textAlign="center" mt={5} className={classes.profileCard}>
               <img src={profileImgLink} alt="dp" className={classes.profile} />
               <Typography className={classes.name}>
@@ -148,14 +193,50 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
                   <img src={facebook} alt="fb" />
                 </IconButton>
               </Box>
+
+              <Divider />
             </Box>
           )}
-
-          <Divider />
         </Grid>
         <Grid item xs={12} sm={8}>
-          <Feed data={writings} type="allFeed" />
-          <PaginationBlog page={pageNo} setPage={setPageNo} />
+          {!user && (
+            <Box display="flex" justifyContent="end">
+              <Box sx={{ width: 230 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Select A Category
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={categoryItem}
+                    label="Select a category"
+                    onChange={handleCategoryChange}
+                  >
+                    <MenuItem value="article">Article</MenuItem>
+                    <MenuItem value="story">Story</MenuItem>
+                    <MenuItem value="podcast">Podcast</MenuItem>
+                    <MenuItem value="videocast">Videocast</MenuItem>
+                    <MenuItem value="poetry">Poetry</MenuItem>
+                    <MenuItem value="review">Reviews</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+          )}
+          {!spinner ? <Feed data={writings} type="allFeed" /> : <LoadingAtom />}
+          {/* <PaginationBlog page={pageNo} setPage={setPageNo} /> */}
+          {writings.length > 0 && (
+            <PaginationBlog
+              page={pageNo}
+              setPage={setPageNo}
+              count={writings.length}
+              hasMore={hasMore}
+            />
+          )}
+          {writings.length === 0 && !spinner && (
+            <p style={{ textAlign: "center" }}>Nothing Found</p>
+          )}
         </Grid>
       </Grid>
     </Container>

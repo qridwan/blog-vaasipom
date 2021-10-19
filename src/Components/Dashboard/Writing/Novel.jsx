@@ -17,6 +17,7 @@ import {
 } from "../../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 
 const types = ["New", "Existing"];
 const interests = ["Mystery", "Horror", "Romantic", "Solo"];
@@ -31,7 +32,6 @@ const Novel = ({
   t,
 }) => {
   const { todo } = dashboardState;
-  console.log("🚀 ~ todo", todo);
   const [suggTags, setSuggTags] = useState([]);
   const [novelType, setNovelType] = useState([]);
   const [editorValue, setEditorValue] = useState();
@@ -110,28 +110,26 @@ const Novel = ({
 
   const novelContent = () => {
     if (novelRef.current) {
-      console.log(novelRef.current.getContent());
+      // console.log(novelRef.current.getContent());
     }
   };
 
-  console.log({ allData });
-
+  const { enqueueSnackbar } = useSnackbar();
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
 
   const CreateNovel = (data) => {
-    console.log("-data-", data);
     todo.edit
       ? axios
           .put(BaseUrl + `/story`, data, {
             headers,
           })
           .then((response) => {
-            console.log("Body--", response.data);
-            alert(`Story Updated`);
+            enqueueSnackbar(`Story Updated`, { variant: "success" });
           })
           .catch((error) => {
+            enqueueSnackbar("Something gets wrong!", { variant: "error" });
             console.log("error", error);
           })
       : axios
@@ -139,28 +137,22 @@ const Novel = ({
             headers,
           })
           .then((response) => {
-            console.log(
-              "SUCCESSFULLY ADDED & response:",
-              response,
-              "Posted Data--",
-              data
-            );
-            alert(`---Novel posted---`);
+            enqueueSnackbar(`Novel Posted`, { variant: "success" });
           })
           .catch((error) => {
+            enqueueSnackbar("Something gets wrong!", { variant: "error" });
             console.log("error", error);
           });
   };
 
   const SaveAsDraft = (post) => {
-    console.log("-data-", post);
     axios
       .post(BaseUrl + `/story/draft`, post, { headers })
       .then((response) => {
-        console.log("response:", response);
-        alert(`Novel saved on draft box`);
+        enqueueSnackbar(`Novel saved on draft box`, { variant: "success" });
       })
       .catch((error) => {
+        enqueueSnackbar("Something gets wrong!", { variant: "error" });
         console.log("error", error);
       });
   };

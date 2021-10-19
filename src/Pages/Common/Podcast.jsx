@@ -44,30 +44,8 @@ const Podcast = () => {
     [loading, hasMore]
   );
 
-  console.log({
-    posts,
-    hasMore,
-    loading,
-    error,
-  });
-
-  // const getPost = () => {
-  //   axios
-  //     .get(
-  //       BaseUrl + `/auth/home/posts?categoryList=podcast&page=1&allPost=true`
-  //     )
-  //     .then((response) => {
-  //       console.log("response:", response);
-  //       setAllPost(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log("error", error);
-  //     });
-  // };
-
   useEffect(() => {
     document.title = "Blog | Podcast";
-    // getPost();
   }, []);
   return (
     <Container maxWidth="lg">

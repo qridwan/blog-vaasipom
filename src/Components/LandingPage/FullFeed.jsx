@@ -1,10 +1,4 @@
-import {
-  Box,
-  Card,
-  CardMedia,
-  Container,
-  Typography,
-} from "@material-ui/core";
+import { Box, Card, CardMedia, Container, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import PostCountInfo from "../Shared/PostCountInfo";
 import PostFooterInfo from "../Shared/PostFooterInfo";
@@ -28,7 +22,7 @@ const FullFeed = ({ setShowTopics }) => {
   const [post, setPost] = useState({});
   const [isRead, setIsRead] = useState(false);
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
   const getPost = () => {
     axios
@@ -47,21 +41,16 @@ const FullFeed = ({ setShowTopics }) => {
       .post(BaseUrl + `/${category}/read?postId=${postId}`, {}, { headers })
       .then((response) => {
         setIsRead(true);
-        console.log("Post Read");
-      })
-      .then((error) => console.log(error));
+      });
   };
   useEffect(() => {
     setShowTopics(false);
     getPost();
     return () => setShowTopics(true);
-  }, []);
+  }, [postId]);
 
   const { title, mainImage, reads, likes, liked, content } = post;
-  console.log("🚀 ~ FullFeed ~ mainImage", mainImage);
- 
-  console.log({ post });
-  const {date} = DateFormater(post?.createdDate)
+  const { date } = DateFormater(post?.createdDate);
   return (
     <>
       {post && (
@@ -119,11 +108,7 @@ const FullFeed = ({ setShowTopics }) => {
                 liked={liked}
               />
 
-              <PostFooterInfo
-                date={date}
-                readTime={4}
-                topic={category}
-              />
+              <PostFooterInfo date={date} readTime={4} topic={category} />
             </Box>
             <div>{post.content ? parse(content) : parse(``)}</div>
           </Card>

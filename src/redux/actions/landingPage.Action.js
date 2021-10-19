@@ -7,11 +7,11 @@ export const FETCH_POST_SUCCESS = "FETCH_POST_SUCCESS";
 export const FETCH_POST_FAILURE = "FETCH_POST_FAILURE";
 export const DELETE_POST_SUCCESS = "DELETE_POST_SUCCESS";
 
-const headers = {
-  Authorization: localStorage.getItem("token"),
+// const headers = {
+//   Authorization: sessionStorage.getItem("token"),
   // "Access-Control-Allow-Origin": "*",
   // "content-type": "application/json",
-};
+// };
 
 export const fetchPost = (categoryItem, page) => {
   return (dispatch) => {
@@ -29,28 +29,28 @@ export const fetchPost = (categoryItem, page) => {
   };
 };
 
-export const deletePost = (category, id, enqueueSnackbar) => {
-  return (dispatch) => {
-    dispatch(fetchAllPost());
-    return axios
-      .delete(BaseUrl + `/${category}?${category}Id=${id}`, { headers })
-      .then(() => {
-        enqueueSnackbar(`${category} deleted`, { variant: "success" });
-        dispatch(fetchAllPost());
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
+// export const deletePost = (category, id, enqueueSnackbar) => {
+//   return (dispatch) => {
+//     dispatch(fetchAllPost());
+//     return axios
+//       .delete(BaseUrl + `/${category}?${category}Id=${id}`, { headers })
+//       .then(() => {
+//         enqueueSnackbar(`${category} deleted`, { variant: "success" });
+//         dispatch(fetchAllPost());
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+// };
 
 // Handle HTTP errors since fetch won't.
-const handleErrors = (response) => {
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-  return response;
-};
+// const handleErrors = (response) => {
+//   if (!response.ok) {
+//     throw Error(response.statusText);
+//   }
+//   return response;
+// };
 
 export const fetchAllPost = () => ({
   type: FETCH_ALL_POST,

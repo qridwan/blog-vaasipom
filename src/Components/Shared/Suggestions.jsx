@@ -2,6 +2,7 @@ import { Container, Divider } from "@material-ui/core";
 import { Box, Paper, Typography } from "@material-ui/core";
 import axios from "axios";
 import i18next from "i18next";
+import { useSnackbar } from "notistack";
 import React, { Fragment, useEffect, useState } from "react";
 import { BaseUrl } from "../../BaseUrl.config";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
@@ -13,9 +14,9 @@ const Suggestions = () => {
   const [topics, setTopics] = useState(false);
   const [isAddTopic, setIsAddTopic] = useState(false);
   const [showTopics, setShowTopics] = useState([]);
-
+  const { enqueueSnackbar } = useSnackbar();
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
 
   const getMyTopics = (allTopics) => {
@@ -38,42 +39,39 @@ const Suggestions = () => {
   };
 
   const addTopicOfInterest = (topic) => {
-    console.log(
-      "--Add topics--",
-      BaseUrl + `/topic/interest?topic=${topic}`,
-      {},
-      { headers }
-    );
-    axios
-      .post(BaseUrl + `/topic/interest?topic=${topic}`, {}, { headers })
-      .then((response) => {
-        setIsAddTopic(true);
-        alert(`${topic} Added as your interest`);
-      })
-      .catch((error) => {
-        alert(`${topic} failed`);
-        console.error(error);
-      });
+    !sessionStorage.token
+      ? enqueueSnackbar(`Can't perform follow before Sign in`, {
+          variant: "info",
+        })
+      : axios
+          .post(BaseUrl + `/topic/interest?topic=${topic}`, {}, { headers })
+          .then((response) => {
+            setIsAddTopic(true);
+            enqueueSnackbar(`${topic} added as your interest`, {
+              variant: "success",
+            });
+          })
+          .catch((error) => {
+            alert(`${topic} failed`);
+            console.error(error);
+          });
   };
 
   const handleShowTopics = () => {
-    console.log({ topics, showTopics });
     const newTopics = [
       ...showTopics,
       ...topics?.slice(showTopics.length, showTopics.length + 5),
     ];
-    console.log("🚀 ~ handleShowTopics ~ newTopics", newTopics);
     setShowTopics(newTopics);
   };
 
   useEffect(() => {
-    localStorage.token
+    sessionStorage.token
       ? axios
           .get(BaseUrl + `/interests?`, { headers })
           .then((res) => {
             setTopics(res.data);
             getMyTopics(res.data);
-            // setShowTopics(res.data.slice(0, 5));
           })
           .catch((err) => console.error(err))
       : axios
@@ -83,8 +81,6 @@ const Suggestions = () => {
             setShowTopics(res.data.slice(0, 5));
           })
           .catch((err) => console.error(err));
-
-    // return () => setIsAddTopic(false);
   }, [isAddTopic]);
   return (
     <Container className={classes.container}>

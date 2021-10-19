@@ -32,7 +32,7 @@ const ForgotPassword = () => {
   });
 
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
 
   // const {
@@ -45,14 +45,6 @@ const ForgotPassword = () => {
   }, []);
 
   const submitEmail = () => {
-    console.log(
-      "🚀 ~ sent otp url`",
-      BaseUrl + `/auth/email/reset/otp?email=${formdata.email}`
-    );
-    // setFormdata({
-    //   ...email,
-    //   email: email,
-    // });
     axios
       .get(BaseUrl + `/auth/email/reset/otp?email=${formdata.email}`, {
         headers,
@@ -68,14 +60,12 @@ const ForgotPassword = () => {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // name !== "confirmPassword" &&
     setFormdata((data) => ({
       ...data,
       [name]: value,
     }));
   };
   const handleResetPassword = (e) => {
-    console.log(formdata);
     const data = {
       email: formdata.email,
       otp: formdata.otp,
@@ -84,12 +74,13 @@ const ForgotPassword = () => {
     if (formdata.newPassword !== formdata.confirmPassword) {
       alert(`Password not matched ${formdata}`);
     } else {
-      axios.post(BaseUrl + `/auth/resetpassword`, data, { headers })
-      .then(response => {
-        alert(`Password changed successfully ${formdata}`);
-        history.push(`/login`)
-      })
-      .catch(error => {console.log(error)});
+      axios
+        .post(BaseUrl + `/auth/resetpassword`, data, { headers })
+        .then((response) => {
+          alert(`Password changed successfully ${formdata}`);
+          history.push(`/login`);
+        })
+        .catch((error) => console.log(error));
     }
   };
   return (

@@ -2,13 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BaseUrl } from "../BaseUrl.config";
 
-const GetPosts = (category, pageNumber, user,) => {
+const GetPosts = (category, pageNumber, user) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const GetPosts = (category, pageNumber, user,) => {
   }, [category]);
 
   const checkHasMore = () => {
-    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
+    const subUrl = sessionStorage.token ? `/home/posts` : `/auth/home/posts`;
     axios({
       method: "GET",
       url: BaseUrl + subUrl,
@@ -32,7 +32,7 @@ const GetPosts = (category, pageNumber, user,) => {
   };
   useEffect(() => {
     setLoading(true);
-    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
+    const subUrl = sessionStorage.token ? `/home/posts` : `/auth/home/posts`;
     setError(false);
     let cancel;
     axios({
@@ -43,7 +43,6 @@ const GetPosts = (category, pageNumber, user,) => {
       cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })
       .then((res) => {
-        console.log(BaseUrl + subUrl);
         setPosts((prevposts) => {
           return [...new Set([...prevposts, ...res.data])];
         });

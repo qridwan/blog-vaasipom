@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 // import BookmarkIcon from "@material-ui/icons/Bookmark";
 import {
-  Button,
   Card,
   CardActionArea,
   CardActions,
   CardMedia,
   Grid,
   IconButton,
-  Popover,
 } from "@material-ui/core";
 import { Box } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
@@ -18,7 +16,6 @@ import { NavLink, useRouteMatch } from "react-router-dom";
 import AuthorButton from "../../muiComponents/AuthorButton";
 import PostCountInfo from "./PostCountInfo";
 import PostFooterInfo from "./PostFooterInfo";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { connect } from "react-redux";
 import {
   setPage,
@@ -26,8 +23,6 @@ import {
   setTodo,
   setWriting,
 } from "../../redux/actions/dashboardAction";
-import { deletePost } from "../../redux/actions/landingPage.Action";
-import { useSnackbar } from "notistack";
 import DateFormater from "../../Function/DateFormater";
 
 const FeedCard = ({
@@ -40,21 +35,21 @@ const FeedCard = ({
   deletePost,
 }) => {
   const classes = feedCardStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isUser, setIsUser] = useState(false);
+  // const [anchorEl, setAnchorEl] = useState(null);
+  // const [isUser, setIsUser] = useState(false);
   const [feedId, setFeedId] = useState(``);
   const [postContent, setPostContent] = useState({});
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  // const open = Boolean(anchorEl);
+  // const id = open ? "simple-popover" : undefined;
   const { author, category } = feed;
 
   let { url } = useRouteMatch();
@@ -69,11 +64,11 @@ const FeedCard = ({
   ) {
     url = "/feed";
   }
-  const userEmail = localStorage.getItem("username");
+  const userEmail = sessionStorage.getItem("username");
 
   useEffect(() => {
     setPostContent(feed[feed.category]);
-    feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
+    // feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
   }, [feed, userEmail]);
 
   useEffect(() => {
@@ -81,15 +76,15 @@ const FeedCard = ({
   }, [postContent, category]);
 
   const { date } = DateFormater(postContent?.createdDate);
-  const handleEdit = () => {
-    setPage(`StartWriting`);
-    setWriting(feed.category);
-    setPostId(feedId);
-    setTodo({
-      edit: true,
-      ...postContent,
-    });
-  };
+  // const handleEdit = () => {
+  //   setPage(`StartWriting`);
+  //   setWriting(feed.category);
+  //   setPostId(feedId);
+  //   setTodo({
+  //     edit: true,
+  //     ...postContent,
+  //   });
+  // };
   return (
     <Card className={classes.root}>
       <Grid container spacing={2}>
@@ -155,7 +150,7 @@ const FeedCard = ({
               </IconButton> */}
 
               {/* edit option visible only for users post */}
-              {isUser && (
+              {/* {isUser && (
                 <>
                   <IconButton style={{ padding: "2px" }} onClick={handleClick}>
                     <MoreVertIcon style={{ fontSize: "16px" }} />
@@ -197,7 +192,7 @@ const FeedCard = ({
                     </Box>
                   </Popover>
                 </>
-              )}
+              )} */}
             </Box>
           </Box>
         </Grid>
@@ -225,6 +220,6 @@ const mapDispatchToProps = {
   setWriting: setWriting,
   setPostId: setPostId,
   setTodo: setTodo,
-  deletePost: deletePost,
+  // deletePost: deletePost,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FeedCard);

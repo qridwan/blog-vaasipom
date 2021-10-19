@@ -14,14 +14,13 @@ SwiperCore.use([Navigation]);
 const TopicSlider = () => {
   const [topics, setTopics] = useState(false);
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
   useEffect(() => {
-    localStorage.token &&
+    sessionStorage.token &&
       axios
         .get(BaseUrl + `/topic/interests`, { headers })
         .then((res) => {
-          console.log(res.data);
           setTopics(res.data);
         })
         .catch((err) => console.error(err));
@@ -32,7 +31,6 @@ const TopicSlider = () => {
       {topics && (
         <Box my={3} mx={3}>
           <Swiper
-            // freeMode={true}
             slidesPerView="auto"
             className=""
             navigation={true}

@@ -27,8 +27,6 @@ const CustomSelect = ({
   type,
   placeholder,
 }) => {
-  console.log("🚀 ~ selectItems", selectItems);
-
   const theme = useTheme();
   const [isMultiple, setIsMultiple] = useState(true);
   const handleSelect = (event) => {

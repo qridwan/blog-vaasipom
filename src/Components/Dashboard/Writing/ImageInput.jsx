@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 // import { headers } from "../../../header.config";
 const headers = {
-  Authorization: localStorage.getItem("token"),
+  Authorization: sessionStorage.getItem("token"),
   "Access-Control-Allow-Origin": "*",
   // "content-type": "application/json",
 };
@@ -50,7 +50,6 @@ const ImageInput = ({ category, setData, image }) => {
       let data = new FormData();
       data.append("file", file, file.name);
       UploadImg(data);
-      console.log("effect", data);
     }
   }, [file]);
 
@@ -67,21 +66,14 @@ const ImageInput = ({ category, setData, image }) => {
     axios
       .post(BaseUrl + `/${category}/image`, data, { headers })
       .then((response) => {
-        console.log("response:", response);
         category !== "profile" &&
           setData((data) => ({
             ...data,
             mainImage: response.data.imageLink,
           }));
-
-        //Console
-        console.log("Upload success: Link--", response.data.imageLink);
-        console.log("Data--", data);
         enqueueSnackbar(`Image successfully uploaded`, { variant: "success" });
-        // alert(`successfully uploaded`);
       })
       .catch((error) => {
-        console.log("file-53", file, "Data", data);
         enqueueSnackbar(`Image uploading failed!`, { variant: "error" });
         console.log("error", error);
       });

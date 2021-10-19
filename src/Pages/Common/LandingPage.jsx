@@ -11,7 +11,6 @@ import { hideHeader } from "../../redux/actions/headerAction.js";
 import { setPage } from "../../redux/actions/dashboardAction";
 import { useRouteMatch } from "react-router-dom";
 import MuiProgress from "../../muiComponents/MuiProgress.jsx";
-// import TopicSlider from "../../Components/Shared/TopicSlider.jsx";
 import GetPosts from "../../Function/GetPosts.js";
 
 const LandingPage = (props) => {
@@ -21,6 +20,7 @@ const LandingPage = (props) => {
 
   const [categoryItem, setCategoryItem] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // const [oldPath, setOldPath] = useState(false);
   const handleOpen = () => {
     setIsLoading(true);
   };
@@ -28,6 +28,9 @@ const LandingPage = (props) => {
     setIsLoading(false);
   };
   const { path } = useRouteMatch();
+  useEffect(() => {
+    return () => hideHeader();
+  }, [path]);
   useEffect(() => {
     document.title = "Blog | Home";
     setPage("");
@@ -38,7 +41,6 @@ const LandingPage = (props) => {
     path === "/" &&
       setCategoryItem("story,article,poetry,review,podcast,videocast");
     // getPost();
-    return () => hideHeader();
   }, [path, pageNo]);
 
   const { posts, hasMore, loading } = GetPosts(categoryItem, pageNo);
@@ -50,6 +52,7 @@ const LandingPage = (props) => {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
           setPageNo((prevPage) => prevPage + 1);
+          // path === "/" && showHeader();
         }
       });
       if (node) observer.current.observe(node);
@@ -59,7 +62,7 @@ const LandingPage = (props) => {
 
   return (
     <Container maxWidth="lg">
-      {!localStorage.token && headerVisible && <Header />}
+      {!sessionStorage.token && headerVisible && <Header />}
       {/* {path !== "/" && <TopicSlider />} */}
       <SubNavigation />
       <Container>
@@ -71,7 +74,6 @@ const LandingPage = (props) => {
           className={classes.content}
         >
           <Grid item xs={12} sm={8} className={classes.left}>
-            
             <Paper className={classes.paper}>
               {isLoading && (
                 <MuiProgress open={handleOpen} close={handleClose} />

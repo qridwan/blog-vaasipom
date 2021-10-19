@@ -17,14 +17,12 @@ import { PaginationBlog } from "../../muiComponents/PaginationBlog";
 import GetMywritings from "../../Function/GetMywritings";
 import DateFormater from "../../Function/DateFormater";
 import { connect } from "react-redux";
-import { deletePost } from "../../redux/actions/landingPage.Action";
 import {
   setPage,
   setPostId,
   setTodo,
   setWriting,
 } from "../../redux/actions/dashboardAction";
-import { NavLink } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import HandleDelete from "../../Function/HandleDelete";
 
@@ -89,132 +87,6 @@ const headDashboardTableData = [
   // },
 ];
 
-function createData(
-  title,
-  category,
-  status,
-  date,
-  likes,
-  views,
-  comment,
-  performance
-) {
-  return { title, category, status, date, likes, views, comment, performance };
-}
-
-const rows = [
-  createData(
-    "Journey To The Heaven",
-    "Article",
-    "Active",
-    "13th Jan 2021",
-    1232,
-    3123,
-    44,
-    9.67
-  ),
-  createData(
-    "Journey To The Mars",
-    "Novel",
-    "Inactive",
-    "22th Jan 2021",
-    5332,
-    6323,
-    14,
-    -8.67
-  ),
-  createData(
-    "Journey To The Pluto",
-    "Article",
-    "Active",
-    "1st Jan 2021",
-    1532,
-    34123,
-    244,
-    2.67
-  ),
-  createData(
-    "Deep dive to the ocean",
-    "Videocast",
-    "Inactive",
-    "30th Jan 2021",
-    232,
-    33123,
-    164,
-    6.67
-  ),
-  createData(
-    "Journey To The Heaven",
-    "Article",
-    "Inactive",
-    "15th Jan 2021",
-    1255,
-    123,
-    344,
-    -7.67
-  ),
-  createData(
-    "Journey To The Mars",
-    "Article",
-    "Inactive",
-    "16th Fab 2021",
-    6632,
-    9123,
-    844,
-    3.67
-  ),
-  createData(
-    "Journey To The Pluto",
-    "Podcast",
-    "Inactive",
-    "13th Mar 2021",
-    7732,
-    80123,
-    644,
-    2.67
-  ),
-  createData(
-    "Journey To The Pluto",
-    "Article",
-    "Active",
-    "1st Jan 2021",
-    1532,
-    34123,
-    244,
-    2.67
-  ),
-  createData(
-    "Deep dive to the ocean",
-    "Article",
-    "Inactive",
-    "13th Sept 2021",
-    8932,
-    1123,
-    164,
-    3.67
-  ),
-  createData(
-    "Deep dive to the ocean",
-    "Article",
-    "Active",
-    "13th Sept 2021",
-    8932,
-    1123,
-    164,
-    3.67
-  ),
-  createData(
-    "Deep dive to the ocean",
-    "Article",
-    "Inactive",
-    "13th Sept 2021",
-    8932,
-    1123,
-    164,
-    3.67
-  ),
-];
-
 const DashboardTable = ({
   t,
   category,
@@ -222,41 +94,50 @@ const DashboardTable = ({
   setWriting,
   setPostId,
   setTodo,
-  deletePost,
+  // deletePost,
 }) => {
   const classes = tableStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("title");
   const [pageNo, setPageNo] = useState(0);
-  const [isChanged, setIsChanged] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(1);
+  const [myPost, setMyPost] = useState([]);
+
+  const { posts, hasMore, loading } = GetMywritings(category, pageNo + 1);
   useEffect(() => {
     setPageNo(0);
   }, [category]);
+  useEffect(() => {
+    setMyPost(posts);
+  }, [posts]);
   const { enqueueSnackbar } = useSnackbar();
-  const handleEdit = (postId, fullPost) => {
+  const handleEdit = () => {
+    const postId = selectedPost[`${category}Id`];
     setPage("StartWriting");
     setWriting(category);
     setPostId(postId);
     setTodo({
       edit: true,
-      ...fullPost,
+      ...selectedPost,
     });
   };
-  const handleDelete = (categ, feedId) => {
-    const success = HandleDelete(categ, feedId, enqueueSnackbar);
-    console.log("🚀 ~ handleDelete ~ success", success)
-    success && setIsChanged(true);
+  const handleDelete = () => {
+    const postId = selectedPost[`${category}Id`];
+    HandleDelete(postId, category, enqueueSnackbar);
+    const deletedJsonPost = JSON.stringify(selectedPost);
+    let filterPost = [];
+    myPost.filter((obj) => {
+      const filter = JSON.stringify(obj) !== deletedJsonPost;
+      filter && filterPost.push(obj);
+    });
+    setMyPost(filterPost);
+    // setIsChanged(true);
   };
 
-  const { posts, hasMore, loading } = GetMywritings(
-    category,
-    pageNo + 1,
-    isChanged
-  );
-
-  const handleClick = (event) => {
+  const handleClick = (event, post) => {
     setAnchorEl(event.currentTarget);
+    setSelectedPost(post);
   };
 
   const handleClose = () => {
@@ -286,7 +167,7 @@ const DashboardTable = ({
                 data={headDashboardTableData}
               />
               <TableBody>
-                {stableSort(posts, getComparator(order, orderBy)).map(
+                {stableSort(myPost, getComparator(order, orderBy)).map(
                   (row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     // let performanceTextColor = "";
@@ -306,7 +187,7 @@ const DashboardTable = ({
                     }
                     const { date } = DateFormater(row.createdDate);
                     return (
-                      <TableRow hover tabIndex={-1} key={index}>
+                      <TableRow hover tabIndex={-1} key={row.createdDate}>
                         <TableCell
                           className={classes.tableCell}
                           component="th"
@@ -349,7 +230,7 @@ const DashboardTable = ({
                             aria-describedby={id}
                             variant="contained"
                             color="primary"
-                            onClick={handleClick}
+                            onClick={(e) => handleClick(e, row)}
                           >
                             <MoreHorizIcon />
                           </IconButton>
@@ -370,8 +251,13 @@ const DashboardTable = ({
                           >
                             <Box mx={2} align="center">
                               <Button
-                                onClick={() =>
-                                  handleEdit(row[`${category}Id`], row)
+                                onClick={(e) =>
+                                  handleEdit(
+                                    row[`${category}Id`],
+                                    row,
+                                    e,
+                                    index
+                                  )
                                 }
                                 className={classes.button}
                               >
@@ -380,12 +266,7 @@ const DashboardTable = ({
                               <Button
                                 onClick={() => {
                                   handleClose();
-                                  // deletePost(
-                                  //   category,
-                                  //   row[`${category}Id`],
-                                  //   enqueueSnackbar
-                                  // );
-                                  handleDelete(row[`${category}Id`], category);
+                                  handleDelete();
                                 }}
                                 style={{ color: "#FF0000" }}
                                 className={classes.button}
@@ -401,6 +282,7 @@ const DashboardTable = ({
                 )}
               </TableBody>
             </Table>
+            {!posts.length && <p style={{ textAlign: "center" }}>Empty</p>}
           </TableContainer>
           <PaginationBlog
             page={pageNo}
@@ -424,7 +306,7 @@ const mapDispatchToProps = {
   setWriting: setWriting,
   setPostId: setPostId,
   setTodo: setTodo,
-  deletePost: deletePost,
+  // deletePost: deletePost,
 };
 export default connect(
   mapStateToProps,

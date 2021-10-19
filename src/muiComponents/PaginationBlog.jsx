@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const PaginationBlog = ({ page, setPage, count, hasMore }) => {
+  console.log("🚀 ~ PaginationBlog ~ page", page, hasMore);
   const classes = useStyles();
   const handleChange = (event, value) => {
     setPage(value);
@@ -26,7 +27,8 @@ export const PaginationBlog = ({ page, setPage, count, hasMore }) => {
         component="div"
         rowsPerPage={10}
         count={count}
-        nextIconButtonProps={ {disabled: hasMore ? false : true }}
+        // backIconButtonProps={ {disabled: page === 1 ? true : false }}
+        nextIconButtonProps={{ disabled: hasMore ? false : true }}
         page={page}
         onPageChange={handleChange}
       />

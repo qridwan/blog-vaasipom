@@ -104,9 +104,6 @@ const WritePost = ({
     const content = ref.current.getContent();
     let selectedTags = [];
     suggTags && suggTags.forEach((tag) => selectedTags.push(tag.label));
-    // console.log({ data, tags, interest, content });
-
-    console.log("🚀 ~ HandlePost ~ selectedTags", selectedTags.join());
     const postData = {
       ...allData,
       tags: selectedTags.join(),
@@ -118,26 +115,21 @@ const WritePost = ({
       // tags: selectedTags.join(),
       content: content,
     };
-    console.log({ editData, postData });
     param === "publish" && CreateArticle(isEdit ? editData : postData);
     param === "draft" && SaveAsDraft(postData);
   };
 
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
 
   const CreateArticle = (data) => {
-    console.log("-Request Body-", data);
-    console.log(BaseUrl + `/${category}`);
     todo.edit
       ? axios
           .put(BaseUrl + `/${category}`, data, {
-            headers, //headers Authorization: localStorage.getItem("token"),
+            headers, //headers Authorization: sessionStorage.getItem("token"),
           })
           .then((response) => {
-            console.log("Body--", response.data);
-            // alert(`${category} Updated`);
             enqueueSnackbar(`${category} updated`, { variant: "success" });
           })
           .catch((error) => {
@@ -151,13 +143,6 @@ const WritePost = ({
             headers,
           })
           .then((response) => {
-            console.log(
-              "SUCCESSFULLY ADDED & response:",
-              response,
-              "Posted Data--",
-              data
-            );
-            // alert(`${category} Posted`);
             enqueueSnackbar(`${category} posted`, { variant: "success" });
           })
           .catch((error) => {
@@ -169,11 +154,9 @@ const WritePost = ({
   };
 
   const SaveAsDraft = (post) => {
-    console.log("-data-", post);
     axios
       .post(BaseUrl + `/${category}/draft`, post, { headers })
       .then((response) => {
-        console.log("response:", response);
         enqueueSnackbar(`${category} successfully saved`, { variant: "success" });
       })
       .catch((error) => {

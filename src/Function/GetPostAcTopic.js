@@ -8,7 +8,7 @@ const GetPostAcTopic = (topic, pageNumber, loadPost) => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
   const category = `story,article,poetry,review,podcast,videocast`;
   useEffect(() => {
@@ -16,7 +16,7 @@ const GetPostAcTopic = (topic, pageNumber, loadPost) => {
   }, [topic, loadPost]);
 
   const checkHasMore = () => {
-    const subUrl = localStorage.token
+    const subUrl = sessionStorage.token
       ? `/posts/interests`
       : `/auth/posts/interests`;
 
@@ -41,7 +41,7 @@ const GetPostAcTopic = (topic, pageNumber, loadPost) => {
   };
   useEffect(() => {
     setLoading(true);
-    const subUrl = localStorage.token
+    const subUrl = sessionStorage.token
       ? `/posts/interests?`
       : `/auth/posts/interests?`;
     setError(false);
@@ -59,8 +59,6 @@ const GetPostAcTopic = (topic, pageNumber, loadPost) => {
       cancelToken: new axios.CancelToken((c) => (cancel = c)),
     })
       .then((res) => {
-        console.log("🚀 ~ .then ~ res", res);
-        console.log(BaseUrl + subUrl);
         setPosts((prevposts) => {
           return [...new Set([...prevposts, ...res.data])];
         });

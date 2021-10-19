@@ -37,7 +37,7 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
   const [countLikes, setCountLikes] = useState(likes);
   const { enqueueSnackbar } = useSnackbar();
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
   };
@@ -50,10 +50,9 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
     axios
       .delete(BaseUrl + `/${category}/like?postId=${id}`, { headers })
       .then((response) => {
-        console.log(response, "--disliked--");
         setIsClicked(false);
         setCountLikes((prevCountLikes) => prevCountLikes - 1);
-        enqueueSnackbar(`${category} disliked`, { variant: "warning" });
+        // enqueueSnackbar(`${category} disliked`, { variant: "warning" });
         // alert(`${category}--disliked--`);
       })
       .catch((err) => {
@@ -65,18 +64,22 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
   };
 
   const handleLike = () => {
-    axios
-      .post(BaseUrl + `/${category}/like?postId=${id}`, {}, { headers })
-      .then((response) => {
-        setIsClicked(true);
-        setCountLikes(likes + 1);
-      })
-      .catch((err) => {
-        enqueueSnackbar(`${category} like request failed!`, {
-          variant: "error",
-        });
-        console.log({ err });
-      });
+    !sessionStorage.token
+      ? enqueueSnackbar(`Can't like a post before Sign in`, {
+          variant: "info",
+        })
+      : axios
+          .post(BaseUrl + `/${category}/like?postId=${id}`, {}, { headers })
+          .then((response) => {
+            setIsClicked(true);
+            setCountLikes(likes + 1);
+          })
+          .catch((err) => {
+            enqueueSnackbar(`Request failed!`, {
+              variant: "error",
+            });
+            console.log({ err });
+          });
   };
 
   return (

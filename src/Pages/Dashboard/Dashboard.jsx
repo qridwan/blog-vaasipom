@@ -27,8 +27,7 @@ import settingIcon from "../../Assets/icons/settings.svg";
 // import readingIcon from "../../Assets/icons/readingIcon.svg";
 import writingIcon from "../../Assets/icons/writingIcon.svg";
 import { NavLink } from "react-router-dom";
-// import { grey } from "@material-ui/core/colors";
-import { BlackButton } from "../../muiComponents/BlackButton";
+// import { grey } from "@material-ui/core/colors";;
 import MenuModal from "../../Components/Dashboard/MenuModal";
 import Novel from "../../Components/Dashboard/Writing/Novel";
 import MediaCast from "../../Components/Dashboard/Writing/MediaCast";
@@ -41,8 +40,7 @@ import { connect } from "react-redux";
 import WritePost from "../../Components/Dashboard/Writing/WritePost";
 import { withTranslation } from "react-i18next";
 import { dashboardStyle } from "../../Styles/muiStyles";
-import axios from "axios";
-import { BaseUrl } from "../../BaseUrl.config";
+import { useHistory } from "react-router-dom";
 
 const Dashboard = (props) => {
   const { window } = props;
@@ -52,6 +50,7 @@ const Dashboard = (props) => {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const history = useHistory();
   const [categoryItem, setCategoryItem] = useState("article");
   const handleCategoryChange = (event) => {
     setCategoryItem(event.target.value);
@@ -66,6 +65,7 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     !page && setPage("Writing");
+    !sessionStorage.token && history.push("/login");
   }, []);
 
   const handleOpen = () => {
@@ -152,7 +152,6 @@ const Dashboard = (props) => {
   // };
   const container =
     window !== undefined ? () => window().document.body : undefined;
-  console.log({ page, writing });
 
   return (
     <Container maxWidth="xl" className={classes.root}>

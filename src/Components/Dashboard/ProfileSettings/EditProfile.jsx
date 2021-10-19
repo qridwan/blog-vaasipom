@@ -12,7 +12,7 @@ import { useSnackbar } from "notistack";
 const EditProfile = ({ t }) => {
   const { enqueueSnackbar } = useSnackbar();
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
     "Access-Control-Allow-Origin": "*",
     // "content-type": "application/json",
   };
@@ -34,11 +34,9 @@ const EditProfile = ({ t }) => {
   });
   useEffect(() => {
     document.title = "Blog | Profile | Settings";
-    console.log(`URL---`, BaseUrl + `/myprofile`, { headers });
     axios
       .get(BaseUrl + `/myprofile`, { headers })
       .then((response) => {
-        console.log(response.data);
         setAllData(response.data);
         setLoading(true);
       })
@@ -49,14 +47,12 @@ const EditProfile = ({ t }) => {
     axios
       .put(BaseUrl + "/myprofile", allData, { headers })
       .then((response) => {
-        console.log(response);
         enqueueSnackbar(`Profile Updated`, { variant: "success" });
       })
       .catch((err) => {
         enqueueSnackbar(`Profile updating failed`, { variant: "error" });
         console.log({ err });
       });
-    console.log("🚀 ~ EditProfile ~ allData", allData);
   };
 
   const handleChange = (e) => {

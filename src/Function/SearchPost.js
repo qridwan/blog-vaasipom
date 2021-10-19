@@ -2,39 +2,58 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BaseUrl } from "../BaseUrl.config";
 
-const SearchPost = (category, user) => {
+const SearchPost = (categoryList, title) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
   // const [hasMore, setHasMore] = useState(false);
+  //DEMO-- {{BASEURL}}/auth/article/search?title=ted
+
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
   };
-  useEffect(() => {
-    setLoading(true);
-    const subUrl = localStorage.token ? `/home/posts` : `/auth/home/posts`;
-    setError(false);
-    let cancel;
+  const getSearchResults = (catg) => {
+    const subUrl = sessionStorage.token
+      ? `/${catg}/search`
+      : `/auth/${catg}/search`;
     axios({
       method: "GET",
       url: BaseUrl + subUrl,
       headers: headers,
-      params: { categoryList: category, page: 1, allPost: true },
-      cancelToken: new axios.CancelToken((c) => (cancel = c)),
+      params: { title: title },
     })
       .then((res) => {
-        console.log(BaseUrl + subUrl);
-        setPosts((prevposts) => {
-          return [...new Set([...prevposts, ...res.data])];
-        });
+        // console.log(BaseUrl + subUrl);
+        let filteredResults = [];
+        res.data &&
+          res.data.forEach((data) => {
+            const schema = {
+              title: data?.title,
+              subTitle: data?.subTitle,
+              id: data[`${catg}Id`],
+              category: catg,
+            };
+            filteredResults.push(schema);
+          });
+
+        res.data.length &&
+          setPosts(
+            (prevPosts) => [...prevPosts, ...filteredResults]
+            // return { ...prevposts, [catg]: res.data };
+          );
         setLoading(false);
       })
       .catch((e) => {
-        if (axios.isCancel(e)) return;
         setError(true);
       });
-    return () => cancel();
-  }, []);
+  };
+  useEffect(() => {
+    setLoading(true);
+    categoryList.forEach((c) => {
+      getSearchResults(c);
+    });
+    setError(false);
+  }, [title]);
 
   return { loading, error, posts };
 };

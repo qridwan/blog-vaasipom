@@ -64,7 +64,18 @@ a {
   display: none;
 } */
 
-
-.MuiTablePagination-input , .MuiTablePagination-caption{
-  display: none;
+/* SEARCHBAR INPUT STYLE */
+.css-i4bv87-MuiSvgIcon-root, .css-1q60rmi-MuiAutocomplete-endAdornment
+{
+  display: none !important;
+}
+.MuiInput-underline::before {
+  border-bottom: none !important;
+  overflow: hidden;
+}
+.MuiInput-underline:after {
+  border-bottom: none !important;
+}
+.MuiInput-underline:hover:not(.mui-disabled):before {
+  border-bottom: none !important;
 }

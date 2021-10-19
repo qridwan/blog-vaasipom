@@ -86,7 +86,7 @@ const MediaCast = ({
   };
 
   const editorContent = () => {
-    console.log(mediaRef.current?.getContent());
+    // console.log(mediaRef.current?.getContent());
     setEditorValue(mediaRef.current?.getContent());
   };
 
@@ -109,24 +109,22 @@ const MediaCast = ({
 
   //API INTEGRATION
   const headers = {
-    Authorization: localStorage.getItem("token"),
+    Authorization: sessionStorage.getItem("token"),
     // "Access-Control-Allow-Origin": "*",
   };
   const CreatePost = (data) => {
-    console.log("-data-", data);
     !todo.edit
       ? axios
           .post(BaseUrl + `/${category}`, data, { headers })
           .then((response) => {
-            console.log(
-              "URL :",
-              BaseUrl + `/${category}`,
-              "SUCCESSFULLY ADDED & response:",
-              response,
-              "Posted Data--",
-              data
-            );
-            // alert(`${category} Posted`);
+            // console.log(
+            //   "URL :",
+            //   BaseUrl + `/${category}`,
+            //   "SUCCESSFULLY ADDED & response:",
+            //   response,
+            //   "Posted Data--",
+            //   data
+            // );
             enqueueSnackbar(`${category} successfully posted`, {
               variant: "success",
             });
@@ -149,17 +147,9 @@ const MediaCast = ({
   };
 
   const SaveAsDraft = (data) => {
-    console.log("-data-", data);
     axios
       .post(BaseUrl + `/${category}/draft`, data, { headers })
       .then((response) => {
-        console.log(
-          "URL :",
-          BaseUrl + `/${category}/draft`,
-          "response:",
-          response.data
-        );
-        // alert(`${category} Saved on draft box`);
         enqueueSnackbar(`${category} saved as a draft`, { variant: "info" });
       })
       .catch((error) => {
@@ -167,17 +157,17 @@ const MediaCast = ({
         console.log("error", error);
       });
   };
-  console.log({ allData });
-  const getAllInterest = () => {
-    axios
-      .get(BaseUrl + `/interests`, { headers })
-      .then((res) => {
-        let allData = [];
-        res.data.forEach((data) => allData.push(data.interestId));
-        setALlInterest(allData);
-      })
-      .catch((err) => console.error(err));
-  };
+
+  // const getAllInterest = () => {
+  //   axios
+  //     .get(BaseUrl + `/interests`, { headers })
+  //     .then((res) => {
+  //       let allData = [];
+  //       res.data.forEach((data) => allData.push(data.interestId));
+  //       setALlInterest(allData);
+  //     })
+  //     .catch((err) => console.error(err));
+  // };
   return (
     <Container maxWidth="md">
       {loading && (
