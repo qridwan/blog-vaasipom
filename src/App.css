@@ -39,34 +39,10 @@ a {
 .swiper-button-prev.swiper-button-disabled {
   opacity: 0 !important;
 }
-/* .swipper-slide {
-  margin-top: 25px !important;
-} */
-
-/* .swiper-button-next {
-  background-image: url(./Assets/icons/arrowForward.svg);
-  background-repeat: no-repeat;
-  background-size: 200% auto;
-  background-position: right bottom;
-}
-
-.swiper-button-next::after {
-  display: none;
-}
-.swiper-button-prev {
-  background-image: url(./Assets/icons/arrowPrev.svg);
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: center;
-}
-
-.swiper-button-prev::after {
-  display: none;
-} */
 
 /* SEARCHBAR INPUT STYLE */
-.css-i4bv87-MuiSvgIcon-root, .css-1q60rmi-MuiAutocomplete-endAdornment
-{
+.css-i4bv87-MuiSvgIcon-root,
+.css-1q60rmi-MuiAutocomplete-endAdornment {
   display: none !important;
 }
 .MuiInput-underline::before {
@@ -78,4 +54,10 @@ a {
 }
 .MuiInput-underline:hover:not(.mui-disabled):before {
   border-bottom: none !important;
+}
+
+/* Styling snackbar text */
+.SnackbarItem-message {
+  font-size: 22px;
+  margin: auto;
 }

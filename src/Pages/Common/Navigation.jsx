@@ -22,7 +22,7 @@ const Navigation = ({ t }) => {
         <div className={classes.root}>
           <AppBar className={classes.appBar} position="static">
             <Toolbar>
-              <Box className={classes.menuBrand}>
+              <div className={classes.menuBrand}>
                 <NavLink to={`/`}>
                   <img
                     src={VasipomLogo}
@@ -32,15 +32,16 @@ const Navigation = ({ t }) => {
                     width="200px"
                   />
                 </NavLink>
-              </Box>
+              </div>
+              <Box sx={{ flexGrow: 1 }} />
               <div className={classes.searchField}>
                 <SearchField style={{ color: "black" }} />
               </div>
-
+              <Box sx={{ flexGrow: 1 }} />
               {/* After Login  */}
               {!isLogin && (
                 <NavLink to="/login">
-                  <DarkButton>Sign In</DarkButton>
+                  <DarkButton>Sign Up</DarkButton>
                 </NavLink>
               )}
               {isLogin && <NavLoginPreference setIsLogin={setIsLogin} />}

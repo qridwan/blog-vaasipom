@@ -28,15 +28,15 @@ const authorButtonStyles = makeStyles((theme) => {
         marginRight: "10px",
         height: "20px",
         width: "20px",
-        fontSize: "10px"
+        fontSize: "10px",
       },
     },
   };
 });
-const AuthorButton = ({ authorName, authorImg, authorEmail }) => {
+const AuthorButton = ({ authorName, authorImg, authorEmail, isUser }) => {
   const classes = authorButtonStyles();
   return (
-    <NavLink to={`/profile/${authorEmail}`}>
+    <NavLink to={isUser ? `/myprofile` : `/profile/${authorEmail}`}>
       <MyButton>
         <Avatar alt="Author" src={authorImg} className={classes.btnAvatar} />
         {authorName}

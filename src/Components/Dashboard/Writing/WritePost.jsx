@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
@@ -18,7 +18,9 @@ import {
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
-
+import { ConvertHtmlToText } from "../../../Function/ConvertHtmlToText";
+import { dashboardStyle } from "../../../Styles/muiStyles";
+import GetInterest from "../../../Function/GetInterest";
 const WritePost = ({
   type,
   dashboardState,
@@ -28,9 +30,9 @@ const WritePost = ({
   setTodo,
   t,
 }) => {
+  const classes = dashboardStyle();
   const { todo } = dashboardState;
   const [suggTags, setSuggTags] = useState();
-  const [allIterest, setALlInterest] = useState([]);
   const [interest, setInterest] = useState([]);
   const [editorValue, setEditorValue] = useState();
   const [loading, setLoading] = useState(false);
@@ -48,22 +50,13 @@ const WritePost = ({
   const [isEdit, setIsEdit] = useState(false);
   const [allData, setAllData] = useState({
     title: "",
-    subTitle: "",
+    subTitle: ``,
     mainImage: "",
-    // tags: "",
+    // subTitle: "",
     // topic: "",
     content: "",
   });
-  const getAllInterest = () => {
-    axios
-      .get(BaseUrl + `/interests`, { headers })
-      .then((res) => {
-        let allData = [];
-        res.data.forEach((data) => allData.push(data.interestId));
-        setALlInterest(allData);
-      })
-      .catch((err) => console.error(err));
-  };
+  const { allInterest } = GetInterest();
   useEffect(() => {
     document.title = `Blog | Writing | ${type.toUpperCase()}`;
     setIsEdit(todo.edit);
@@ -81,7 +74,6 @@ const WritePost = ({
         tags: todo.tags,
       });
     setLoading(true);
-    getAllInterest();
     return () => cleanReduxState();
   }, []);
 
@@ -102,10 +94,13 @@ const WritePost = ({
   const HandlePost = async (param) => {
     articleContent();
     const content = ref.current.getContent();
+    const text = ConvertHtmlToText(content);
+
     let selectedTags = [];
     suggTags && suggTags.forEach((tag) => selectedTags.push(tag.label));
     const postData = {
       ...allData,
+      subTitle: text.split(" ").slice(0, 20).join(" "),
       tags: selectedTags.join(),
       topic: interest.join(),
       content: content,
@@ -130,6 +125,7 @@ const WritePost = ({
             headers, //headers Authorization: sessionStorage.getItem("token"),
           })
           .then((response) => {
+            setPage(`Writing`);
             enqueueSnackbar(`${category} updated`, { variant: "success" });
           })
           .catch((error) => {
@@ -143,6 +139,7 @@ const WritePost = ({
             headers,
           })
           .then((response) => {
+            setPage(`Writing`);
             enqueueSnackbar(`${category} posted`, { variant: "success" });
           })
           .catch((error) => {
@@ -157,7 +154,10 @@ const WritePost = ({
     axios
       .post(BaseUrl + `/${category}/draft`, post, { headers })
       .then((response) => {
-        enqueueSnackbar(`${category} successfully saved`, { variant: "success" });
+        setPage(`Writing`);
+        enqueueSnackbar(`${category} successfully saved`, {
+          variant: "success",
+        });
       })
       .catch((error) => {
         enqueueSnackbar(`${category} saving failed!`, { variant: "error" });
@@ -167,6 +167,10 @@ const WritePost = ({
 
   return (
     <Container maxWidth="md">
+      <Typography className={classes.title}>
+        {t(`write_headings`) + " "}
+        {t(`dash_modal_${type}`)}
+      </Typography>
       {loading && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
@@ -178,7 +182,7 @@ const WritePost = ({
               onChange={handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
+          {/* <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">{t(`writing_label_subTitle`)}</CustomLabel>
             <InputArea
               defaultValue={isEdit ? todo.subTitle : ""}
@@ -186,7 +190,7 @@ const WritePost = ({
               name="subTitle"
               onChange={handleChange}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">{t(`writing_label_writeHere`)}</CustomLabel>
             <BlogEditor ref={ref} value={editorValue} />
@@ -195,13 +199,12 @@ const WritePost = ({
           <Grid item xs={12} sm={7} spacing={3}>
             {!isEdit && (
               <>
-                {" "}
                 <Grid item xs={12} sm={12}>
                   <CustomLabel htmlFor="">
                     {t(`writing_label_interest`)}
                   </CustomLabel>
                   <CustomSelect
-                    data={allIterest}
+                    data={allInterest}
                     selectItems={interest}
                     setSelectItems={setInterest}
                   />

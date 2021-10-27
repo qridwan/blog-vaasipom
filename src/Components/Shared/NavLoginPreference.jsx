@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, IconButton, Popover } from "@material-ui/core";
+import { Avatar, Box, IconButton, Popover } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { NavigationStyles } from "../../Styles/muiStyles";
@@ -10,6 +10,8 @@ import { useHistory } from "react-router-dom";
 import { setPage, setWriting } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
+import CheckImage from "../../Function/CheckImage";
+import placeholderAvatar from "../../Assets/img/dp_placeholder.png";
 
 const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
   const classes = NavigationStyles();
@@ -50,6 +52,7 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
       .post(BaseUrl + "/logout", {}, { headers })
       .then((response) => {
         sessionStorage.clear();
+        handleClose();
         history.push("/login");
       })
       .catch((error) => {
@@ -64,7 +67,7 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
   useEffect(() => {
     getMyProfileInfo();
   }, []);
-
+  const { isImage } = CheckImage(userImg);
   return (
     <Box>
       <NavLink to="/dashboard">
@@ -81,7 +84,11 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
       </IconButton>
 
       <IconButton className={classes.navIcon} onClick={handleClick}>
-        <Avatar src={userImg} alt="User" />
+        {isImage ? (
+          <Avatar src={userImg} alt="User" />
+        ) : (
+          <Avatar src={placeholderAvatar} alt="Placeholder" />
+        )}
       </IconButton>
       <Popover
         id={id}
@@ -96,19 +103,21 @@ const NavLoginPreference = ({ setIsLogin, setPage, setWrite, type, t }) => {
           vertical: "top",
           horizontal: "center",
         }}
-        elevation={1}
+        elevation={2}
       >
-        <Box mx={2} align="center">
+        <Box align="center">
           <NavLink to="/myprofile">
-            <Button className={classes.button}>{t(`nav_profile`)}</Button>
+            <li className={classes.button} onClick={handleClose}>
+              {t(`nav_profile`)}
+            </li>
           </NavLink>
-          <Button
+          <li
             style={{ color: "#FF0000" }}
             className={classes.button}
             onClick={handleLogout}
           >
             {t(`nav_logout`)}
-          </Button>
+          </li>
         </Box>
       </Popover>
     </Box>

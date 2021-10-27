@@ -6,8 +6,6 @@ const SearchPost = (categoryList, title) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
-  // const [hasMore, setHasMore] = useState(false);
-  //DEMO-- {{BASEURL}}/auth/article/search?title=ted
 
   const headers = {
     Authorization: sessionStorage.getItem("token"),
@@ -23,7 +21,6 @@ const SearchPost = (categoryList, title) => {
       params: { title: title },
     })
       .then((res) => {
-        // console.log(BaseUrl + subUrl);
         let filteredResults = [];
         res.data &&
           res.data.forEach((data) => {
@@ -37,10 +34,7 @@ const SearchPost = (categoryList, title) => {
           });
 
         res.data.length &&
-          setPosts(
-            (prevPosts) => [...prevPosts, ...filteredResults]
-            // return { ...prevposts, [catg]: res.data };
-          );
+          setPosts((prevPosts) => [...prevPosts, ...filteredResults]);
         setLoading(false);
       })
       .catch((e) => {

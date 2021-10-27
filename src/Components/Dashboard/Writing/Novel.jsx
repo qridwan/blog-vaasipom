@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import { BlackButton } from "../../../muiComponents/BlackButton";
 import { CustomLabel, InputArea } from "../../../muiComponents/InputArea";
@@ -18,9 +18,10 @@ import {
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
-
+import { dashboardStyle } from "../../../Styles/muiStyles";
+import { ConvertHtmlToText } from "../../../Function/ConvertHtmlToText";
+import GetInterest from "../../../Function/GetInterest";
 const types = ["New", "Existing"];
-const interests = ["Mystery", "Horror", "Romantic", "Solo"];
 
 const Novel = ({
   type,
@@ -31,6 +32,7 @@ const Novel = ({
   setTodo,
   t,
 }) => {
+  const classes = dashboardStyle();
   const { todo } = dashboardState;
   const [suggTags, setSuggTags] = useState([]);
   const [novelType, setNovelType] = useState([]);
@@ -43,12 +45,13 @@ const Novel = ({
   // const [tags, setTags] = useState([]);
   const [allData, setAllData] = useState({
     title: "",
-    subTitle: "First subtitle to the first Novel",
+    subTitle: "",
     type: "",
     mainImage: "",
     topic: "",
     content: "",
   });
+
   useEffect(() => {
     document.title = "Blog | Writing | Novel";
 
@@ -84,19 +87,19 @@ const Novel = ({
     setEditorValue("");
     setWriting(null);
   };
-  const HandlePost = (param) => {
-    novelContent();
-    const content = novelRef.current.getContent();
+  const HandlePost = async (param) => {
+    const content = await novelRef.current.getContent();
+    const text = ConvertHtmlToText(await content);
     let selectedTags = [];
     !isEdit && suggTags.forEach((tag) => selectedTags.push(tag.label));
 
     const postData = {
       ...allData,
+      subTitle: text.split(" ").slice(0, 20).join(" "),
       content: content,
       tags: selectedTags.join(),
       novelType: novelType,
       topic: interest.join(),
-      // type: novelType,
     };
 
     const editData = {
@@ -106,12 +109,6 @@ const Novel = ({
 
     param === "publish" && CreateNovel(isEdit ? editData : postData);
     param === "draft" && SaveAsDraft(postData);
-  };
-
-  const novelContent = () => {
-    if (novelRef.current) {
-      // console.log(novelRef.current.getContent());
-    }
   };
 
   const { enqueueSnackbar } = useSnackbar();
@@ -126,6 +123,7 @@ const Novel = ({
             headers,
           })
           .then((response) => {
+            setPage(`Writing`);
             enqueueSnackbar(`Story Updated`, { variant: "success" });
           })
           .catch((error) => {
@@ -137,6 +135,7 @@ const Novel = ({
             headers,
           })
           .then((response) => {
+            setPage(`Writing`);
             enqueueSnackbar(`Novel Posted`, { variant: "success" });
           })
           .catch((error) => {
@@ -149,6 +148,7 @@ const Novel = ({
     axios
       .post(BaseUrl + `/story/draft`, post, { headers })
       .then((response) => {
+        setPage(`Writing`);
         enqueueSnackbar(`Novel saved on draft box`, { variant: "success" });
       })
       .catch((error) => {
@@ -156,10 +156,14 @@ const Novel = ({
         console.log("error", error);
       });
   };
+  const { allInterest } = GetInterest();
   return (
     <>
       {loading && (
         <Container maxWidth="md">
+          <Typography className={classes.title}>
+            {t(`write_headings`) + " " + t("nav_novel")}
+          </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={3}>
               <CustomLabel shrink htmlFor="">
@@ -223,7 +227,7 @@ const Novel = ({
                     {t(`writing_label_interest`)}
                   </CustomLabel>
                   <CustomSelect
-                    data={interests}
+                    data={allInterest}
                     selectItems={interest}
                     setSelectItems={setInterest}
                   />

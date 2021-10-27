@@ -24,7 +24,8 @@ import {
   setWriting,
 } from "../../redux/actions/dashboardAction";
 import DateFormater from "../../Function/DateFormater";
-
+import CheckImage from "../../Function/CheckImage";
+import placeholderAvatar from "../../Assets/img/dp_placeholder.png";
 const FeedCard = ({
   feed,
   type,
@@ -36,23 +37,21 @@ const FeedCard = ({
 }) => {
   const classes = feedCardStyles();
   // const [anchorEl, setAnchorEl] = useState(null);
-  // const [isUser, setIsUser] = useState(false);
+  const [isUser, setIsUser] = useState(false);
   const [feedId, setFeedId] = useState(``);
   const [postContent, setPostContent] = useState({});
   // const { enqueueSnackbar } = useSnackbar();
-
   // const handleClick = (event) => {
   //   setAnchorEl(event.currentTarget);
   // };
   // const handleClose = () => {
   //   setAnchorEl(null);
   // };
-
   // const open = Boolean(anchorEl);
   // const id = open ? "simple-popover" : undefined;
   const { author, category } = feed;
-
-  let { url } = useRouteMatch();
+  const { isImage } = CheckImage(author?.profileImage);
+  let { url, path } = useRouteMatch();
   if (
     url === "/" ||
     url === "/article" ||
@@ -60,7 +59,8 @@ const FeedCard = ({
     url === "/story" ||
     url === "/review" ||
     url === "/podcast" ||
-    url === "/videocast"
+    url === "/videocast" ||
+    path === "/profile/:user"
   ) {
     url = "/feed";
   }
@@ -68,7 +68,7 @@ const FeedCard = ({
 
   useEffect(() => {
     setPostContent(feed[feed.category]);
-    // feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
+    feed.author.email === userEmail ? setIsUser(true) : setIsUser(false);
   }, [feed, userEmail]);
 
   useEffect(() => {
@@ -90,25 +90,37 @@ const FeedCard = ({
       <Grid container spacing={2}>
         <Grid item xs={12} sm={postContent?.mainImage ? 8 : 12}>
           <CardActions className={classes.authorBtn}>
-            <AuthorButton
-              authorName={author?.name}
-              authorImg={author?.profileImage}
-              authorEmail={author?.email}
-            />
+            {isImage ? (
+              <AuthorButton
+                authorName={author?.name}
+                authorImg={author?.profileImage}
+                authorEmail={author?.email}
+                isUser={isUser}
+              />
+            ) : (
+              <AuthorButton
+                authorName={author?.name}
+                authorImg={placeholderAvatar}
+                authorEmail={author?.email}
+                isUser={isUser}
+              />
+            )}
           </CardActions>
           <NavLink to={`${url}/${category}/${feedId}`}>
             <CardActionArea className={classes.mainArea}>
               {/* title */}
               <Typography className={classes.title}>
                 {postContent?.title?.length > 70
-                  ? postContent?.title?.slice(0, 70) + "..."
+                  ? postContent?.title?.split(" ").slice(0, 12).join(" ") +
+                    "..."
                   : postContent?.title}
               </Typography>
               {/* description */}
               {postContent?.subTitle && (
                 <Typography className={classes.desc}>
                   {postContent?.subTitle?.length > 90
-                    ? postContent?.subTitle?.slice(0, 90) + "..."
+                    ? postContent?.subTitle?.split(" ").slice(0, 18).join(" ") +
+                      "..."
                     : postContent?.subTitle}
                   {/* {mainText} */}
                 </Typography>
@@ -129,7 +141,7 @@ const FeedCard = ({
           >
             <PostCountInfo
               likes={postContent?.likes}
-              views={postContent?.reads}
+              // views={postContent?.reads}
               category={category}
               id={feedId}
               liked={postContent?.liked}

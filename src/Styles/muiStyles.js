@@ -1,11 +1,12 @@
 import { alpha, makeStyles } from "@material-ui/core";
 import { grey, red } from "@material-ui/core/colors";
+import { dark } from "@material-ui/core/styles/createPalette";
 
 // navigation AppBar styling
 export const NavigationStyles = makeStyles((theme) => {
   return {
     root: {
-      flexGrow: 1,
+      flexGrow: 0,
       paddingTop: 12,
     },
     appBar: {
@@ -14,9 +15,9 @@ export const NavigationStyles = makeStyles((theme) => {
       // display: "flex",
     },
     menuBrand: {
-      marginRight: "10px",
+      // marginRight: "10px",
       cursor: "pointer",
-      flexGrow: 1,
+      // flexGrow: 1,
     },
     title: {
       flexGrow: 1,
@@ -28,14 +29,22 @@ export const NavigationStyles = makeStyles((theme) => {
     button: {
       display: "block",
       padding: "15px 25px",
-      width: "100%",
+      width: "fit-content",
       textTransform: "capitalize",
+      textAlign: "center",
+      cursor: "pointer",
+      color: "#000000",
+      fontSize: "18px",
+      fontFamily: "Manrope",
+      "&:hover": {
+        backgroundColor: dark[400],
+      },
     },
     searchField: {
       display: "none",
       [theme.breakpoints.up("sm")]: {
         display: "block",
-        marginRight: "10px",
+        // marginRight: "10px",
         input: {
           text: "black",
         },
@@ -290,6 +299,15 @@ export const profileStyles = makeStyles((theme) => {
       fontWeight: "800",
       fontSize: "20px",
       lineHeight: "35px",
+      textAlign: "center",
+      letterSpacing: "-0.02em",
+      color: "#000000",
+    },
+    desc: {
+      marginTop: "10px",
+      fontWeight: "500",
+      fontSize: "16px",
+      lineHeight: "22px",
       textAlign: "center",
       letterSpacing: "-0.02em",
       color: "#000000",

@@ -7,7 +7,7 @@ import CommentTemp from "../Shared/CommentTemp";
 import PostComment from "../Shared/PostComment";
 import { setShowTopics } from "../../redux/actions/dashboardAction";
 import { connect } from "react-redux";
-import { useRouteMatch, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // const comments = [
 //   {
@@ -30,7 +30,6 @@ import { useRouteMatch, useParams } from "react-router-dom";
 //   },
 // ];
 const VideoDetails = ({ setShowTopics }) => {
-  // const { url } = useRouteMatch();
   const props = useParams();
   console.log("🚀 ~ VideoDetails ~ props", props)
 
@@ -41,9 +40,7 @@ const VideoDetails = ({ setShowTopics }) => {
   // }, []);
   return (
     <>
-      {/* <Navigation /> */}
       <Container>
-        {/* <SubNavigation /> */}
         <Grid
           container
           spacing={3}
@@ -52,7 +49,6 @@ const VideoDetails = ({ setShowTopics }) => {
         >
           <Grid item sm={12} md={8}>
             <VideoDetailsCard
-            // feed={feed}
             />
           </Grid>
           {/* <Grid item sm={12} md={4}>

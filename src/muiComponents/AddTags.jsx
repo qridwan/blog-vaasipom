@@ -63,7 +63,6 @@ const AddTags = ({ setTags , t}) => {
     setTags(chipData);
   }, [chipData, setTags]);
 
-  // console.log({ chipData });
   return (
     <Paper component="ul" className={classes.root}>
       {chipData.map((data, index) => {

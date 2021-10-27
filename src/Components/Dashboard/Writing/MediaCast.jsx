@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import AddTags from "../../../muiComponents/AddTags";
 import { BlackButton } from "../../../muiComponents/BlackButton";
@@ -19,6 +19,9 @@ import {
 } from "../../../redux/actions/dashboardAction";
 import { withTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
+import { ConvertHtmlToText } from "../../../Function/ConvertHtmlToText";
+import { dashboardStyle } from "../../../Styles/muiStyles";
+import GetInterest from "../../../Function/GetInterest";
 
 const MediaCast = ({
   type,
@@ -30,9 +33,9 @@ const MediaCast = ({
   t,
 }) => {
   const category = type.toLowerCase();
+  const classes = dashboardStyle();
   const [interest, setInterest] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const [allIterest, setALlInterest] = useState([]);
   const [tags, setTags] = useState([]);
   const [image, setImage] = useState(``);
   const [editorValue, setEditorValue] = useState();
@@ -86,21 +89,21 @@ const MediaCast = ({
   };
 
   const editorContent = () => {
-    // console.log(mediaRef.current?.getContent());
     setEditorValue(mediaRef.current?.getContent());
   };
 
   const HandlePost = async (param) => {
     editorContent();
     const content = mediaRef.current.getContent();
+    const text = ConvertHtmlToText(await content);
     let selectedTags = [];
     tags.forEach((tag) => selectedTags.push(tag.label));
-    // console.log({ data, tags, interest, content });
     const postData = {
       ...allData,
       tags: selectedTags.join(),
       topic: interest.join(),
       content: content,
+      subTitle: text.split(" ").slice(0, 20).join(" "),
     };
     param === "publish" && CreatePost(postData);
     param === "draft" && SaveAsDraft(postData);
@@ -108,23 +111,17 @@ const MediaCast = ({
   };
 
   //API INTEGRATION
+  const { allInterest } = GetInterest();
   const headers = {
     Authorization: sessionStorage.getItem("token"),
-    // "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": "*",
   };
   const CreatePost = (data) => {
     !todo.edit
       ? axios
           .post(BaseUrl + `/${category}`, data, { headers })
           .then((response) => {
-            // console.log(
-            //   "URL :",
-            //   BaseUrl + `/${category}`,
-            //   "SUCCESSFULLY ADDED & response:",
-            //   response,
-            //   "Posted Data--",
-            //   data
-            // );
+            setPage(`Writing`);
             enqueueSnackbar(`${category} successfully posted`, {
               variant: "success",
             });
@@ -138,6 +135,7 @@ const MediaCast = ({
       : axios
           .put(BaseUrl + `/${category}`, data, { headers })
           .then((response) => {
+            setPage(`Writing`);
             enqueueSnackbar(`${category} updated`, { variant: "success" });
           })
           .catch((error) => {
@@ -150,6 +148,7 @@ const MediaCast = ({
     axios
       .post(BaseUrl + `/${category}/draft`, data, { headers })
       .then((response) => {
+        setPage(`Writing`);
         enqueueSnackbar(`${category} saved as a draft`, { variant: "info" });
       })
       .catch((error) => {
@@ -170,6 +169,10 @@ const MediaCast = ({
   // };
   return (
     <Container maxWidth="md">
+      <Typography className={classes.title}>
+        {t(`write_headings`) + " "}
+        {t(`dash_modal_${type}`)}
+      </Typography>
       {loading && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12}>
@@ -180,7 +183,8 @@ const MediaCast = ({
               onChange={handleChange}
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
+
+          {/* <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">{t(`writing_label_subTitle`)}</CustomLabel>
             <InputArea
               defaultValue={isEdit ? todo.subTitle : ""}
@@ -188,7 +192,8 @@ const MediaCast = ({
               name="subTitle"
               onChange={handleChange}
             />
-          </Grid>
+          </Grid> */}
+
           <Grid item xs={12} sm={12}>
             <CustomLabel htmlFor="">
               {t(`writing_label_${type}Url`)}
@@ -216,7 +221,7 @@ const MediaCast = ({
                 {t(`writing_label_interest`)}
               </CustomLabel>
               <CustomSelect
-                data={allIterest}
+                data={allInterest}
                 selectItems={interest}
                 setSelectItems={setInterest}
               />

@@ -20,7 +20,6 @@ const AcTopics = () => {
     setLoadPost(true);
   }, [loadPost, setLoadPost]);
   const { posts, hasMore, loading } = GetPostAcTopic(topic, pageNo, loadPost);
-  //   console.log("🚀 ~ AcTopics ~ posts", posts);
   const observer = useRef();
   const lastFeedRef = useCallback(
     (node) => {

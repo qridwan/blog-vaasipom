@@ -1,4 +1,10 @@
-import { MenuItem, Select, useTheme } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  useTheme,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { InputArea } from "./InputArea";
 
@@ -13,9 +19,18 @@ function getStyles(item, chosenItems, theme) {
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
+  anchorOrigin: {
+    vertical: "bottom",
+    horizontal: "left",
+  },
+  transformOrigin: {
+    vertical: "top",
+    horizontal: "left",
+  },
+  getContentAnchorEl: null,
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      maxHeight: ITEM_HEIGHT * 4 + ITEM_PADDING_TOP,
       width: 250,
     },
   },
@@ -38,38 +53,43 @@ const CustomSelect = ({
     }
   }, []);
 
-  
   return (
-    <Select
-      multiple={isMultiple}
-      displayEmpty
-      value={selectItems}
-      onChange={handleSelect}
-      input={<InputArea />}
-      renderValue={(selected) => {
-        if (selected && isMultiple) {
-          if (selected.length === 0) {
-            return <span>{placeholder && "Filter By Category"}</span>;
-          }
-          return selected.join(", ");
-        } else if (selected && !isMultiple) {
-          return selected;
-        }
-      }}
-      MenuProps={MenuProps}
-      inputProps={{ "aria-label": "Without label" }}
-    >
-      <MenuItem disabled value=""></MenuItem>
-      {data.map((item) => (
-        <MenuItem
-          key={item}
-          value={item}
-          style={getStyles(item, selectItems, theme)}
+    <div>
+      <InputLabel id="demo-multiple-name-label"></InputLabel>
+      <FormControl style={{ m: 1, width: "100%" }}>
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple={isMultiple}
+          displayEmpty
+          value={selectItems}
+          onChange={handleSelect}
+          input={<InputArea />}
+          renderValue={(selected) => {
+            if (selected && isMultiple) {
+              if (selected.length === 0) {
+                return <span>{placeholder && "Filter By Category"}</span>;
+              }
+              return selected.join(", ");
+            } else if (selected && !isMultiple) {
+              return selected;
+            }
+          }}
+          MenuProps={MenuProps}
         >
-          {item}
-        </MenuItem>
-      ))}
-    </Select>
+          <MenuItem disabled value=""></MenuItem>
+          {data.map((item) => (
+            <MenuItem
+              key={item}
+              value={item}
+              style={getStyles(item, selectItems, theme)}
+            >
+              {item}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
   );
 };
 

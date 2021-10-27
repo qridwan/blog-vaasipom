@@ -44,6 +44,7 @@ const LandingPage = (props) => {
   }, [path, pageNo]);
 
   const { posts, hasMore, loading } = GetPosts(categoryItem, pageNo);
+  console.log("🚀 ~ LandingPage ~ posts", {posts})
   const observer = useRef();
   const lastFeedRef = useCallback(
     (node) => {

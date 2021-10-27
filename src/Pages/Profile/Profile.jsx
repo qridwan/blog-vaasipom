@@ -15,7 +15,7 @@ import { useRouteMatch } from "react-router-dom";
 import facebook from "../../Assets/icons/facebook-social.png";
 import instagram from "../../Assets/icons/instagram.png";
 import linkedIn from "../../Assets/icons/linkedin.png";
-// import profileImage from "../../Assets/img/dp.png";
+import placheholderImg from "../../Assets/img/dp_placeholder.png";
 import Feed from "../../Components/Shared/Feed";
 import { OutlineButton } from "../../muiComponents/OutlineButton";
 import { BaseUrl } from "../../BaseUrl.config.js";
@@ -27,6 +27,7 @@ import { setPage, setShowTopics } from "../../redux/actions/dashboardAction";
 import { useHistory, useParams } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import LoadingAtom from "../../muiComponents/LoadingAtom";
+import CheckImage from "../../Function/CheckImage";
 
 const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
   const classes = profileStyles();
@@ -150,20 +151,34 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
     }
   }, [pageNo, categoryItem]);
 
-  const { firstName, followersCount, profileImgLink, profileTitle } = userInfo;
+  const {
+    firstName,
+    followersCount,
+    profileImgLink,
+    profileTitle,
+    profileDesc,
+  } = userInfo;
   const history = useHistory();
   const handleEdit = () => {
     setPage(`Settings`);
     history.push("/dashboard");
   };
-
+  const { isImage } = CheckImage(profileImgLink);
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3}>
         <Grid item xs={12} sm={3}>
           {!isLoading && (
             <Box textAlign="center" mt={5} className={classes.profileCard}>
-              <img src={profileImgLink} alt="dp" className={classes.profile} />
+              {isImage ? (
+                <img
+                  src={profileImgLink}
+                  alt="dp"
+                  className={classes.profile}
+                />
+              ) : (
+                <img src={placheholderImg} alt="" height="200px" />
+              )}
               <Typography className={classes.name}>
                 {firstName
                   ? firstName?.charAt(0).toUpperCase() + firstName?.slice(1)
@@ -182,7 +197,9 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
                   {t(`edit`)}
                 </OutlineButton>
               )}
-              <Box my={3}>
+
+              {/* SOCIAL ICONS */}
+              {/* <Box my={3}>
                 <IconButton>
                   <img src={linkedIn} alt="li" />
                 </IconButton>
@@ -192,16 +209,19 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
                 <IconButton>
                   <img src={facebook} alt="fb" />
                 </IconButton>
-              </Box>
+              </Box> */}
 
-              <Divider />
+              <Divider style={{ margin: "10px 0" }} />
+              <Typography className={classes.desc}>
+                {profileDesc ? profileDesc : "Edit A Short Description"}
+              </Typography>
             </Box>
           )}
         </Grid>
         <Grid item xs={12} sm={8}>
           {!user && (
             <Box display="flex" justifyContent="end">
-              <Box sx={{ width: 230 }}>
+              <Box sx={{ width: 230, my: 3 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
                     Select A Category
@@ -212,6 +232,7 @@ const Profile = ({ setShowTopics, type, setPage, dashboardState, t }) => {
                     value={categoryItem}
                     label="Select a category"
                     onChange={handleCategoryChange}
+                    sx={{ fontSize: "10px" }}
                   >
                     <MenuItem value="article">Article</MenuItem>
                     <MenuItem value="story">Story</MenuItem>

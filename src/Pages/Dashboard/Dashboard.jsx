@@ -55,6 +55,7 @@ const Dashboard = (props) => {
   const handleCategoryChange = (event) => {
     setCategoryItem(event.target.value);
   };
+  
   // READING PART-------------
   // const [lookingFor] = useState([
   //   { key: 1, label: "All", trans_label: "reading_nav_all" },
@@ -271,7 +272,7 @@ const Dashboard = (props) => {
                 </BlackButton> */}
               </>
             ) : (
-              page === "Writing" && (
+              page === "StartWriting" && (
                 <Container maxWidth="md">
                   <Typography className={classes.title}>
                     {t(`write_headings`) + " "}

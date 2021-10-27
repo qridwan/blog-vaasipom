@@ -1,4 +1,4 @@
-import { Box, Card, CardMedia, Container, Typography } from "@material-ui/core";
+import { Box, Card, CardMedia, Container, IconButton, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import PostCountInfo from "../Shared/PostCountInfo";
 import PostFooterInfo from "../Shared/PostFooterInfo";
@@ -13,6 +13,8 @@ import { connect } from "react-redux";
 import ReactPlayer from "react-player";
 import playIco from "../../Assets/icons/play.png";
 import DateFormater from "../../Function/DateFormater";
+import CheckImage from "../../Function/CheckImage";
+// import shareIcon from "../../Assets/icons/shareIcon.svg"
 
 const playIcon = <img src={playIco} alt="play icon" height="60" width="60" />;
 // const comments = [1, 2, 3, 4, 5, 6, 7];
@@ -50,6 +52,7 @@ const FullFeed = ({ setShowTopics }) => {
   }, [postId]);
 
   const { title, mainImage, reads, likes, liked, content } = post;
+  const { isImage } = CheckImage(mainImage);
   const { date } = DateFormater(post?.createdDate);
   return (
     <>
@@ -85,7 +88,7 @@ const FullFeed = ({ setShowTopics }) => {
             ) : (
               <Box>
                 {/* image */}
-                {mainImage && (
+                {isImage && (
                   <CardMedia
                     className={classes.media}
                     image={mainImage}

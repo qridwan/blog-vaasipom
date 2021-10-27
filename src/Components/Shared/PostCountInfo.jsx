@@ -1,12 +1,14 @@
 import { Box, IconButton, Typography, makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+// import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Favorite from "@material-ui/icons/Favorite";
 import { grey } from "@material-ui/core/colors";
 import { BaseUrl } from "../../BaseUrl.config";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import shareIcon from "../../Assets/icons/share.png";
+import copyTextToClipboard from "copy-text-to-clipboard";
 
 const postCountStyles = makeStyles(() => {
   return {
@@ -30,8 +32,7 @@ const postCountStyles = makeStyles(() => {
   };
 });
 
-const PostCountInfo = ({ views, likes, category, id, liked }) => {
-  // console.log("🚀 ~ PostCountInfo ~ liked", { liked, id });
+const PostCountInfo = ({ likes, category, id, liked }) => {
   const classes = postCountStyles();
   const [isClicked, setIsClicked] = useState(Boolean(liked));
   const [countLikes, setCountLikes] = useState(likes);
@@ -44,8 +45,11 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
   useEffect(() => {
     setCountLikes(likes);
     liked && setIsClicked(true);
-  }, [liked]);
-
+  }, [liked, likes]);
+  const handleCopyLink = () => {
+    enqueueSnackbar(`Link copied to clipboard`, { variant: "success" });
+    copyTextToClipboard(`http://localhost:3000/feed/${category}/${id}`)
+  };
   const handleDislike = () => {
     axios
       .delete(BaseUrl + `/${category}/like?postId=${id}`, { headers })
@@ -72,7 +76,7 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
           .post(BaseUrl + `/${category}/like?postId=${id}`, {}, { headers })
           .then((response) => {
             setIsClicked(true);
-            setCountLikes(likes + 1);
+            setCountLikes((prevLikes) => prevLikes + 1);
           })
           .catch((err) => {
             enqueueSnackbar(`Request failed!`, {
@@ -92,10 +96,10 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
     >
       {id && (
         <>
-          <Box display="flex" alignItems="center" py={0} mr={1}>
+          {/* <Box display="flex" alignItems="center" py={0} mr={1}>
             <VisibilityOutlinedIcon className={classes.icon} />
             <Typography className={classes.text}>{views}</Typography>
-          </Box>
+          </Box> */}
           <Box display="flex" alignItems="center" py={0} mr={1}>
             <IconButton
               className={classes.root}
@@ -108,8 +112,17 @@ const PostCountInfo = ({ views, likes, category, id, liked }) => {
                 <FavoriteBorderOutlinedIcon className={classes.icon} />
               )}
             </IconButton>
-
             <Typography className={classes.text}>{countLikes}</Typography>
+          </Box>
+          <Box display="flex" alignItems="center" py={0} mr={1}>
+            <IconButton onClick={handleCopyLink}>
+              <img
+                src={shareIcon}
+                alt="Share"
+                height={15}
+                className={classes.icon}
+              />
+            </IconButton>
           </Box>
         </>
       )}

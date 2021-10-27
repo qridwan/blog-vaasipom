@@ -16,7 +16,7 @@ export const headerStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   left: {
-    padding: theme.spacing(5),
+    padding: theme.spacing(0),
     textAlign: "start",
     color: theme.palette.text.primary,
     display: "flex",
@@ -101,7 +101,7 @@ const Header = () => {
                   dictum neque. Curabitur rhoncus quis ipsum quis varius.
                 </Typography>
                 <NavLink to="/login">
-                  <BlackButton className={classes.btn}>Sign Up</BlackButton>
+                  <BlackButton className={classes.btn}>Get Started</BlackButton>
                 </NavLink>
               </div>
             </Paper>

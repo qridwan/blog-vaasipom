@@ -47,7 +47,6 @@ const GetPosts = (category, pageNumber, user) => {
           return [...new Set([...prevposts, ...res.data])];
         });
         checkHasMore();
-        // setHasMore(res.data.docs.length > 0);
         setLoading(false);
       })
       .catch((e) => {

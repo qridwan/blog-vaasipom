@@ -7,7 +7,6 @@ const HandleDelete = (id, category, enqueueSnackbar) => {
   axios
     .delete(BaseUrl + `/${category}?${category}Id=${id}`, { headers })
     .then(() => {
-      // setSuccess(true);
       enqueueSnackbar(`${category} deleted`, { variant: "success" });
     })
     .catch((err) => {
