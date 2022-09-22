@@ -1,4 +1,4 @@
-# Blog WebsiteDevelopment
+# Blog Application UI
 
 ## Demo Link
 
